@@ -1291,45 +1291,63 @@ If the <code>SIGNING_KEY</code> bit of the attestation report is 1, then the <co
 <p id="section-3.1.2-2">The <code>GUEST_POLICY</code> field's least significant 16 bits represent a Major.Minor minimum version number:<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-3">
 <pre>
-{:include cddl/sevsnpvm-policy-record.cddl}
+sevsnpvm-policy-record = [
+  abi-major: byte,
+  abi-minor: byte
+]
 </pre><a href="#section-3.1.2-3" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-4">The policy's minimum ABI version is assigned codepoint -1:<a href="#section-3.1.2-4" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-5">
 <pre>
-{:include cddl/sevsnpvm-policy-abi-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnpvm-policy-abi: -1) =&gt; sevsnpvm-policy-record
+)
 </pre><a href="#section-3.1.2-5" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-6">The attestation report's <code>FAMILY_ID</code> and <code>IMAGE_ID</code> are indirectly represented through an extension to <code>$version-scheme</code> as described in <a href="#sec-version-scheme" class="auto internal xref">Section 3.1.2.1</a>.<a href="#section-3.1.2-6" class="pilcrow">¶</a></p>
 <p id="section-3.1.2-7">The attestation report's <code>VMPL</code> field is assigned codepoint -2:<a href="#section-3.1.2-7" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-8">
 <pre>
-{:include cddl/sevsnpvm-vmpl-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnpvm-vmpl: -2) =&gt; 0..3
+)
 </pre><a href="#section-3.1.2-8" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-9">The attestation report's <code>HOST_DATA</code> is assigned codepoint -3:<a href="#section-3.1.2-9" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-10">
 <pre>
-{:include cddl/sevsnpvm-hostdata-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnpvm-host-data: -3) =&gt; bstr .size 32
+)
+
 </pre><a href="#section-3.1.2-10" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-11">The SEV-SNP firmware build number and Minor.Minor version numbers are provided for both the installed and committed versions of the firmware to account for firmware hotloading.
 The three values are captured in a record type <code>sevsnphost-sp-fw-version-record</code>:<a href="#section-3.1.2-11" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-12">
 <pre>
-{:include cddl/sevsnphost-sp-fw-version-record.cddl}
+sevsnphost-sp-fw-version-record = [
+  build-number: uint .size 1,
+  major: uint .size 1,
+  minor: uint .size 1
+]
 </pre><a href="#section-3.1.2-12" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-13">The current build/major/minor of the SP firmware is assigned codepoint -4:<a href="#section-3.1.2-13" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-14">
 <pre>
-{:include cddl/sevsnphost-spfw-current-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-sp-fw-current: -4) =&gt; sevsnphost-sp-fw-version-record
+)
 </pre><a href="#section-3.1.2-14" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-15">The committed build/major/minor of the SP firmware is assigned codepoint -5:<a href="#section-3.1.2-15" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-16">
 <pre>
-{:include cddl/sevsnphost-spfw-committed-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-sp-fw-committed: -5) =&gt; sevsnphost-sp-fw-version-record
+)
 </pre><a href="#section-3.1.2-16" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-17">The host components other than AMD SP firmware are relevant to VM security posture, so a combination of host components' security patch levels are included as TCB versions.
@@ -1339,38 +1357,61 @@ Tools for human readability MAY present the TCB version a component-wise manner,
 <p id="section-3.1.2-18">The <code>CURRENT_TCB</code> version of the host is assigned codepoint -6:<a href="#section-3.1.2-18" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-19">
 <pre>
-{:include cddl/sevsnphost-current-tcb-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-current-tcb: -6) =&gt; svn-type-choice
+)
 </pre><a href="#section-3.1.2-19" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-20">The <code>COMMITTED_TCB</code> version of the host is assigned codepoint -7:<a href="#section-3.1.2-20" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-21">
 <pre>
-{:include cddl/sevsnphost-committed-tcb-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-committed-tcb: -7) =&gt; svn-type-choice
+)
 </pre><a href="#section-3.1.2-21" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-22">The <code>LAUNCH_TCB</code> version of the host is assigned codepoint -8:<a href="#section-3.1.2-22" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-23">
 <pre>
-{:include cddl/sevsnphost-launch-tcb-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-launch-tcb: -8) =&gt; svn-type-choice
+)
 </pre><a href="#section-3.1.2-23" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-24">The <code>REPORTED_TCB</code> version of the host is assigned codepoint -9:<a href="#section-3.1.2-24" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-25">
 <pre>
-{:include cddl/sevsnphost-launch-tcb-ext.cddl}
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-launch-tcb: -8) =&gt; svn-type-choice
+)
 </pre><a href="#section-3.1.2-25" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-26">The <code>GUEST_POLICY</code> boolean flags are added as extensions to <code>$$flags-map-extension</code>, starting from coedpoint -1.<a href="#section-3.1.2-26" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-27">
 <pre>
-{:include cddl/sevsnpvm-guest-policy-flags-ext.cddl}
+$$flags-map-extension //= &amp;(
+  sevsnpvm-policy-smt-allowed: -1,
+  sevsnpvm-policy-migration-agent-allowed: -2,
+  sevsnpvm-policy-debug-allowed: -3,
+  sevsnpvm-policy-single-socket-only: -4,
+  sevsnpvm-policy-cxl-allowed: -5,
+  sevsnpvm-policy-mem-aes-256-xts-required: -6,
+  sevsnpvm-policy-rapl-must-be-disabled: -7,
+  sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+)
 </pre><a href="#section-3.1.2-27" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-28">There are 47 available bits for selection when the mandatory 1 in position 17 and the ABI Major.Minor values are excluded from the 64-bit <code>GUEST_POLICY</code>.
 The <code>PLATFORM_INFO</code> bits are host configuration that are added as extensions to <code>$$flags-map-extension</code> starting at <code>-49</code>.<a href="#section-3.1.2-28" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-29">
 <pre>
-{:include cddl/sevsnphost-platform-info-flags-ext.cddl}
+$$flags-map-extension //= &amp;(
+  sevsnphost-smt-enabled: -49,
+  sevsnphost-tsme-enabled: -50,
+  sevsnphost-ecc-mem-reported-enabled:-51,
+  sevsnphost-rapl-disabled: -52,
+  sevsnphost-ciphertext-hiding-enabled: -53
+)
 </pre><a href="#section-3.1.2-29" class="pilcrow">¶</a>
 </div>
 <div id="sec-version-scheme">
@@ -1381,7 +1422,7 @@ The <code>PLATFORM_INFO</code> bits are host configuration that are added as ext
 <p id="section-3.1.2.1-1">Extend the <code>$version-scheme</code> type with as follows<a href="#section-3.1.2.1-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2.1-2">
 <pre>
-{:include cddl/sevsnpvm-version-scheme-ext.cddl}
+$version-scheme /= &amp;(sevsnpvm-familyimageid-hex: -1)
 </pre><a href="#section-3.1.2.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2.1-3">The <code>-1</code> scheme is a string representation of the two 128-bit identifiers in hexadecimal encoding as separated by <code>/</code>.
@@ -1398,7 +1439,7 @@ The scheme allows for fuzzy comparison with <code>_</code> as a wildcard on eith
 A notional instance identifier is a tagged CBOR map from integer codepoint to opaque bytes.<a href="#section-3.1.2.2-1" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2.2-2">
 <pre>
-{:include cddl/int-bytes-map.cddl}
+int-bytes-map = { * int =&gt; bytes }
 </pre><a href="#section-3.1.2.2-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2.2-3">Profiles may restrict which integers are valid codepoints, and may restrict the respective byte string sizes.
@@ -1407,7 +1448,7 @@ The expected byte string sizes are 32 bytes.
 For the <code>int-bytes-map</code> to be an interpretable extension of <code>$instance-id-type-choice</code>, there is <code>tagged-int-bytes-map</code>:<a href="#section-3.1.2.2-3" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2.2-4">
 <pre>
-{:include cddl/tagged-int-bytes-map.cddl}
+tagged-int-bytes-map = #6.563(int-bytes-map)
 </pre><a href="#section-3.1.2.2-4" class="pilcrow">¶</a>
 </div>
 </section>

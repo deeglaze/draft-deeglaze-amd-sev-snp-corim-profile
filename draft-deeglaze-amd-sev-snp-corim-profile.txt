@@ -178,11 +178,16 @@ Table of Contents
    The GUEST_POLICY field's least significant 16 bits represent a
    Major.Minor minimum version number:
 
-   {:include cddl/sevsnpvm-policy-record.cddl}
+   sevsnpvm-policy-record = [
+     abi-major: byte,
+     abi-minor: byte
+   ]
 
    The policy's minimum ABI version is assigned codepoint -1:
 
-   {:include cddl/sevsnpvm-policy-abi-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnpvm-policy-abi: -1) => sevsnpvm-policy-record
+   )
 
    The attestation report's FAMILY_ID and IMAGE_ID are indirectly
    represented through an extension to $version-scheme as described in
@@ -190,28 +195,40 @@ Table of Contents
 
    The attestation report's VMPL field is assigned codepoint -2:
 
-   {:include cddl/sevsnpvm-vmpl-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnpvm-vmpl: -2) => 0..3
+   )
 
    The attestation report's HOST_DATA is assigned codepoint -3:
 
-   {:include cddl/sevsnpvm-hostdata-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnpvm-host-data: -3) => bstr .size 32
+   )
 
    The SEV-SNP firmware build number and Minor.Minor version numbers are
    provided for both the installed and committed versions of the
    firmware to account for firmware hotloading.  The three values are
    captured in a record type sevsnphost-sp-fw-version-record:
 
-   {:include cddl/sevsnphost-sp-fw-version-record.cddl}
+   sevsnphost-sp-fw-version-record = [
+     build-number: uint .size 1,
+     major: uint .size 1,
+     minor: uint .size 1
+   ]
 
    The current build/major/minor of the SP firmware is assigned
    codepoint -4:
 
-   {:include cddl/sevsnphost-spfw-current-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnphost-sp-fw-current: -4) => sevsnphost-sp-fw-version-record
+   )
 
    The committed build/major/minor of the SP firmware is assigned
    codepoint -5:
 
-   {:include cddl/sevsnphost-spfw-committed-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnphost-sp-fw-committed: -5) => sevsnphost-sp-fw-version-record
+   )
 
    The host components other than AMD SP firmware are relevant to VM
    security posture, so a combination of host components' security patch
@@ -225,24 +242,41 @@ Table of Contents
 
    The CURRENT_TCB version of the host is assigned codepoint -6:
 
-   {:include cddl/sevsnphost-current-tcb-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnphost-current-tcb: -6) => svn-type-choice
+   )
 
    The COMMITTED_TCB version of the host is assigned codepoint -7:
 
-   {:include cddl/sevsnphost-committed-tcb-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnphost-committed-tcb: -7) => svn-type-choice
+   )
 
    The LAUNCH_TCB version of the host is assigned codepoint -8:
 
-   {:include cddl/sevsnphost-launch-tcb-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnphost-launch-tcb: -8) => svn-type-choice
+   )
 
    The REPORTED_TCB version of the host is assigned codepoint -9:
 
-   {:include cddl/sevsnphost-launch-tcb-ext.cddl}
+   $$measurement-values-map-extension //= (
+     &(sevsnphost-launch-tcb: -8) => svn-type-choice
+   )
 
    The GUEST_POLICY boolean flags are added as extensions to $$flags-
    map-extension, starting from coedpoint -1.
 
-   {:include cddl/sevsnpvm-guest-policy-flags-ext.cddl}
+   $$flags-map-extension //= &(
+     sevsnpvm-policy-smt-allowed: -1,
+     sevsnpvm-policy-migration-agent-allowed: -2,
+     sevsnpvm-policy-debug-allowed: -3,
+     sevsnpvm-policy-single-socket-only: -4,
+     sevsnpvm-policy-cxl-allowed: -5,
+     sevsnpvm-policy-mem-aes-256-xts-required: -6,
+     sevsnpvm-policy-rapl-must-be-disabled: -7,
+     sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+   )
 
    There are 47 available bits for selection when the mandatory 1 in
    position 17 and the ABI Major.Minor values are excluded from the
@@ -250,13 +284,19 @@ Table of Contents
    that are added as extensions to $$flags-map-extension starting at
    -49.
 
-   {:include cddl/sevsnphost-platform-info-flags-ext.cddl}
+   $$flags-map-extension //= &(
+     sevsnphost-smt-enabled: -49,
+     sevsnphost-tsme-enabled: -50,
+     sevsnphost-ecc-mem-reported-enabled:-51,
+     sevsnphost-rapl-disabled: -52,
+     sevsnphost-ciphertext-hiding-enabled: -53
+   )
 
 3.1.2.1.  Version scheme extension
 
    Extend the $version-scheme type with as follows
 
-   {:include cddl/sevsnpvm-version-scheme-ext.cddl}
+   $version-scheme /= &(sevsnpvm-familyimageid-hex: -1)
 
    The -1 scheme is a string representation of the two 128-bit
    identifiers in hexadecimal encoding as separated by /. The scheme
@@ -273,7 +313,7 @@ Table of Contents
    are each unique within their notion.  A notional instance identifier
    is a tagged CBOR map from integer codepoint to opaque bytes.
 
-   {:include cddl/int-bytes-map.cddl}
+   int-bytes-map = { * int => bytes }
 
    Profiles may restrict which integers are valid codepoints, and may
    restrict the respective byte string sizes.  For this profile, only
@@ -281,7 +321,7 @@ Table of Contents
    bytes.  For the int-bytes-map to be an interpretable extension of
    $instance-id-type-choice, there is tagged-int-bytes-map:
 
-   {:include cddl/tagged-int-bytes-map.cddl}
+   tagged-int-bytes-map = #6.563(int-bytes-map)
 
 3.1.3.  AMD SEV-SNP Evidence Translation
 
