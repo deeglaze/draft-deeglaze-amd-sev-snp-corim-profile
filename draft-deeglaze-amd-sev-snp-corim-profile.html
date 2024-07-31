@@ -1029,7 +1029,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Glaze</td>
-<td class="center">Expires 31 January 2025</td>
+<td class="center">Expires 1 February 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1042,12 +1042,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-30" class="published">30 July 2024</time>
+<time datetime="2024-07-31" class="published">31 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-31">31 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-02-01">1 February 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1082,7 +1082,7 @@ This document specifies the information elements for representing SEV-SNP Refere
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 31 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 1 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1164,6 +1164,14 @@ This document specifies the information elements for representing SEV-SNP Refere
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
                 <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-amd-sev-snp-launch-event-lo" class="internal xref">AMD SEV-SNP Launch Event Log</a></p>
 </li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-amd-sev-snp-launch-event-log" class="internal xref">AMD SEV-SNP Launch Event Log Appraisal</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3.2.1">
+                    <p id="section-toc.1-1.3.2.3.2.1.1"><a href="#section-3.3.1" class="auto internal xref">3.3.1</a>.  <a href="#name-comparisons-for-reference-v" class="internal xref">Comparisons for reference values</a></p>
+</li>
+                </ul>
+</li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
@@ -1232,6 +1240,8 @@ This draft documents the normative representation of attestation report Evidence
   Version Loaded Endorsement Key.
   An alternative SEV-SNP Attestation Report signing key that is derived from a secret shared between AMD and a Cloud Service Provider.
   The key is encrypted with a per-device per-version wrapping key that is then decrypted and stored by the AMD-SP.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">VEK:
+  Either a VCEK or VLEK.<a href="#section-3-5" class="pilcrow">¶</a></p>
 <div id="amd-sev-snp-corim-profile">
 <section id="section-3.1">
         <h3 id="name-amd-sev-snp-corim-profile">
@@ -1490,7 +1500,7 @@ If <code>SIGNING_KEY</code> is 0, the field MAY be set to the VCEK <code>hwid</c
 <a href="#section-3.1.3.2" class="section-number selfRef">3.1.3.2. </a><a href="#name-measurement-map" class="section-name selfRef"><code>measurement-map</code></a>
             </h5>
 <p id="section-3.1.3.2-1">The <code>mkey</code> is left unset.
-The <code>authorized-by</code> key SHALL be set to a representation of the V(CL)EK key that signed the <code>ATTESTATION_REPORT</code>, or a key along the certificate path to a self-signed root, i.e., the ASK, ASVK, or ARK for the product line.
+The <code>authorized-by</code> key SHALL be set to a representation of the VEK that signed the <code>ATTESTATION_REPORT</code>, or a key along the certificate path to a self-signed root, i.e., the ASK, ASVK, or ARK for the product line.
 The <code>measurement-values-map</code> is set as described in the following section.<a href="#section-3.1.3.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1647,7 +1657,84 @@ The <code>ECPoint</code> conversion routines in section 2 of <span>[<a href="#SE
 <p id="section-3.2-1">The composition of a SEV-SNP VM may be comprised of measurements from multiple principals, such that no one principal has absolute authority to endorse the overall measurement value represented in the attestation report.
 If one principal does have that authority, the <code>ID_BLOCK</code> mechanism provides a convenient launch configuration endorsement mechanism without need for distributing a CoRIM.
 This section documents an event log format the Virtual Machine Monitor may construct at launch time and provide in the data pages of an extended guest request, as documented in <span>[<a href="#GHCB" class="cite xref">GHCB</a>]</span>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The content media type shall be <code>application/vnd.amd.sevsnp.launch-updates+cbor</code>.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The content media type shall be <code>application/vnd.amd.sevsnp.launch-updates+cbor</code> for the encoding of a <code>sevsnp-launch-configuration-map</code>:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.2-3">
+<pre>
+sevsnp-launch-configuration-map = {
+  ? (fms: 0) =&gt; uint
+  ? (sevsnpvm-launch-baseline: 1) =&gt; bytes .size 48
+  ? (sevsnpvm-launch-updates: 2) =&gt; [ + sevsnp-launch-update-data-map ]
+}
+</pre><a href="#section-3.2-3" class="pilcrow">¶</a>
+</div>
+<ul class="normal">
+<li class="normal" id="section-3.2-4.1">
+            <p id="section-3.2-4.1.1">The <code>fms</code> field if included SHALL contain the CPUID[1]_EAX value masked with <code>0x0fff3fff</code> to provide chip family, model, stepping information.
+  If not included, the Verifier may reference the VEK certificate's extension for <code>productName</code>.<a href="#section-3.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-4.2">
+            <p id="section-3.2-4.2.1">The <code>sevsnpvm-launch-baseline</code> field if not included is SHALL be interpreted as an all zero SHA-384 digest.
+The calculation of the launch measurement SHALL use the value is the initial <code>PAGE_INFO</code>'s <code>DIGEST_CUR</code> value.<a href="#section-3.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.2-4.3">
+            <p id="section-3.2-4.3.1">The <code>sevsnpvm-launch-updates</code> field contains an ordered list of inputs to the <code>SNP_LAUNCH_UPDATE</code> command:<a href="#section-3.2-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div class="lang-cddl sourcecode" id="section-3.2-5">
+<pre>
+sevsnp-launch-update-sequence-map =
+  { * sevsnp-launch-update-sequence-number =&gt; sevsnp-launch-update-data-map }
+</pre><a href="#section-3.2-5" class="pilcrow">¶</a>
+</div>
+<p id="section-3.2-6">The <code>sevsnp-launch-update-data-map</code> contains all fields of the <code>PAGE_INFO</code> structure that are needed for reconstructing a measurement.
+If an update repeats many times, such as an application processor VMSA, then that can be compressed with the <code>repeat</code> field.<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2-7">The bits 1..3 encode the PAGE_TYPE as documented in the <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.
+The content codepoint MUST NOT be present if the page type is neither <code>PAGE_TYPE_NORMAL</code> (01h) nor <code>PAGE_TYPE_VMSA</code> (02h).<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.2-8">If <code>page2m</code> is not set, and content is present, it must not exceed size <code>0x1000B</code>.
+If <code>page2m</code> is set and content is present, it must not exceed size 0x100000B.
+The content is appended with zeros to reach the expected size.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
+<p id="section-3.2-9">For the VMM, there are some updates it does on behalf of a different principal than the firmware vendor, so it may choose to pass through some of the information about the launch measurement circumstances for separate appraisal.<a href="#section-3.2-9" class="pilcrow">¶</a></p>
+<p id="section-3.2-10">The encoded <code>sevsnp-launch-configuration-map</code> may be found in the extended guest report data table for UUID <code>8dd67209-971c-4c7f-8be6-4efcb7e24027</code>.<a href="#section-3.2-10" class="pilcrow">¶</a></p>
+<p id="section-3.2-11">The VMM is expected to provide all fields unless their default corresponds to the value used.<a href="#section-3.2-11" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="amd-sev-snp-launch-event-log-appraisal">
+<section id="section-3.3">
+        <h3 id="name-amd-sev-snp-launch-event-log">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-amd-sev-snp-launch-event-log" class="section-name selfRef">AMD SEV-SNP Launch Event Log Appraisal</a>
+        </h3>
+<p id="section-3.3-1">The <code>sevsnp-launch-configuration-map</code> is translated into a full sequence of <code>SNP_LAUNCH_UPDATE</code> commands on top of a baseline digest value to calculate following <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>'s documentation of digest calculation from <code>PAGE_INFO</code> structures.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">The first <code>PAGE_INFO</code> structure uses the baseline digest as its <code>DIGEST_CUR</code>.
+The following pseudocode for the function measurement computes the expected measurement of the endorsement format.
+If this measurement equals the digests value with VCEK authority, then add the baseline and updates measurement values to the same ECT as the attestation report.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a <code>sevsnp-launch-update-data-map</code> have default values when translated to a <code>PAGE_INFO</code> without the <code>DIGEST_CUR</code> field.
+If the baseline is not provided, it is assumed to be all zeros.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">```
+measurement({fms, baseline, updates}) = iterate(baseline, appendmap(mk_page_info(fms), updates))<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+<p id="section-3.3-5">PAGE_SHIFT = 12
+bitWidth(fms) = 48 if (fms &gt;&gt; 4) == 0xA00F0 ; Milan
+bitWidth(fms) = 52 if (fms &gt;&gt; 4) == 0xA10F0 ; Genoa<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+<p id="section-3.3-6">top_gpfn(fms) = ((1 &lt;&lt; bitWidth(fms)) - 1) &gt;&gt; PAGE_SHIFT
+default_gpa(fms): uint64 = top_gpfn(fms) &lt;&lt; PAGE_SHIFT<a href="#section-3.3-6" class="pilcrow">¶</a></p>
+<p id="section-3.3-7">mk_page_info(fms)({page-type or PAGE_TYPE_NORMAL,  content, gpa or default_gpa(fms), page-data or 0, vmpl-perms or 0, repeat or 1}):list[bytes] =
+ [contents || {0x70, 0, page-type, page-data} || leuint64(vmpl-data) || leuint64(gpa)]*repeat<a href="#section-3.3-7" class="pilcrow">¶</a></p>
+<p id="section-3.3-8">appendmap(f, []) = []
+appendmap(f, x:xs) = append(f(x), appendmap(f, xs))<a href="#section-3.3-8" class="pilcrow">¶</a></p>
+<p id="section-3.3-9">iterate(digest_cur, []) = digest_cur
+iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
+```<a href="#section-3.3-9" class="pilcrow">¶</a></p>
+<p id="section-3.3-10">The <code>leuint64</code> metafunction translates a 64-bit unsigned integer into its little endian byte string representation.<a href="#section-3.3-10" class="pilcrow">¶</a></p>
+<div id="comparisons-for-reference-values">
+<section id="section-3.3.1">
+          <h4 id="name-comparisons-for-reference-v">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-comparisons-for-reference-v" class="section-name selfRef">Comparisons for reference values</a>
+          </h4>
+<p id="section-3.3.1-1">An "any" sequence number matches any sequence number.
+The uint sequence number must be equal to the sequence number in the ACS.
+The <code>sevsnp-launch-update-data-map</code> reference value must match all present codepoints with encoding equality.
+The evidence ECT for the matching values are then split into a separate ECT to account for the added authority.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
