@@ -127,10 +127,7 @@ Table of Contents
 
    The profile attribute in the CoRIM MUST be present and MUST have a
    single entry set to the uri http://amd.com/please-permalink-me as
-   shown in {#figure-profile}.
-
-   {% figure caption:"SEV-SNP attestation profile version 1, CoRIM
-   profile" %}
+   shown in Figure 1.
 
    / corim-map / {
      / corim.profile / 3: [
@@ -139,7 +136,7 @@ Table of Contents
      / ... /
    }
 
-   {% endfigure %}
+       Figure 1: SEV-SNP attestation profile version 1, CoRIM profile
 
 3.1.1.  AMD SEV-SNP Target Environment
 
