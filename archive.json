@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-01T01:35:27.766041+00:00",
+  "timestamp": "2024-08-04T01:34:07.416794+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -49,6 +49,71 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOMdG_Uc6RpL-Z",
+      "title": "Launch updates by themselves can't express partial VMSA values",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/1",
+      "state": "OPEN",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The SEV-ES reset vector address has to be in the AP VMSAs' RIP and CS_BASE, but that's specified by the firmware whereas the rest of the VMSA is specified by the VMM.\r\n",
+      "createdAt": "2024-08-01T21:26:06Z",
+      "updatedAt": "2024-08-01T21:26:06Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOMdG_Uc6RulAQ",
+      "title": "Size of 2MB pages",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/2",
+      "state": "OPEN",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> If page2m is set and content is present, it must not exceed size 0x100000B\r\n\r\nDid you mean 0x200000B? CMDBUF_SNP_LAUNCH_UPDATE.PAGE_SIZE says PAGE_SIZE can be 4 KB or 2 MB.",
+      "createdAt": "2024-08-02T12:55:04Z",
+      "updatedAt": "2024-08-02T12:55:04Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOMdG_Uc6RumP-",
+      "title": "Format of PAGE_INFO.CONTENTS",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/3",
+      "state": "OPEN",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> The content is appended with zeros to reach the expected size.\r\n\r\nFrom your description, \"contents\" would be the un-digested contents. Is there a reason for this?\r\n\r\nWe can use the SHA-384 digest of the contents here unless you see a problem.",
+      "createdAt": "2024-08-02T12:57:56Z",
+      "updatedAt": "2024-08-02T12:57:56Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOMdG_Uc6RunMd",
+      "title": "Missing PAGE_INFO.GPA",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/4",
+      "state": "OPEN",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a sevsnp-launch-update-data-map have default values when translated to a PAGE_INFO without the DIGEST_CUR field.\r\n\r\nWe must also know the page's GPA to compute the measurement.",
+      "createdAt": "2024-08-02T13:00:01Z",
+      "updatedAt": "2024-08-02T13:00:01Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": []
 }
