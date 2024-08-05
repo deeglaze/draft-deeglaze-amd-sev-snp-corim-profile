@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-04T01:34:07.416794+00:00",
+  "timestamp": "2024-08-05T18:30:05.521790+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -111,6 +111,22 @@
       "body": "> Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a sevsnp-launch-update-data-map have default values when translated to a PAGE_INFO without the DIGEST_CUR field.\r\n\r\nWe must also know the page's GPA to compute the measurement.",
       "createdAt": "2024-08-02T13:00:01Z",
       "updatedAt": "2024-08-02T13:00:01Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOMdG_Uc6R9wEn",
+      "title": "type: REPORTED_TCB",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/5",
+      "state": "OPEN",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> $$measurement-values-map-extension //= (\r\n>   &(sevsnphost-launch-tcb: -8) => svn-type-choice\r\n> )\r\n\r\nIt should be &(sevsnphost-reported-tcb: -9) => svn-type-choice",
+      "createdAt": "2024-08-05T15:44:10Z",
+      "updatedAt": "2024-08-05T15:44:10Z",
       "closedAt": null,
       "comments": []
     }
