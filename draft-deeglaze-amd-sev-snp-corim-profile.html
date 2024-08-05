@@ -1822,21 +1822,34 @@ The following pseudocode for the function measurement computes the expected meas
 If this measurement equals the digests value with VCEK authority, then add the baseline and updates measurement values to the same ECT as the attestation report.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.3-3">Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a <code>sevsnp-launch-update-data-map</code> have default values when translated to a <code>PAGE_INFO</code> without the <code>DIGEST_CUR</code> field.
 If the baseline is not provided, it is assumed to be all zeros.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
-<p id="section-3.3-4">```
-measurement({fms, baseline, updates}) = iterate(baseline, appendmap(mk_page_info(fms), updates))<a href="#section-3.3-4" class="pilcrow">¶</a></p>
-<p id="section-3.3-5">PAGE_SHIFT = 12
+<div class="alignLeft art-text artwork" id="section-3.3-4">
+<pre>
+measurement({fms, baseline, updates}) = iterate(baseline, appendmap(mk_page_info(fms), updates))
+
+PAGE_SHIFT = 12
 bitWidth(fms) = 48 if (fms &gt;&gt; 4) == 0xA00F0 ; Milan
-bitWidth(fms) = 52 if (fms &gt;&gt; 4) == 0xA10F0 ; Genoa<a href="#section-3.3-5" class="pilcrow">¶</a></p>
-<p id="section-3.3-6">top_gpfn(fms) = ((1 &lt;&lt; bitWidth(fms)) - 1) &gt;&gt; PAGE_SHIFT
-default_gpa(fms): uint64 = top_gpfn(fms) &lt;&lt; PAGE_SHIFT<a href="#section-3.3-6" class="pilcrow">¶</a></p>
-<p id="section-3.3-7">mk_page_info(fms)({page-type or PAGE_TYPE_NORMAL,  content, gpa or default_gpa(fms), page-data or 0, vmpl-perms or 0}):list[bytes] =
- [contents || {0x70, 0, page-type, page-data} || leuint64(vmpl-data) || leuint64(gpa)]<a href="#section-3.3-7" class="pilcrow">¶</a></p>
-<p id="section-3.3-8">appendmap(f, []) = []
-appendmap(f, x:xs) = append(f(x), appendmap(f, xs))<a href="#section-3.3-8" class="pilcrow">¶</a></p>
-<p id="section-3.3-9">iterate(digest_cur, []) = digest_cur
+bitWidth(fms) = 52 if (fms &gt;&gt; 4) == 0xA10F0 ; Genoa
+
+top_gpfn(fms) = ((1 &lt;&lt; bitWidth(fms)) - 1) &gt;&gt; PAGE_SHIFT
+default_gpa(fms): uint64 = top_gpfn(fms) &lt;&lt; PAGE_SHIFT
+
+mk_page_info(fms)({page-type or PAGE_TYPE_NORMAL,
+                   contents,
+                   gpa or default_gpa(fms),
+                   page-data or 0,
+                   vmpl-perms or 0}):list[bytes] = [
+  contents || {0x70, 0, page-type,
+  page-data} || leuint64(vmpl-data) || leuint64(gpa),
+]
+
+appendmap(f, []) = []
+appendmap(f, x:xs) = append(f(x), appendmap(f, xs))
+
+iterate(digest_cur, []) = digest_cur
 iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
-```<a href="#section-3.3-9" class="pilcrow">¶</a></p>
-<p id="section-3.3-10">The <code>leuint64</code> metafunction translates a 64-bit unsigned integer into its little endian byte string representation.<a href="#section-3.3-10" class="pilcrow">¶</a></p>
+</pre><a href="#section-3.3-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.3-5">The <code>leuint64</code> metafunction translates a 64-bit unsigned integer into its little endian byte string representation.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
 <div id="comparisons-for-reference-values">
 <section id="section-3.3.1">
           <h4 id="name-comparisons-for-reference-v">
