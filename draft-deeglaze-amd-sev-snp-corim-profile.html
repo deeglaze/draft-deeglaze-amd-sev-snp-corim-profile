@@ -10,11 +10,11 @@
        AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) attestation reports comprise of reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
 This document specifies the information elements for representing SEV-SNP Reference Values in CoRIM format. 
     " name="description">
-<meta content="xml2rfc 3.22.0" name="generator">
+<meta content="xml2rfc 3.21.0" name="generator">
 <meta content="RIM, RATS, attestation, verifier, supply chain" name="keyword">
 <meta content="draft-deeglaze-amd-sev-snp-corim-profile-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.22.0
+  xml2rfc 3.21.0
     Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -24,8 +24,9 @@ This document specifies the information elements for representing SEV-SNP Refere
     platformdirs 4.2.2
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.32.3
+    requests 2.31.0
     setuptools 69.5.1
+    six 1.16.0
     wcwidth 0.2.13
 -->
 <link href="draft-deeglaze-amd-sev-snp-corim-profile.xml" rel="alternate" type="application/rfc+xml">
@@ -1315,15 +1316,15 @@ If the <code>SIGNING_KEY</code> bit of the attestation report is 1, then the <co
 <div class="lang-cbor-diag sourcecode" id="section-3.1.1-3">
 <pre>
 / environment-map / {
-/ class-map / {
-   / class-id: / 0 =&gt; #6.111(1.3.6.1.4.1.3704.2.1)
- }
-/ instance: / 1 =&gt; #6.563({
-  / report-id: / 0 =&gt; REPORT_ID,
-  / report-id-ma: / 1 =&gt; REPORT_ID_MA
-  })
-/ group: / 2 =&gt; #6.560(CHIP_ID)
- }
+  / class-map / {
+    / class-id: / 0 =&gt; #6.111(1.3.6.1.4.1.3704.2.1)
+  }
+  / instance: / 1 =&gt; #6.563({
+    / report-id: / 0 =&gt; REPORT_ID,
+    / report-id-ma: / 1 =&gt; REPORT_ID_MA
+    })
+  / group: / 2 =&gt; #6.560(CHIP_ID)
+}
 </pre><a href="#section-3.1.1-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1743,9 +1744,13 @@ The digest alone for the VMSA launch update command is insufficient to represent
 <p id="section-3.2.1-3">The bootstrap processor (BSP) and application processors (APs) typically have different initial values.
 The APs typically all have the same initial value, so the <code>ap-vmsa</code> codepoint MAY be a single <code>sevsnp-vmsa-type-choice</code> to represent its replication.
 Alternatively, each AP's initial VMSA may be individually specified with a list of <code>sevsnp-vmsa-type-choice</code>.<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-4">All VMSA fields are optional.
+<p id="section-3.2.1-4">sevsnp-repeated-vmsa = [
+  vmsa: sevsnp-vmsa-type-choice
+  repeat: uint
+}<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-5">All VMSA fields are optional.
 A missing VMSA field in evidence is treated as its default value.
-A missing VMSA field in a reference value is one less matching condition.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+A missing VMSA field in a reference value is one less matching condition.<a href="#section-3.2.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="vmsa-default-values">
@@ -1882,51 +1887,155 @@ Given that the firmware may be built by one party, the VMM another, and <code>SE
 <p id="section-3.3.2.1-1">The GUID table at the end of the ROM is terminated by the GUID <code>96b582de-1fb2-45f7-baea-a366c55a082d</code> starting at offset <code>ROM_end - 0x30</code>.
 At offset <code>ROM_end - 0x32</code> there is a length in a 16-bit little endian unsigned integer.
 At offset <code>ROM_end - 0x32 - length</code> there is a table with format<a href="#section-3.3.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.3.2.1-2"><code>
-| Type | Name |
-| ---- | ---- |
-| UINT8[Length] | Data |
-| LE_UINT16 | Length |
-| EFI_GUID | Name |
-| * | * |
-</code><a href="#section-3.3.2.1-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+              <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+                <tr>
+                  <th class="text-left" rowspan="1" colspan="1">Type</th>
+                  <th class="text-left" rowspan="1" colspan="1">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">UINT8[Length]</td>
+                  <td class="text-left" rowspan="1" colspan="1">Data</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT16</td>
+                  <td class="text-left" rowspan="1" colspan="1">Length</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">EFI_GUID</td>
+                  <td class="text-left" rowspan="1" colspan="1">Name</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">*</td>
+                  <td class="text-left" rowspan="1" colspan="1">*</td>
+                </tr>
+              </tbody>
+            </table>
 <p id="section-3.3.2.1-3"><code>LE_UINT16</code> is the type of a little endian 16-bit unsigned integer.
 <code>EFI_GUID</code> is the UUID format specified in section 4 of [RFC4122].
 The footer GUID and length specifies the length of the table of entries itself, which does not include the footer.<a href="#section-3.3.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.3.2.1-4">Within this table there is an entry that specifies the guest physical address that contains the <code>SevMetadata</code>.<a href="#section-3.3.2.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.3.2.1-5"><code>
-| LE_UINT32 | Address |
-| LE_UINT16 | Length |
-| EFI_GUID | dc886566-984a-4798-A75e-5585a7bf67cc |
-</code><a href="#section-3.3.2.1-5" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+              <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+                <tr>
+                  <th class="text-left" rowspan="1" colspan="1">Type</th>
+                  <th class="text-left" rowspan="1" colspan="1">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">Address</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT16</td>
+                  <td class="text-left" rowspan="1" colspan="1">Length</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">EFI_GUID</td>
+                  <td class="text-left" rowspan="1" colspan="1">dc886566-984a-4798-A75e-5585a7bf67cc</td>
+                </tr>
+              </tbody>
+            </table>
 <p id="section-3.3.2.1-6">At this address when loaded, or at offset <code>ROM_end - (4GiB - Address)</code>, the <code>SevMetadata</code>,<a href="#section-3.3.2.1-6" class="pilcrow">¶</a></p>
-<p id="section-3.3.2.1-7"><code>
-| Type | Name |
-| ---- | ---- |
-| LE_UINT32 | Signature |
-| LE_UINT32 | Length |
-| LE_UINT32 | Version |
-| LE_UINT32 | NumSections |
-| SevMetadataSection[Sections] | Sections |
-</code><a href="#section-3.3.2.1-7" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+              <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+                <tr>
+                  <th class="text-left" rowspan="1" colspan="1">Type</th>
+                  <th class="text-left" rowspan="1" colspan="1">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">Signature</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">Length</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">Version</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">NumSections</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">SevMetadataSection[Sections]</td>
+                  <td class="text-left" rowspan="1" colspan="1">Sections</td>
+                </tr>
+              </tbody>
+            </table>
 <p id="section-3.3.2.1-8">The <code>Signature</code> value should be <code>'A', 'S', 'E', 'V'</code> or "VESA" in big-endian order: <code>0x56455341</code>.
 Where <code>SevMetadataSection</code> is<a href="#section-3.3.2.1-8" class="pilcrow">¶</a></p>
-<p id="section-3.3.2.1-9"><code>
-| Type | Name |
-| ---- | ---- |
-| LE_UINT32 | Address |
-| LE_UINT32 | Length |
-| LE_UINT32 | Kind |
-</code><a href="#section-3.3.2.1-9" class="pilcrow">¶</a></p>
+<table class="center" id="table-4">
+              <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+<thead>
+                <tr>
+                  <th class="text-left" rowspan="1" colspan="1">Type</th>
+                  <th class="text-left" rowspan="1" colspan="1">Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">Address</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">Length</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">LE_UINT32</td>
+                  <td class="text-left" rowspan="1" colspan="1">Kind</td>
+                </tr>
+              </tbody>
+            </table>
 <p id="section-3.3.2.1-10">A section references some slice of guest physical memory that has a certain purpose as labeled by <code>Kind</code>:<a href="#section-3.3.2.1-10" class="pilcrow">¶</a></p>
-<p id="section-3.3.2.1-11"><code>
-| Value | Name | PAGE_TYPE |
-| 1 | OVMF_SECTION_TYPE_SNP_SEC_MEM | PAGE_TYPE_UNMEASURED |
-| 2 | OVMF_SECTION_TYPE_SNP_SECRETS | PAGE_TYPE_SECRETS |
-| 3 | OVMF_SECTION_TYPE_CPUID | PAGE_TYPE_CPUID |
-| 4 | OVMF_SECTION_TYPE_SNP_SVSM_CAA | PAGE_TYPE_ZERO |
-| 16 | OVMF_SECTION_TYPE_KERNEL_HASHES | PAGE_TYPE_NORMAL |
-</code><a href="#section-3.3.2.1-11" class="pilcrow">¶</a></p>
+<table class="center" id="table-5">
+              <caption><a href="#table-5" class="selfRef">Table 5</a></caption>
+<thead>
+                <tr>
+                  <th class="text-left" rowspan="1" colspan="1">Value</th>
+                  <th class="text-left" rowspan="1" colspan="1">Name</th>
+                  <th class="text-left" rowspan="1" colspan="1">PAGE_TYPE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">1</td>
+                  <td class="text-left" rowspan="1" colspan="1">OVMF_SECTION_TYPE_SNP_SEC_MEM</td>
+                  <td class="text-left" rowspan="1" colspan="1">PAGE_TYPE_UNMEASURED</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">2</td>
+                  <td class="text-left" rowspan="1" colspan="1">OVMF_SECTION_TYPE_SNP_SECRETS</td>
+                  <td class="text-left" rowspan="1" colspan="1">PAGE_TYPE_SECRETS</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">3</td>
+                  <td class="text-left" rowspan="1" colspan="1">OVMF_SECTION_TYPE_CPUID</td>
+                  <td class="text-left" rowspan="1" colspan="1">PAGE_TYPE_CPUID</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">4</td>
+                  <td class="text-left" rowspan="1" colspan="1">OVMF_SECTION_TYPE_SNP_SVSM_CAA</td>
+                  <td class="text-left" rowspan="1" colspan="1">PAGE_TYPE_ZERO</td>
+                </tr>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">16</td>
+                  <td class="text-left" rowspan="1" colspan="1">OVMF_SECTION_TYPE_KERNEL_HASHES</td>
+                  <td class="text-left" rowspan="1" colspan="1">PAGE_TYPE_NORMAL</td>
+                </tr>
+              </tbody>
+            </table>
 <p id="section-3.3.2.1-12">The memory allocated to the initial UEFI boot phase, <code>SEC</code>, is unmeasured but must be marked for encryption without needing the <code>GHCB</code> or <code>MSR</code> protocol.
 The <code>SEC_MEM</code> sections contain the initial <code>GHCB</code> pages, page tables, and temporary memory for stack and heap.
 The secrets section is memory allocated specifically for holding secrets that the AMD-SP populates at launch.
@@ -2024,77 +2133,77 @@ For an initial example, consider the 2MiB OVMF ROM's 512 4KiB updates as the bas
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x811000`
+      / gpa: / 2 =&gt; 0x811000
       / seq-no: / 5 =&gt; 17
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x812000`
+      / gpa: / 2 =&gt; 0x812000
       / seq-no: / 5 =&gt; 18
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x813000`
+      / gpa: / 2 =&gt; 0x813000
       / seq-no: / 5 =&gt; 19
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x814000`
+      / gpa: / 2 =&gt; 0x814000
       / seq-no: / 5 =&gt; 20
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x815000`
+      / gpa: / 2 =&gt; 0x815000
       / seq-no: / 5 =&gt; 21
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x816000`
+      / gpa: / 2 =&gt; 0x816000
       / seq-no: / 5 =&gt; 22
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x817000`
+      / gpa: / 2 =&gt; 0x817000
       / seq-no: / 5 =&gt; 23
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x818000`
+      / gpa: / 2 =&gt; 0x818000
       / seq-no: / 5 =&gt; 24
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x819000`
+      / gpa: / 2 =&gt; 0x819000
       / seq-no: / 5 =&gt; 25
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81A000`
+      / gpa: / 2 =&gt; 0x81A000
       / seq-no: / 5 =&gt; 26
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81B000`
+      / gpa: / 2 =&gt; 0x81B000
       / seq-no: / 5 =&gt; 27
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81C000`
+      / gpa: / 2 =&gt; 0x81C000
       / seq-no: / 5 =&gt; 28
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81D000`
+      / gpa: / 2 =&gt; 0x81D000
       / seq-no: / 5 =&gt; 29
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81E000`
+      / gpa: / 2 =&gt; 0x81E000
       / seq-no: / 5 =&gt; 30
     },
     / sevsnp-launch-update-data-map / {
       / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81F000`
+      / gpa: / 2 =&gt; 0x81F000
       / seq-no: / 5 =&gt; 31
     },
   ]
@@ -2116,10 +2225,10 @@ The launch secrets and kernel hashes are at address <code>0x810000</code> and fi
 The location of the final unmeasured pages are for the APIC page tables and PEI temporary memory.
 The final section after the svsm calling area and kernel hashes up to the PEI firmware volume base, so <code>0x811000</code> up to <code>0x820000</code> for another 15 pages.<a href="#section-3.3.2.1-15" class="pilcrow">¶</a></p>
 <p id="section-3.3.2.1-16">A more compact representation can take advantage of the fact that several of the first update commands are driven entirely by the firmware.
+The firmware author may then decide to reorder the section processing to ensure the kernel hashes are last, as there is no requirement for sequential GPAs.
 The baseline contains the initial ROM plus all the sections that don't have a dependency on external measured information.
-The first update after the baseline is the <code>PAGE_TYPE_NORMAL</code> command without a digest to account for partial information for <code>SEV_KERNEL_HASHES</code>.
-The other update is just what appears afterwards.<a href="#section-3.3.2.1-16" class="pilcrow">¶</a></p>
-<div class="breakable lang-cbor-diag sourcecode" id="section-3.3.2.1-17">
+Thanks to the section reordering, only the <code>SEV_KERNEL_HASHES</code> need to be called out in the signed configuration.<a href="#section-3.3.2.1-16" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.3.2.1-17">
 <pre>
 / sevsnp-launch-configuration-map / {
   / sevsnp-launch-update-baseline: / 1 =&gt;
@@ -2130,81 +2239,6 @@ The other update is just what appears afterwards.<a href="#section-3.3.2.1-16" c
       / gpa: / 2 =&gt; 0x810000
       / seq-no: / 5 =&gt; 1
     },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x811000`
-      / seq-no: / 5 =&gt; 2
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x812000`
-      / seq-no: / 5 =&gt; 3
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x813000`
-      / seq-no: / 5 =&gt; 4
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x814000`
-      / seq-no: / 5 =&gt; 5
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x815000`
-      / seq-no: / 5 =&gt; 6
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x816000`
-      / seq-no: / 5 =&gt; 7
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x817000`
-      / seq-no: / 5 =&gt; 8
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x818000`
-      / seq-no: / 5 =&gt; 9
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x819000`
-      / seq-no: / 5 =&gt; 10
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81A000`
-      / seq-no: / 5 =&gt; 11
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81B000`
-      / seq-no: / 5 =&gt; 12
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81C000`
-      / seq-no: / 5 =&gt; 13
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81D000`
-      / seq-no: / 5 =&gt; 14
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81E000`
-      / seq-no: / 5 =&gt; 15
-    },
-    / sevsnp-launch-update-data-map / {
-      / page-type: / 0 =&gt; 4
-      / gpa: / 2 =&gt; 0x81F000`
-      / seq-no: / 5 =&gt; 16
-    },
   ]
   / ap-vmsa: 4 / =&gt; #6.32781({
     / cs: / 1 =&gt; / svm-vmcb-seg-map / {/ base: / 3 =&gt; 0x800000}
@@ -2213,8 +2247,6 @@ The other update is just what appears afterwards.<a href="#section-3.3.2.1-16" c
 }
 </pre><a href="#section-3.3.2.1-17" class="pilcrow">¶</a>
 </div>
-<p id="section-3.3.2.1-18">The firmware author may then decide to reorder the section processing to ensure the kernel hashes are last, as there is no requirement for sequential GPAs.
-The result becomes a signed baseline and a single update for the <code>PAGE_TYPE_NORMAL</code> kernel hashes' address.<a href="#section-3.3.2.1-18" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="kernel-data">
@@ -2260,8 +2292,12 @@ The order in which kernel hashes are loaded, and at which address is irrelevant 
         </h3>
 <p id="section-4.1-1">IANA is requested to allocate the following tags in the "CBOR Tags" registry <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>.
 The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<table class="center" id="table-1">
-          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<span id="name-added-cbor-tags"></span><div id="cbor-tags">
+<table class="center" id="table-6">
+          <caption>
+<a href="#table-6" class="selfRef">Table 6</a>:
+<a href="#name-added-cbor-tags" class="selfRef">Added CBOR tags</a>
+          </caption>
 <thead>
             <tr>
               <th class="text-left" rowspan="1" colspan="1">Tag</th>
@@ -2289,13 +2325,31 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </td>
               <td class="text-left" rowspan="1" colspan="1">RFCthis</td>
             </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">32781</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>map</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">A map of virtual machine vCPU registers (VMSA) to initial values <a href="#vmsa-evidence" class="auto internal xref">Section 3.2.1</a>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">RFCthis</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">32782</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>array</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">A record of a single VMSA and a count of how many times it repeats <a href="#vmsa-evidence" class="auto internal xref">Section 3.2.1</a>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">RFCthis</td>
+            </tr>
           </tbody>
         </table>
-</section>
 </div>
 </section>
 </div>
-<div id="sec-combined-references">
+</section>
+</div>
 <section id="section-5">
       <h2 id="name-references">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-references" class="section-name selfRef">References</a>
@@ -2375,7 +2429,6 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </section>
 </div>
 </section>
-</div>
 <div id="contributors">
 <section id="appendix-A">
       <h2 id="name-contributors">

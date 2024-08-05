@@ -173,15 +173,15 @@ Table of Contents
    VLEK.
 
    / environment-map / {
-   / class-map / {
-      / class-id: / 0 => #6.111(1.3.6.1.4.1.3704.2.1)
-    }
-   / instance: / 1 => #6.563({
-     / report-id: / 0 => REPORT_ID,
-     / report-id-ma: / 1 => REPORT_ID_MA
-     })
-   / group: / 2 => #6.560(CHIP_ID)
-    }
+     / class-map / {
+       / class-id: / 0 => #6.111(1.3.6.1.4.1.3704.2.1)
+     }
+     / instance: / 1 => #6.563({
+       / report-id: / 0 => REPORT_ID,
+       / report-id-ma: / 1 => REPORT_ID_MA
+       })
+     / group: / 2 => #6.560(CHIP_ID)
+   }
 
 3.1.2.  AMD SEV-SNP Attestation Report measurement values extensions
 
@@ -598,6 +598,8 @@ Table of Contents
    each AP's initial VMSA may be individually specified with a list of
    sevsnp-vmsa-type-choice.
 
+   sevsnp-repeated-vmsa = [ vmsa: sevsnp-vmsa-type-choice repeat: uint }
+
    All VMSA fields are optional.  A missing VMSA field in evidence is
    treated as its default value.  A missing VMSA field in a reference
    value is one less matching condition.
@@ -748,8 +750,19 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
    endian unsigned integer.  At offset ROM_end - 0x32 - length there is
    a table with format
 
-   | Type | Name | | ---- | ---- | | UINT8[Length] | Data | |
-   LE_UINT16 | Length | | EFI_GUID | Name | | * | * |
+                        +===============+========+
+                        | Type          | Name   |
+                        +===============+========+
+                        | UINT8[Length] | Data   |
+                        +---------------+--------+
+                        | LE_UINT16     | Length |
+                        +---------------+--------+
+                        | EFI_GUID      | Name   |
+                        +---------------+--------+
+                        | *             | *      |
+                        +---------------+--------+
+
+                                 Table 1
 
    LE_UINT16 is the type of a little endian 16-bit unsigned integer.
    EFI_GUID is the UUID format specified in section 4 of [RFC4122].  The
@@ -759,31 +772,70 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
    Within this table there is an entry that specifies the guest physical
    address that contains the SevMetadata.
 
-   | LE_UINT32 | Address | | LE_UINT16 | Length | | EFI_GUID | dc886566-
-   984a-4798-A75e-5585a7bf67cc |
+           +===========+======================================+
+           | Type      | Name                                 |
+           +===========+======================================+
+           | LE_UINT32 | Address                              |
+           +-----------+--------------------------------------+
+           | LE_UINT16 | Length                               |
+           +-----------+--------------------------------------+
+           | EFI_GUID  | dc886566-984a-4798-A75e-5585a7bf67cc |
+           +-----------+--------------------------------------+
+
+                                 Table 2
 
    At this address when loaded, or at offset ROM_end - (4GiB - Address),
    the SevMetadata,
 
-   | Type | Name | | ---- | ---- | | LE_UINT32 | Signature | |
-   LE_UINT32 | Length | | LE_UINT32 | Version | | LE_UINT32 |
-   NumSections | | SevMetadataSection[Sections] | Sections |
+              +==============================+=============+
+              | Type                         | Name        |
+              +==============================+=============+
+              | LE_UINT32                    | Signature   |
+              +------------------------------+-------------+
+              | LE_UINT32                    | Length      |
+              +------------------------------+-------------+
+              | LE_UINT32                    | Version     |
+              +------------------------------+-------------+
+              | LE_UINT32                    | NumSections |
+              +------------------------------+-------------+
+              | SevMetadataSection[Sections] | Sections    |
+              +------------------------------+-------------+
+
+                                 Table 3
 
    The Signature value should be 'A', 'S', 'E', 'V' or "VESA" in big-
    endian order: 0x56455341.  Where SevMetadataSection is
 
-   | Type | Name | | ---- | ---- | | LE_UINT32 | Address | | LE_UINT32 |
-   Length | | LE_UINT32 | Kind |
+                          +===========+=========+
+                          | Type      | Name    |
+                          +===========+=========+
+                          | LE_UINT32 | Address |
+                          +-----------+---------+
+                          | LE_UINT32 | Length  |
+                          +-----------+---------+
+                          | LE_UINT32 | Kind    |
+                          +-----------+---------+
+
+                                  Table 4
 
    A section references some slice of guest physical memory that has a
    certain purpose as labeled by Kind:
 
-   | Value | Name | PAGE_TYPE | | 1 | OVMF_SECTION_TYPE_SNP_SEC_MEM |
-   PAGE_TYPE_UNMEASURED | | 2 | OVMF_SECTION_TYPE_SNP_SECRETS |
-   PAGE_TYPE_SECRETS | | 3 | OVMF_SECTION_TYPE_CPUID |
-   PAGE_TYPE_CPUID | | 4 | OVMF_SECTION_TYPE_SNP_SVSM_CAA |
-   PAGE_TYPE_ZERO | | 16 | OVMF_SECTION_TYPE_KERNEL_HASHES |
-   PAGE_TYPE_NORMAL |
+    +=======+=================================+======================+
+    | Value | Name                            | PAGE_TYPE            |
+    +=======+=================================+======================+
+    | 1     | OVMF_SECTION_TYPE_SNP_SEC_MEM   | PAGE_TYPE_UNMEASURED |
+    +-------+---------------------------------+----------------------+
+    | 2     | OVMF_SECTION_TYPE_SNP_SECRETS   | PAGE_TYPE_SECRETS    |
+    +-------+---------------------------------+----------------------+
+    | 3     | OVMF_SECTION_TYPE_CPUID         | PAGE_TYPE_CPUID      |
+    +-------+---------------------------------+----------------------+
+    | 4     | OVMF_SECTION_TYPE_SNP_SVSM_CAA  | PAGE_TYPE_ZERO       |
+    +-------+---------------------------------+----------------------+
+    | 16    | OVMF_SECTION_TYPE_KERNEL_HASHES | PAGE_TYPE_NORMAL     |
+    +-------+---------------------------------+----------------------+
+
+                                 Table 5
 
    The memory allocated to the initial UEFI boot phase, SEC, is
    unmeasured but must be marked for encryption without needing the GHCB
@@ -892,77 +944,77 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x811000`
+         / gpa: / 2 => 0x811000
          / seq-no: / 5 => 17
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x812000`
+         / gpa: / 2 => 0x812000
          / seq-no: / 5 => 18
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x813000`
+         / gpa: / 2 => 0x813000
          / seq-no: / 5 => 19
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x814000`
+         / gpa: / 2 => 0x814000
          / seq-no: / 5 => 20
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x815000`
+         / gpa: / 2 => 0x815000
          / seq-no: / 5 => 21
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x816000`
+         / gpa: / 2 => 0x816000
          / seq-no: / 5 => 22
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x817000`
+         / gpa: / 2 => 0x817000
          / seq-no: / 5 => 23
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x818000`
+         / gpa: / 2 => 0x818000
          / seq-no: / 5 => 24
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x819000`
+         / gpa: / 2 => 0x819000
          / seq-no: / 5 => 25
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x81A000`
+         / gpa: / 2 => 0x81A000
          / seq-no: / 5 => 26
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x81B000`
+         / gpa: / 2 => 0x81B000
          / seq-no: / 5 => 27
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x81C000`
+         / gpa: / 2 => 0x81C000
          / seq-no: / 5 => 28
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x81D000`
+         / gpa: / 2 => 0x81D000
          / seq-no: / 5 => 29
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x81E000`
+         / gpa: / 2 => 0x81E000
          / seq-no: / 5 => 30
        },
        / sevsnp-launch-update-data-map / {
          / page-type: / 0 => 4
-         / gpa: / 2 => 0x81F000`
+         / gpa: / 2 => 0x81F000
          / seq-no: / 5 => 31
        },
      ]
@@ -988,12 +1040,12 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
 
    A more compact representation can take advantage of the fact that
    several of the first update commands are driven entirely by the
-   firmware.  The baseline contains the initial ROM plus all the
-   sections that don't have a dependency on external measured
-   information.  The first update after the baseline is the
-   PAGE_TYPE_NORMAL command without a digest to account for partial
-   information for SEV_KERNEL_HASHES.  The other update is just what
-   appears afterwards.
+   firmware.  The firmware author may then decide to reorder the section
+   processing to ensure the kernel hashes are last, as there is no
+   requirement for sequential GPAs.  The baseline contains the initial
+   ROM plus all the sections that don't have a dependency on external
+   measured information.  Thanks to the section reordering, only the
+   SEV_KERNEL_HASHES need to be called out in the signed configuration.
 
    / sevsnp-launch-configuration-map / {
      / sevsnp-launch-update-baseline: / 1 =>
@@ -1004,92 +1056,12 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
          / gpa: / 2 => 0x810000
          / seq-no: / 5 => 1
        },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x811000`
-         / seq-no: / 5 => 2
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x812000`
-         / seq-no: / 5 => 3
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x813000`
-         / seq-no: / 5 => 4
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x814000`
-         / seq-no: / 5 => 5
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x815000`
-         / seq-no: / 5 => 6
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x816000`
-         / seq-no: / 5 => 7
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x817000`
-         / seq-no: / 5 => 8
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x818000`
-         / seq-no: / 5 => 9
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x819000`
-         / seq-no: / 5 => 10
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x81A000`
-         / seq-no: / 5 => 11
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x81B000`
-         / seq-no: / 5 => 12
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x81C000`
-         / seq-no: / 5 => 13
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x81D000`
-         / seq-no: / 5 => 14
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x81E000`
-         / seq-no: / 5 => 15
-       },
-       / sevsnp-launch-update-data-map / {
-         / page-type: / 0 => 4
-         / gpa: / 2 => 0x81F000`
-         / seq-no: / 5 => 16
-       },
      ]
      / ap-vmsa: 4 / => #6.32781({
        / cs: / 1 => / svm-vmcb-seg-map / {/ base: / 3 => 0x800000}
        / rip: / 37 => 0xb004
      })
    }
-
-   The firmware author may then decide to reorder the section processing
-   to ensure the kernel hashes are last, as there is no requirement for
-   sequential GPAs.  The result becomes a signed baseline and a single
-   update for the PAGE_TYPE_NORMAL kernel hashes' address.
 
 3.3.2.2.  Kernel data
 
@@ -1135,8 +1107,16 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
      |       |       | format that compares with other   |           |
      |       |       | keys Section 3.1.3.4              |           |
      +-------+-------+-----------------------------------+-----------+
+     | 32781 | map   | A map of virtual machine vCPU     | RFCthis   |
+     |       |       | registers (VMSA) to initial       |           |
+     |       |       | values Section 3.2.1              |           |
+     +-------+-------+-----------------------------------+-----------+
+     | 32782 | array | A record of a single VMSA and a   | RFCthis   |
+     |       |       | count of how many times it        |           |
+     |       |       | repeats Section 3.2.1             |           |
+     +-------+-------+-----------------------------------+-----------+
 
-                                  Table 1
+                          Table 6: Added CBOR tags
 
 5.  References
 
