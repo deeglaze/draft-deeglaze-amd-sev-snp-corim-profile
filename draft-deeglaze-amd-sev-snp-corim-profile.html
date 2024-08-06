@@ -1823,7 +1823,7 @@ GCE sets <code>ds</code>, <code>es</code>, <code>fs</code>, <code>gs</code>, and
 <p id="section-3.3-2">The first <code>PAGE_INFO</code> structure uses the baseline digest as its <code>DIGEST_CUR</code>.
 The following pseudocode for the function measurement computes the expected measurement of the endorsement format.
 If this measurement equals the digests value with VCEK authority, then add the baseline and updates measurement values to the same ECT as the attestation report.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.3-3">Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a <code>sevsnp-launch-update-data-map</code> have default values when translated to a <code>PAGE_INFO</code> without the <code>DIGEST_CUR</code> field.
+<p id="section-3.3-3">Since the VMM only has to provide the gpa, page type, and digest of the contents, the rest of the fields of a <code>sevsnp-launch-update-data-map</code> have default values when translated to a <code>PAGE_INFO</code> without the <code>DIGEST_CUR</code> field.
 If the baseline is not provided, it is assumed to be all zeros.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3-4">
 <pre>
