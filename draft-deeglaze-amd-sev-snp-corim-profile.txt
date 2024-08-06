@@ -4,8 +4,8 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                           5 August 2024
-Expires: 6 February 2025
+Intended status: Standards Track                           6 August 2024
+Expires: 7 February 2025
 
 
             CoRIM profile for AMD SEV-SNP attestation report
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 February 2025.
+   This Internet-Draft will expire on 7 February 2025.
 
 Copyright Notice
 
@@ -275,7 +275,7 @@ Table of Contents
    The REPORTED_TCB version of the host is assigned codepoint -9:
 
    $$measurement-values-map-extension //= (
-     &(sevsnphost-launch-tcb: -8) => svn-type-choice
+     &(sevsnphost-reported-tcb: -9) => svn-type-choice
    )
 
    The GUEST_POLICY boolean flags are added as extensions to $$flags-
