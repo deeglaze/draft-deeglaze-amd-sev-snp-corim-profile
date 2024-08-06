@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-05T18:30:05.521790+00:00",
+  "timestamp": "2024-08-06T15:14:16.423593+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -55,15 +55,15 @@
       "id": "I_kwDOMdG_Uc6RpL-Z",
       "title": "Launch updates by themselves can't express partial VMSA values",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/1",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "deeglaze",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "The SEV-ES reset vector address has to be in the AP VMSAs' RIP and CS_BASE, but that's specified by the firmware whereas the rest of the VMSA is specified by the VMM.\r\n",
       "createdAt": "2024-08-01T21:26:06Z",
-      "updatedAt": "2024-08-01T21:26:06Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-06T15:11:05Z",
+      "closedAt": "2024-08-06T15:11:05Z",
       "comments": []
     },
     {
@@ -71,32 +71,48 @@
       "id": "I_kwDOMdG_Uc6RulAQ",
       "title": "Size of 2MB pages",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jraman567",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "> If page2m is set and content is present, it must not exceed size 0x100000B\r\n\r\nDid you mean 0x200000B? CMDBUF_SNP_LAUNCH_UPDATE.PAGE_SIZE says PAGE_SIZE can be 4 KB or 2 MB.",
       "createdAt": "2024-08-02T12:55:04Z",
-      "updatedAt": "2024-08-02T12:55:04Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-08-06T15:13:56Z",
+      "closedAt": "2024-08-06T15:13:56Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "I've removed the page size entirely since the measurements are always in terms of 4KiB pages.",
+          "createdAt": "2024-08-06T15:10:20Z",
+          "updatedAt": "2024-08-06T15:10:20Z"
+        }
+      ]
     },
     {
       "number": 3,
       "id": "I_kwDOMdG_Uc6RumP-",
       "title": "Format of PAGE_INFO.CONTENTS",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jraman567",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "> The content is appended with zeros to reach the expected size.\r\n\r\nFrom your description, \"contents\" would be the un-digested contents. Is there a reason for this?\r\n\r\nWe can use the SHA-384 digest of the contents here unless you see a problem.",
       "createdAt": "2024-08-02T12:57:56Z",
-      "updatedAt": "2024-08-02T12:57:56Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-08-06T15:10:42Z",
+      "closedAt": "2024-08-06T15:10:42Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Thanks, that's been fixed.",
+          "createdAt": "2024-08-06T15:10:42Z",
+          "updatedAt": "2024-08-06T15:10:42Z"
+        }
+      ]
     },
     {
       "number": 4,
@@ -119,16 +135,24 @@
       "id": "I_kwDOMdG_Uc6R9wEn",
       "title": "type: REPORTED_TCB",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jraman567",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "> $$measurement-values-map-extension //= (\r\n>   &(sevsnphost-launch-tcb: -8) => svn-type-choice\r\n> )\r\n\r\nIt should be &(sevsnphost-reported-tcb: -9) => svn-type-choice",
       "createdAt": "2024-08-05T15:44:10Z",
-      "updatedAt": "2024-08-05T15:44:10Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-08-06T15:13:48Z",
+      "closedAt": "2024-08-06T15:13:48Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Ah, the ::import was a copy/paste error. Thanks.",
+          "createdAt": "2024-08-06T15:13:48Z",
+          "updatedAt": "2024-08-06T15:13:48Z"
+        }
+      ]
     }
   ],
   "pulls": []
