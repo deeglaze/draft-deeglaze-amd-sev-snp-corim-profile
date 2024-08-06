@@ -10,11 +10,11 @@
        AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) attestation reports comprise of reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
 This document specifies the information elements for representing SEV-SNP Reference Values in CoRIM format. 
     " name="description">
-<meta content="xml2rfc 3.22.0" name="generator">
+<meta content="xml2rfc 3.21.0" name="generator">
 <meta content="RIM, RATS, attestation, verifier, supply chain" name="keyword">
 <meta content="draft-deeglaze-amd-sev-snp-corim-profile-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.22.0
+  xml2rfc 3.21.0
     Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -24,8 +24,9 @@ This document specifies the information elements for representing SEV-SNP Refere
     platformdirs 4.2.2
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.32.3
+    requests 2.31.0
     setuptools 69.5.1
+    six 1.16.0
     wcwidth 0.2.13
 -->
 <link href="draft-deeglaze-amd-sev-snp-corim-profile.xml" rel="alternate" type="application/rfc+xml">
@@ -1548,7 +1549,7 @@ The <code>measurement-values-map</code> is set as described in the following sec
 <p id="section-3.1.3.3-1">The function <code>is-set(x, b)</code> represents whether the bit at position <code>b</code> is set in the number <code>x</code>.<a href="#section-3.1.3.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.1.3.3-2.1">
-                <p id="section-3.1.3.3-2.1.1">The <code>digests: 2</code> codepoint SHALL be set to either <code>[ / digest / { alg: 7 val: MEASUREMENT } ]</code> or <code>[ / digest / { alg: "sha-384" val: MEASUREMENT } ]</code> as assigned in [named-info].<a href="#section-3.1.3.3-2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1.3.3-2.1.1">The <code>digests: 2</code> codepoint SHALL be set to either <code>[ / digest / { alg: 7 val: MEASUREMENT } ]</code> or <code>[ / digest / { alg: "sha-384" val: MEASUREMENT } ]</code> as assigned in <span>[<a href="#IANA.named-information" class="cite xref">IANA.named-information</a>]</span>.<a href="#section-3.1.3.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
               <li class="normal" id="section-3.1.3.3-2.2">
                 <p id="section-3.1.3.3-2.2.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-smt-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 16</code>.<a href="#section-3.1.3.3-2.2.1" class="pilcrow">¶</a></p>
@@ -1674,10 +1675,10 @@ If an author key is used, its signature of the ID_KEY is assumed to exist and ha
                 <p id="section-3.1.3.4-4.3.1">A PKIX public key (#6.554-tagged <code>tstr</code>) or PKIX certificate (#6.555-tagged <code>tstr</code>) MAY be comparable to a #6.32780-tagged byte string.<a href="#section-3.1.3.4-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-3.1.3.4-5">The [RFC3280] specified <code>AlgorithmIdentifier</code> has optional parameters based on the algorithm identifier.
-The AMD signature algorithm <code>1h</code> corresponds to algorithm <code>ecdsa-with-sha384</code> from section 3.2 of [RFC5758], but the parameters MUST be omitted.
-The <code>SubjectPublicKeyInfo</code> is therefore <code>id-ecPublicKey</code> from section 2.1.1 of [RFC5480] to further allow the curve to be specified, despite not further specifying that the signature is of a SHA-384 digest.
-The AMD ECSDA curve name <code>2h</code> corresponds to named curve <code>secp384r1</code> from section 2.2 of [RFC5480].
+<p id="section-3.1.3.4-5">The <span>[<a href="#RFC3280" class="cite xref">RFC3280</a>]</span> specified <code>AlgorithmIdentifier</code> has optional parameters based on the algorithm identifier.
+The AMD signature algorithm <code>1h</code> corresponds to algorithm <code>ecdsa-with-sha384</code> from section 3.2 of <span>[<a href="#RFC5758" class="cite xref">RFC5758</a>]</span>, but the parameters MUST be omitted.
+The <code>SubjectPublicKeyInfo</code> is therefore <code>id-ecPublicKey</code> from section 2.1.1 of <span>[<a href="#RFC5480" class="cite xref">RFC5480</a>]</span> to further allow the curve to be specified, despite not further specifying that the signature is of a SHA-384 digest.
+The AMD ECSDA curve name <code>2h</code> corresponds to named curve <code>secp384r1</code> from section 2.2 of <span>[<a href="#RFC5480" class="cite xref">RFC5480</a>]</span>.
 The <code>ECPoint</code> conversion routines in section 2 of <span>[<a href="#SEC1" class="cite xref">SEC1</a>]</span> provide guidance on how the <code>QX</code> and <code>QY</code> little-endian big integers zero-padded to 72 bytes may be constructed.<a href="#section-3.1.3.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1764,12 +1765,13 @@ Figure <a href="#_figure-vmsa-defaults" class="auto internal xref">Figure 2</a> 
 <figure id="figure-2">
             <div class="lang-cbor-diag sourcecode" id="section-3.2.2-2.1">
 <pre>
+/ sevsnp-vmsa-map-r1-55 / {
   / es: / 0 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
   / cs: / 1 =&gt; / svm-vmcb-seg-map / {
     / selector: / 0 =&gt; 0xf000
     / attrib: / 1 =&gt; 0x9b
     / limit: / 2 =&gt; 0xffff
-    / base: / 3 =# 0xffff0000
+    / base: / 3 =&gt; 0xffff0000
   }
   / ss: / 2 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
   / ds: / 3 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
@@ -1786,14 +1788,14 @@ Figure <a href="#_figure-vmsa-defaults" class="auto internal xref">Figure 2</a> 
   / rip: / 37 =&gt; 0xfff0
   / g_pat: / 63 =&gt; 0x7040600070406
   / xcr0: / 97 =&gt; 0x1
+}
 </pre>
 </div>
 <figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
 <a href="#name-sev-snp-default-vmsa-values" class="selfRef">SEV-SNP default VMSA values</a>
             </figcaption></figure>
 </div>
-<p id="section-3.2.2-3">The <code>ds</code>, <code>es</code>, <code>fs</code>, <code>gs</code>, and <code>ss</code> attributes are all meant to be data segment attributes <code>0x92</code>
-The <code>rdx</code> is expected to be the FMS of the chip, but VMMs commonly disregard this, so it's left to a different configuration field.
+<p id="section-3.2.2-3">The <code>rdx</code> is expected to be the FMS of the chip, but VMMs commonly disregard this, so it's left to a different configuration field.
 A VMM provider may therefore sign reference values for a <code>sevsnp-launch-configuration-map</code> to specify non-default values for the BSP and AP state.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
 <div id="example-vmm-reference-values-for-vmsa">
 <section id="section-3.2.2.1">
@@ -1886,8 +1888,11 @@ Given that the firmware may be built by one party, the VMM another, and <code>SE
 <p id="section-3.3.2.1-1">The GUID table at the end of the ROM is terminated by the GUID <code>96b582de-1fb2-45f7-baea-a366c55a082d</code> starting at offset <code>ROM_end - 0x30</code>.
 At offset <code>ROM_end - 0x32</code> there is a length in a 16-bit little endian unsigned integer.
 At offset <code>ROM_end - 0x32 - length</code> there is a table with format<a href="#section-3.3.2.1-1" class="pilcrow">¶</a></p>
-<table class="center" id="table-1">
-              <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<span id="name-ovmf-footer-guid-table-type"></span><table class="center" id="table-1">
+              <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-ovmf-footer-guid-table-type" class="selfRef">OVMF footer GUID table type description</a>
+              </caption>
 <thead>
                 <tr>
                   <th class="text-left" rowspan="1" colspan="1">Type</th>
@@ -1895,6 +1900,10 @@ At offset <code>ROM_end - 0x32 - length</code> there is a table with format<a hr
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <td class="text-left" rowspan="1" colspan="1">*</td>
+                  <td class="text-left" rowspan="1" colspan="1">*</td>
+                </tr>
                 <tr>
                   <td class="text-left" rowspan="1" colspan="1">UINT8[Length]</td>
                   <td class="text-left" rowspan="1" colspan="1">Data</td>
@@ -1907,18 +1916,17 @@ At offset <code>ROM_end - 0x32 - length</code> there is a table with format<a hr
                   <td class="text-left" rowspan="1" colspan="1">EFI_GUID</td>
                   <td class="text-left" rowspan="1" colspan="1">Name</td>
                 </tr>
-                <tr>
-                  <td class="text-left" rowspan="1" colspan="1">*</td>
-                  <td class="text-left" rowspan="1" colspan="1">*</td>
-                </tr>
               </tbody>
             </table>
 <p id="section-3.3.2.1-3"><code>LE_UINT16</code> is the type of a little endian 16-bit unsigned integer.
-<code>EFI_GUID</code> is the UUID format specified in section 4 of [RFC4122].
+<code>EFI_GUID</code> is the UUID format specified in section 4 of <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span>.
 The footer GUID and length specifies the length of the table of entries itself, which does not include the footer.<a href="#section-3.3.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.3.2.1-4">Within this table there is an entry that specifies the guest physical address that contains the <code>SevMetadata</code>.<a href="#section-3.3.2.1-4" class="pilcrow">¶</a></p>
-<table class="center" id="table-2">
-              <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<span id="name-sevmetadataoffset-guid-tabl"></span><table class="center" id="table-2">
+              <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-sevmetadataoffset-guid-tabl" class="selfRef">SevMetadataOffset GUID table entry description</a>
+              </caption>
 <thead>
                 <tr>
                   <th class="text-left" rowspan="1" colspan="1">Type</th>
@@ -1941,8 +1949,11 @@ The footer GUID and length specifies the length of the table of entries itself, 
               </tbody>
             </table>
 <p id="section-3.3.2.1-6">At this address when loaded, or at offset <code>ROM_end - (4GiB - Address)</code>, the <code>SevMetadata</code>,<a href="#section-3.3.2.1-6" class="pilcrow">¶</a></p>
-<table class="center" id="table-3">
-              <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<span id="name-sevmetadata-type-descriptio"></span><table class="center" id="table-3">
+              <caption>
+<a href="#table-3" class="selfRef">Table 3</a>:
+<a href="#name-sevmetadata-type-descriptio" class="selfRef">SevMetadata type description</a>
+              </caption>
 <thead>
                 <tr>
                   <th class="text-left" rowspan="1" colspan="1">Type</th>
@@ -1974,8 +1985,11 @@ The footer GUID and length specifies the length of the table of entries itself, 
             </table>
 <p id="section-3.3.2.1-8">The <code>Signature</code> value should be <code>'A', 'S', 'E', 'V'</code> or "VESA" in big-endian order: <code>0x56455341</code>.
 Where <code>SevMetadataSection</code> is<a href="#section-3.3.2.1-8" class="pilcrow">¶</a></p>
-<table class="center" id="table-4">
-              <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+<span id="name-sevmetadatasection-type-des"></span><table class="center" id="table-4">
+              <caption>
+<a href="#table-4" class="selfRef">Table 4</a>:
+<a href="#name-sevmetadatasection-type-des" class="selfRef">SevMetadataSection type description</a>
+              </caption>
 <thead>
                 <tr>
                   <th class="text-left" rowspan="1" colspan="1">Type</th>
@@ -1998,8 +2012,11 @@ Where <code>SevMetadataSection</code> is<a href="#section-3.3.2.1-8" class="pilc
               </tbody>
             </table>
 <p id="section-3.3.2.1-10">A section references some slice of guest physical memory that has a certain purpose as labeled by <code>Kind</code>:<a href="#section-3.3.2.1-10" class="pilcrow">¶</a></p>
-<table class="center" id="table-5">
-              <caption><a href="#table-5" class="selfRef">Table 5</a></caption>
+<span id="name-ovmf-section-kind-to-sev-sn"></span><table class="center" id="table-5">
+              <caption>
+<a href="#table-5" class="selfRef">Table 5</a>:
+<a href="#name-ovmf-section-kind-to-sev-sn" class="selfRef">OVMF section kind to SEV-SNP page type mapping</a>
+              </caption>
 <thead>
                 <tr>
                   <th class="text-left" rowspan="1" colspan="1">Value</th>
@@ -2349,7 +2366,6 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </div>
 </section>
 </div>
-<div id="sec-combined-references">
 <section id="section-5">
       <h2 id="name-references">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-references" class="section-name selfRef">References</a>
@@ -2367,6 +2383,22 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 <dt id="IANA.named-information">[IANA.named-information]</dt>
         <dd>
 <span class="refAuthor">IANA</span>, <span class="refTitle">"Named Information"</span>, <span>&lt;<a href="https://www.iana.org/assignments/named-information">https://www.iana.org/assignments/named-information</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3280">[RFC3280]</dt>
+        <dd>
+<span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Polk, W.</span>, <span class="refAuthor">Ford, W.</span>, and <span class="refAuthor">D. Solo</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile"</span>, <span class="seriesInfo">RFC 3280</span>, <span class="seriesInfo">DOI 10.17487/RFC3280</span>, <time datetime="2002-04" class="refDate">April 2002</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3280">https://www.rfc-editor.org/rfc/rfc3280</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4122">[RFC4122]</dt>
+        <dd>
+<span class="refAuthor">Leach, P.</span>, <span class="refAuthor">Mealling, M.</span>, and <span class="refAuthor">R. Salz</span>, <span class="refTitle">"A Universally Unique IDentifier (UUID) URN Namespace"</span>, <span class="seriesInfo">RFC 4122</span>, <span class="seriesInfo">DOI 10.17487/RFC4122</span>, <time datetime="2005-07" class="refDate">July 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4122">https://www.rfc-editor.org/rfc/rfc4122</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5480">[RFC5480]</dt>
+        <dd>
+<span class="refAuthor">Turner, S.</span>, <span class="refAuthor">Brown, D.</span>, <span class="refAuthor">Yiu, K.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">T. Polk</span>, <span class="refTitle">"Elliptic Curve Cryptography Subject Public Key Information"</span>, <span class="seriesInfo">RFC 5480</span>, <span class="seriesInfo">DOI 10.17487/RFC5480</span>, <time datetime="2009-03" class="refDate">March 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5480">https://www.rfc-editor.org/rfc/rfc5480</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5758">[RFC5758]</dt>
+        <dd>
+<span class="refAuthor">Dang, Q.</span>, <span class="refAuthor">Santesson, S.</span>, <span class="refAuthor">Moriarty, K.</span>, <span class="refAuthor">Brown, D.</span>, and <span class="refAuthor">T. Polk</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure: Additional Algorithms and Identifiers for DSA and ECDSA"</span>, <span class="seriesInfo">RFC 5758</span>, <span class="seriesInfo">DOI 10.17487/RFC5758</span>, <time datetime="2010-01" class="refDate">January 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5758">https://www.rfc-editor.org/rfc/rfc5758</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
@@ -2429,7 +2461,6 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </section>
 </div>
 </section>
-</div>
 <div id="contributors">
 <section id="appendix-A">
       <h2 id="name-contributors">
