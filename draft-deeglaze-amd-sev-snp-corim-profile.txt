@@ -1262,9 +1262,8 @@ Appendix A.  CoRIM Extensions CDDL
    sevsnp-launch-update-sequence-map = [ sevsnp-launch-update-data-map ]
 
    sev-snp-page-data = &(
-     imi-page: 4
-     page2m: 0
-   ) / 1..3
+     imi-page: 0
+   )
 
    sevsnp-repeated-vmsa = [
      vmsa: sevsnp-vmsa-type-choice
