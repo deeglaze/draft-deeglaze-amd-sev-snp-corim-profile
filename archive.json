@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-06T15:14:16.423593+00:00",
+  "timestamp": "2024-08-07T01:09:00.910443+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -119,16 +119,24 @@
       "id": "I_kwDOMdG_Uc6RunMd",
       "title": "Missing PAGE_INFO.GPA",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jraman567",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "> Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a sevsnp-launch-update-data-map have default values when translated to a PAGE_INFO without the DIGEST_CUR field.\r\n\r\nWe must also know the page's GPA to compute the measurement.",
       "createdAt": "2024-08-02T13:00:01Z",
-      "updatedAt": "2024-08-02T13:00:01Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-08-06T15:15:02Z",
+      "closedAt": "2024-08-06T15:15:02Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Good catch.",
+          "createdAt": "2024-08-06T15:15:02Z",
+          "updatedAt": "2024-08-06T15:15:02Z"
+        }
+      ]
     },
     {
       "number": 5,
