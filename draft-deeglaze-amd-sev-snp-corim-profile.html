@@ -1030,7 +1030,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Glaze</td>
-<td class="center">Expires 7 February 2025</td>
+<td class="center">Expires 8 February 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1043,12 +1043,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-08-06" class="published">6 August 2024</time>
+<time datetime="2024-08-07" class="published">7 August 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-02-07">7 February 2025</time></dd>
+<dd class="expires"><time datetime="2025-02-08">8 February 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1091,7 +1091,7 @@ This document specifies the information elements for representing SEV-SNP Refere
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 7 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 8 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1227,10 +1227,13 @@ This document specifies the information elements for representing SEV-SNP Refere
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-corim-extensions-cddl" class="internal xref">CoRIM Extensions CDDL</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1367,7 +1370,6 @@ $$measurement-values-map-extension //= (
 $$measurement-values-map-extension //= (
   &amp;(sevsnpvm-host-data: -3) =&gt; bstr .size 32
 )
-
 </pre><a href="#section-3.1.2-10" class="pilcrow">¶</a>
 </div>
 <p id="section-3.1.2-11">The SEV-SNP firmware build number and Minor.Minor version numbers are provided for both the installed and committed versions of the firmware to account for firmware hotloading.
@@ -2461,8 +2463,295 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </section>
 </div>
 </section>
-<div id="contributors">
+<div id="sec-corim-cddl">
 <section id="appendix-A">
+      <h2 id="name-corim-extensions-cddl">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-corim-extensions-cddl" class="section-name selfRef">CoRIM Extensions CDDL</a>
+      </h2>
+<div class="breakable lang-cddl sourcecode" id="appendix-A-1">
+<pre>
+$crypto-key-type-choice /= #6.32780(bytes .size 48)
+
+digest = [
+  alg: (int / text),
+  val: bytes
+]
+
+int-bytes-map = { * int =&gt; bytes }
+
+non-empty&lt;M&gt; = (M) .and ({ + any =&gt; any })
+
+sevsnp-launch-configuration-map = {
+  ? (fms: 0) =&gt; uint
+  ? (sevsnpvm-launch-baseline: 1) =&gt; bytes .size 48
+  ? (sevsnpvm-launch-updates: 2) =&gt; [ + sevsnp-launch-update-data-map ]
+  ? (bsp-vmsa: 3) =&gt; sevsnp-vmsa-type-choice
+  ? (ap-vmsa: 4) =&gt; sevsnp-ap-vmsa-type-choice
+}
+
+sevsnp-launch-update-data-map = non-empty&lt;{
+  ? &amp;(page-type: 0) =&gt; 1..6
+  ? &amp;(content: 1) =&gt; digest
+  ? &amp;(gpa: 2) =&gt; uint
+  ? &amp;(page-data: 3) =&gt; byte .bits sev-snp-page-data
+  ? &amp;(vmpl-perms: 4) =&gt; uint .size 8
+  ? &amp;(seq-no: 5) =&gt; uint
+}&gt;
+
+sevsnp-launch-update-sequence-map = [ sevsnp-launch-update-data-map ]
+
+sev-snp-page-data = &amp;(
+  imi-page: 4
+  page2m: 0
+) / 1..3
+
+sevsnp-repeated-vmsa = [
+  vmsa: sevsnp-vmsa-type-choice
+  repeat: uint
+}
+
+sevsnp-ap-vmsa-type-choice = [ + sevsnp-vmsa-type-choice ] / tagged-sevsnp-repeated-vmsa
+
+$$flags-map-extension //= &amp;(
+  sevsnpvm-policy-smt-allowed: -1,
+  sevsnpvm-policy-migration-agent-allowed: -2,
+  sevsnpvm-policy-debug-allowed: -3,
+  sevsnpvm-policy-single-socket-only: -4,
+  sevsnpvm-policy-cxl-allowed: -5,
+  sevsnpvm-policy-mem-aes-256-xts-required: -6,
+  sevsnpvm-policy-rapl-must-be-disabled: -7,
+  sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnpvm-host-data: -3) =&gt; bstr .size 32
+)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnpvm-policy-abi: -1) =&gt; sevsnpvm-policy-record
+)
+
+sevsnpvm-policy-record = [
+  abi-major: byte,
+  abi-minor: byte
+]
+
+$version-scheme /= &amp;(sevsnpvm-familyimageid-hex: -1)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnpvm-vmpl: -2) =&gt; 0..3
+)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-committed-tcb: -7) =&gt; svn-type-choice
+)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-current-tcb: -6) =&gt; svn-type-choice
+)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-launch-tcb: -8) =&gt; svn-type-choice
+)
+
+$$flags-map-extension //= &amp;(
+  sevsnphost-smt-enabled: -49,
+  sevsnphost-tsme-enabled: -50,
+  sevsnphost-ecc-mem-reported-enabled:-51,
+  sevsnphost-rapl-disabled: -52,
+  sevsnphost-ciphertext-hiding-enabled: -53
+)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-reported-tcb: -9) =&gt; svn-type-choice
+)
+
+sevsnphost-sp-fw-version-record = [
+  build-number: uint .size 1,
+  major: uint .size 1,
+  minor: uint .size 1
+]
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-sp-fw-current: -4) =&gt; sevsnphost-sp-fw-version-record
+)
+
+$$measurement-values-map-extension //= (
+  &amp;(sevsnphost-sp-fw-committed: -5) =&gt; sevsnphost-sp-fw-version-record
+)
+
+sevsnp-tcb-version-type-choice = sevsnphost-tcb-map / svn-type-choice
+
+sevsnphost-tcb-map = {
+  &amp;(blspl: 0) =&gt; uint
+  &amp;(teespl: 1) =&gt; svn-type
+  ? &amp;(spl4: 2) =&gt; svn-type
+  ? &amp;(spl5: 3) =&gt; svn-type
+  ? &amp;(spl6: 4) =&gt; svn-type
+  ? &amp;(spl7: 5) =&gt; svn-type
+  &amp;(snpspl: 6) =&gt; svn-type
+  &amp;(ucodespl: 7) =&gt; svn-type
+}
+
+
+sevsnp-vmsa-map-r1-55 = { sevsnp-vmsa-r1-55 }
+
+sevsnp-vmsa-r1-55 = &amp;(
+  ? &amp;(es: 0) =&gt; svm-vmcb-seg-map
+  ? &amp;(cs: 1) =&gt; svm-vmcb-seg-map
+  ? &amp;(ss: 2) =&gt; svm-vmcb-seg-map
+  ? &amp;(ds: 3) =&gt; svm-vmcb-seg-map
+  ? &amp;(fs: 4) =&gt; svm-vmcb-seg-map
+  ? &amp;(gs: 5) =&gt; svm-vmcb-seg-map
+  ? &amp;(ldtr: 6) =&gt; svm-vmcb-seg-map
+  ? &amp;(gdtr: 7) =&gt; svm-vmcb-seg-map
+  ? &amp;(idtr: 8) =&gt; svm-vmcb-seg-map
+  ? &amp;(tr: 9) =&gt; svm-vmcb-seg-map
+  ? &amp;(pl0_ssp: 10) =&gt; uint64
+  ? &amp;(pl1_ssp: 11) =&gt; uint64
+  ? &amp;(pl2_ssp: 12) =&gt; uint64
+  ? &amp;(pl3_ssp: 13) =&gt; uint64
+  ? &amp;(u_cet: 14) =&gt; uint64
+  ? ?(vmpl: 15) =&gt; byte
+  ? &amp;(cpl: 16) =&gt; byte
+  ? &amp;(efer: 17) =&gt; uint64
+  ? &amp;(perf_ctl0: 18) =&gt; uint64
+  ? &amp;(perf_ctr0: 19) =&gt; uint64
+  ? &amp;(perf_ctl1: 20) =&gt; uint64
+  ? &amp;(perf_ctr1: 21) =&gt; uint64
+  ? &amp;(perf_ctl2: 22) =&gt; uint64
+  ? &amp;(perf_ctr2: 23) =&gt; uint64
+  ? &amp;(perf_ctl3: 24) =&gt; uint64
+  ? &amp;(perf_ctr3: 25) =&gt; uint64
+  ? &amp;(perf_ctl4: 26) =&gt; uint64
+  ? &amp;(perf_ctr4: 27) =&gt; uint64
+  ? &amp;(perf_ctl5: 28) =&gt; uint64
+  ? &amp;(perf_ctr5: 29) =&gt; uint64
+  ? &amp;(xss: 30) =&gt; uint64
+  ? &amp;(cr4: 31) =&gt; uint64
+  ? &amp;(cr3: 32) =&gt; uint64
+  ? &amp;(cr0: 33) =&gt; uint64
+  ? &amp;(dr7: 34) =&gt; uint64
+  ? &amp;(dr6: 35) =&gt; uint64
+  ? &amp;(rflags: 36) =&gt; uint64
+  ? &amp;(rip: 37) =&gt; uint64
+  ? &amp;(dr0: 38) =&gt; uint64
+  ? &amp;(dr1: 39) =&gt; uint64
+  ? &amp;(dr2: 40) =&gt; uint64
+  ? &amp;(dr3: 41) =&gt; uint64
+  ? &amp;(dr0_addr_mask: 42) =&gt; uint64
+  ? &amp;(dr1_addr_mask: 43) =&gt; uint64
+  ? &amp;(dr2_addr_mask: 44) =&gt; uint64
+  ? &amp;(dr3_addr_mask: 45) =&gt; uint64
+  ? &amp;(instr_retired_ctr: 46) =&gt; uint64
+  ? &amp;(perf_ctr_global_sts: 47) =&gt; uint64
+  ? &amp;(perf_ctr_global_ctl: 48) =&gt; uint64
+  ? &amp;(rsp: 49) =&gt; uint64
+  ? &amp;(s_cet: 50) =&gt; uint64
+  ? &amp;(ssp: 51) =&gt; uint64
+  ? &amp;(isst_addr: 52) =&gt; uint64
+  ? &amp;(rax: 53) =&gt; uint64
+  ? &amp;(star: 54) =&gt; uint64
+  ? &amp;(lstar: 55) =&gt; uint64
+  ? &amp;(cstar: 56) =&gt; uint64
+  ? &amp;(sfmask: 57) =&gt; uint64
+  ? &amp;(kernel_gs_base: 58) =&gt; uint64
+  ? &amp;(sysenter_cs: 59) =&gt; uint64
+  ? &amp;(sysenter_esp: 60) =&gt; uint64
+  ? &amp;(sysenter_eip: 61) =&gt; uint64
+  ? &amp;(cr2: 62) =&gt; uint64
+  ? &amp;(g_pat: 63) =&gt; uint64
+  ? &amp;(dbgctl: 64) =&gt; uint64
+  ? &amp;(br_from: 65) =&gt; uint64
+  ? &amp;(br_to: 66) =&gt; uint64
+  ? &amp;(last_excp_from: 67) =&gt; uint64
+  ? &amp;(last_excp_to: 68) =&gt; uint64
+  ? &amp;(dbgextngfg: 69) =&gt; uint64
+  ? &amp;(spec_ctrl: 70) =&gt; uint64
+  ? &amp;(pkru: 71) =&gt; uint64
+  ? &amp;(tsc_aux: 72) =&gt; uint64
+  ? &amp;(guest_tsc_scale: 73) =&gt; uint64
+  ? &amp;(guest_tsc_offset: 74) =&gt; uint64
+  ? &amp;(reg_prot_nonce: 75) =&gt; uint64
+  ? &amp;(rcx: 76) =&gt; uint64
+  ? &amp;(rdx: 77) =&gt; uint64
+  ? &amp;(rbx: 78) =&gt; uint64
+  ? &amp;(secure_avic_ctl: 79) =&gt; uint64
+  ? &amp;(rbp: 80) =&gt; uint64
+  ? &amp;(rsi: 81) =&gt; uint64
+  ? &amp;(rdi: 82) =&gt; uint64
+  ? &amp;(r8: 83) =&gt; uint64
+  ? &amp;(r9: 84) =&gt; uint64
+  ? &amp;(r10: 85) =&gt; uint64
+  ? &amp;(r11: 86) =&gt; uint64
+  ? &amp;(r12: 87) =&gt; uint64
+  ? &amp;(r13: 88) =&gt; uint64
+  ? &amp;(r14: 89) =&gt; uint64
+  ? &amp;(r15: 90) =&gt; uint64
+  ? &amp;(sev_features: 91) =&gt; uint64
+  ? &amp;(vintr_ctrl: 92) =&gt; uint64
+  ? &amp;(virtual_tom: 93) =&gt; uint64
+  ? &amp;(tlb_id: 94) =&gt; uint64
+  ? &amp;(pcpu_id: 95) =&gt; uint64
+  ? &amp;(event_inj: 96) =&gt; uint64
+  ? &amp;(xcr0: 97) =&gt; uint64
+  ? &amp;(x87_dp: 98) =&gt; uint64
+  ? &amp;(mxcsr: 99) =&gt; uint32
+  ? &amp;(x87_ftw: 100) =&gt; uint16
+  ? &amp;(x87_fsw: 101) =&gt; uint16
+  ? &amp;(x87_fcw: 102) =&gt; uint16
+  ? &amp;(x87_fop: 103) =&gt; uint16
+  ? &amp;(x87_ds: 104) =&gt; uint16
+  ? &amp;(x87_rip: 105) =&gt; uint64
+  ? &amp;(fpreg_87: 106) =&gt; bytes .size 80
+  ? &amp;(fpreg_xmm: 107) =&gt; bytes .size 256
+  ? &amp;(fpreg_ymm: 108) =&gt; bytes .size 256
+  ? &amp;(lbr_stack: 109) =&gt; bytes .size 256
+  ? &amp;(lbr_select: 110) =&gt; uint64
+  ? &amp;(ibs_fetch_ctl: 111) =&gt; uint64
+  ? &amp;(ibs_fetch_linaddr: 112) =&gt; uint64
+  ? &amp;(ibs_op_ctl: 113) =&gt; uint64
+  ? &amp;(ibs_op_rip: 114) =&gt; uint64
+  ? &amp;(ibs_op_data: 115) =&gt; uint64
+  ? &amp;(ibs_op_data2: 116) =&gt; uint64
+  ? &amp;(ibs_op_data3: 117) =&gt; uint64
+  ? &amp;(ibs_dc_linaddr: 118) =&gt; uint64
+  ? &amp;(bp_ibstgt_rip: 119) =&gt; uint64
+  ? &amp;(ic_ibs_extd_ctl: 120) =&gt; uint64
+)
+
+$sevsnp-vmsa-type-choice = #6.32781(sevsnp-vmsa-map-r1-55) / uuid-type / oid-type
+
+svm-vmcb-seg-map = {
+  ? &amp;(selector: 0) =&gt; uint16
+  ? &amp;(attrib: 1) =&gt; uint16
+  ? &amp;(limit: 2) =&gt; uint32
+  ? &amp;(base: 3) =&gt; uint64
+}
+
+svn-type = uint
+svn = svn-type
+min-svn = svn-type
+tagged-svn = #6.552(svn)
+tagged-min-svn = #6.553(min-svn)
+svn-type-choice = tagged-svn / tagged-min-svn
+
+tagged-int-bytes-map = #6.563(int-bytes-map)
+
+tagged-sevsnp-repeated-vmsa = #6.32872(sevsnp-repeated-vmsa)
+
+uint16 = 0..65535
+
+uint32 = 0..4294967295
+
+uint64 = 0..18446744073709551615
+
+</pre><a href="#appendix-A-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="contributors">
+<section id="appendix-B">
       <h2 id="name-contributors">
 <a href="#name-contributors" class="section-name selfRef">Contributors</a>
       </h2>
@@ -2474,11 +2763,11 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 <a href="mailto:yogesh.deshpande@arm.com" class="email">yogesh.deshpande@arm.com</a>
 </div>
 </address>
-<p id="appendix-A-1">Yogesh Deshpande contributed to the data model by providing advice about CoRIM founding principles.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-1">Yogesh Deshpande contributed to the data model by providing advice about CoRIM founding principles.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-B">
+<section id="appendix-C">
       <h2 id="name-authors-address">
 <a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
       </h2>
