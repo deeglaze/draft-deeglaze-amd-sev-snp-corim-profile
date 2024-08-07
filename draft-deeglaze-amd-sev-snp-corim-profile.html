@@ -2674,7 +2674,7 @@ sevsnp-vmsa-map-r1-55 = { sevsnp-vmsa-r1-55 }
 
 sevsnp-vmsa-r1-55 = &amp;(
   ? &amp;(page-data: -2) =&gt; byte .bits sev-snp-page-data
-  ? &amp;(vmpl-perms: -1) =&gt; uint .size 8
+  ? &amp;(vmpl-perms: -1) =&gt; uint64
   ? &amp;(es: 0) =&gt; svm-vmcb-seg-map
   ? &amp;(cs: 1) =&gt; svm-vmcb-seg-map
   ? &amp;(ss: 2) =&gt; svm-vmcb-seg-map
