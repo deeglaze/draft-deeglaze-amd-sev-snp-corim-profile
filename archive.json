@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-07T21:18:05.488075+00:00",
+  "timestamp": "2024-08-11T01:35:40.747867+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -161,6 +161,54 @@
           "updatedAt": "2024-08-06T15:13:48Z"
         }
       ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOMdG_Uc6SUtpE",
+      "title": "CoRIM must be a \"normative\" reference",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/6",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It is currently in the \"informative\" block.",
+      "createdAt": "2024-08-08T05:30:21Z",
+      "updatedAt": "2024-08-08T05:30:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOMdG_Uc6SUvI5",
+      "title": "wrong default repo?",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/7",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "When I clone this repo I get:\r\n```\r\n\u279c  deeglaze gh repo clone deeglaze/draft-deeglaze-amd-sev-snp-corim-profile\r\nCloning into 'draft-deeglaze-amd-sev-snp-corim-profile'...\r\n[...]\r\nFrom https://github.com/martinthomson/internet-draft-template\r\n * [new branch]      main       -> upstream/main\r\n! Repository martinthomson/internet-draft-template set as the default repository. To learn more about the default repository, run: gh repo set-default --help\r\n```\r\nwhich doesn't sound right.",
+      "createdAt": "2024-08-08T05:36:10Z",
+      "updatedAt": "2024-08-08T05:36:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOMdG_Uc6SUxC3",
+      "title": "examples with too long lines",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/8",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "They render suboptimally.\r\n\r\nI suggest running `fold -w72` automatically on all the CBOR diagnostic files.",
+      "createdAt": "2024-08-08T05:43:26Z",
+      "updatedAt": "2024-08-08T05:43:40Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": []
