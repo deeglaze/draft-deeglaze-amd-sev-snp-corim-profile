@@ -1,0 +1,215 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-08-13T01:24:59.259404+00:00",
+  "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOMdG_Uc6RpL-Z",
+      "title": "Launch updates by themselves can't express partial VMSA values",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/1",
+      "state": "CLOSED",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "The SEV-ES reset vector address has to be in the AP VMSAs' RIP and CS_BASE, but that's specified by the firmware whereas the rest of the VMSA is specified by the VMM.\r\n",
+      "createdAt": "2024-08-01T21:26:06Z",
+      "updatedAt": "2024-08-06T15:11:05Z",
+      "closedAt": "2024-08-06T15:11:05Z",
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOMdG_Uc6RulAQ",
+      "title": "Size of 2MB pages",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/2",
+      "state": "CLOSED",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> If page2m is set and content is present, it must not exceed size 0x100000B\r\n\r\nDid you mean 0x200000B? CMDBUF_SNP_LAUNCH_UPDATE.PAGE_SIZE says PAGE_SIZE can be 4 KB or 2 MB.",
+      "createdAt": "2024-08-02T12:55:04Z",
+      "updatedAt": "2024-08-06T15:13:56Z",
+      "closedAt": "2024-08-06T15:13:56Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "I've removed the page size entirely since the measurements are always in terms of 4KiB pages.",
+          "createdAt": "2024-08-06T15:10:20Z",
+          "updatedAt": "2024-08-06T15:10:20Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOMdG_Uc6RumP-",
+      "title": "Format of PAGE_INFO.CONTENTS",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/3",
+      "state": "CLOSED",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> The content is appended with zeros to reach the expected size.\r\n\r\nFrom your description, \"contents\" would be the un-digested contents. Is there a reason for this?\r\n\r\nWe can use the SHA-384 digest of the contents here unless you see a problem.",
+      "createdAt": "2024-08-02T12:57:56Z",
+      "updatedAt": "2024-08-06T15:10:42Z",
+      "closedAt": "2024-08-06T15:10:42Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Thanks, that's been fixed.",
+          "createdAt": "2024-08-06T15:10:42Z",
+          "updatedAt": "2024-08-06T15:10:42Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOMdG_Uc6RunMd",
+      "title": "Missing PAGE_INFO.GPA",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/4",
+      "state": "CLOSED",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a sevsnp-launch-update-data-map have default values when translated to a PAGE_INFO without the DIGEST_CUR field.\r\n\r\nWe must also know the page's GPA to compute the measurement.",
+      "createdAt": "2024-08-02T13:00:01Z",
+      "updatedAt": "2024-08-06T15:15:02Z",
+      "closedAt": "2024-08-06T15:15:02Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Good catch.",
+          "createdAt": "2024-08-06T15:15:02Z",
+          "updatedAt": "2024-08-06T15:15:02Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOMdG_Uc6R9wEn",
+      "title": "type: REPORTED_TCB",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/5",
+      "state": "CLOSED",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "> $$measurement-values-map-extension //= (\r\n>   &(sevsnphost-launch-tcb: -8) => svn-type-choice\r\n> )\r\n\r\nIt should be &(sevsnphost-reported-tcb: -9) => svn-type-choice",
+      "createdAt": "2024-08-05T15:44:10Z",
+      "updatedAt": "2024-08-06T15:13:48Z",
+      "closedAt": "2024-08-06T15:13:48Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Ah, the ::import was a copy/paste error. Thanks.",
+          "createdAt": "2024-08-06T15:13:48Z",
+          "updatedAt": "2024-08-06T15:13:48Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOMdG_Uc6SUtpE",
+      "title": "CoRIM must be a \"normative\" reference",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/6",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It is currently in the \"informative\" block.",
+      "createdAt": "2024-08-08T05:30:21Z",
+      "updatedAt": "2024-08-08T05:30:21Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOMdG_Uc6SUvI5",
+      "title": "wrong default repo?",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/7",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "When I clone this repo I get:\r\n```\r\n\u279c  deeglaze gh repo clone deeglaze/draft-deeglaze-amd-sev-snp-corim-profile\r\nCloning into 'draft-deeglaze-amd-sev-snp-corim-profile'...\r\n[...]\r\nFrom https://github.com/martinthomson/internet-draft-template\r\n * [new branch]      main       -> upstream/main\r\n! Repository martinthomson/internet-draft-template set as the default repository. To learn more about the default repository, run: gh repo set-default --help\r\n```\r\nwhich doesn't sound right.",
+      "createdAt": "2024-08-08T05:36:10Z",
+      "updatedAt": "2024-08-08T05:36:10Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOMdG_Uc6SUxC3",
+      "title": "examples with too long lines",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/8",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "They render suboptimally.\r\n\r\nI suggest running `fold -w72` automatically on all the CBOR diagnostic files.",
+      "createdAt": "2024-08-08T05:43:26Z",
+      "updatedAt": "2024-08-08T05:43:40Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": []
+}
