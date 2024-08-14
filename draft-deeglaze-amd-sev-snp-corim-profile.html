@@ -1030,7 +1030,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Glaze</td>
-<td class="center">Expires 8 February 2025</td>
+<td class="center">Expires 15 February 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1043,12 +1043,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-08-07" class="published">7 August 2024</time>
+<time datetime="2024-08-14" class="published">14 August 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-02-08">8 February 2025</time></dd>
+<dd class="expires"><time datetime="2025-02-15">15 February 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1091,7 +1091,7 @@ This document specifies the information elements for representing SEV-SNP Refere
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 8 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1901,35 +1901,26 @@ mk_vmsa_info(fms)(#6.32781(sevsnp-vmsa-map-r1-55)) =
   sha384(to_vmsa_page(sevsnp-vmsa-map-r1-55)) ||
   {0x70, 0, 0x2, sevsnp-vmsa-map-r1-55 / page-data} ||
   leuint64(sevsnp-vmsa-map-r1-55 / vmpl-perms) ||
-  leuint64(top_gpa(fms))
+  initial_vmsa_gpa
 </pre><a href="#section-3.3.2-3" class="pilcrow">¶</a>
 </div>
-<p id="section-3.3.2-4">The <code>top_gpa</code> function provides the top-most representable page-aligned address for the chip model:<a href="#section-3.3.2-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.2-5">
-<pre>
-top_gpa(fms) = ((1UL &lt;&lt; bitWidth(fms)) - 1) &amp; PAGE_MASK
-
-PAGE_MASK = 0xfffffffffffff000
-bitWidth(fms) = 48 if (fms &gt;&gt; 4) == 0xA00F0 ; Milan
-bitWidth(fms) = 52 if (fms &gt;&gt; 4) == 0xA10F0 ; Genoa
-</pre><a href="#section-3.3.2-5" class="pilcrow">¶</a>
-</div>
-<p id="section-3.3.2-6">The <code>to_vmsa_page</code> function constructs a VMSA 4KiB page with fields written to their respective locations as specified by the <span>[<a href="#AMD.SPM" class="cite xref">AMD.SPM</a>]</span>.
-Fields not represented in the map are taken to be their default value from figure <a href="#_figure-vmsa-defaults" class="auto internal xref">Figure 2</a>.<a href="#section-3.3.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.3.2-7">The <code>ap-vmsa</code> will be measured only if present.
-The list of VMSA type choices is translated to a list of <code>PAGE_INFO</code> with the same operation:<a href="#section-3.3.2-7" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.2-8">
+<p id="section-3.3.2-4">The <code>initial_vmsa_gpa</code> is the little-endian representation of a high memory address that is last page on an architecture with 48-bit width addresses: <code>{0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00}</code><a href="#section-3.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-5">The <code>to_vmsa_page</code> function constructs a VMSA 4KiB page with fields written to their respective locations as specified by the <span>[<a href="#AMD.SPM" class="cite xref">AMD.SPM</a>]</span>.
+Fields not represented in the map are taken to be their default value from figure <a href="#_figure-vmsa-defaults" class="auto internal xref">Figure 2</a>.<a href="#section-3.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-6">The <code>ap-vmsa</code> will be measured only if present.
+The list of VMSA type choices is translated to a list of <code>PAGE_INFO</code> with the same operation:<a href="#section-3.3.2-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.2-7">
 <pre>
 mk_ap_vmsa_info(fms, [ + sevsnp-vmsa-type-choice ]) =
   map(mk_vmsa_info(fms)([ sevsnp-vmsa-type-choice ... ])
-</pre><a href="#section-3.3.2-8" class="pilcrow">¶</a>
+</pre><a href="#section-3.3.2-7" class="pilcrow">¶</a>
 </div>
-<p id="section-3.3.2-9">The repeated vmsas expand into a list of the same <code>PAGE_INFO</code> byte string repeated:<a href="#section-3.3.2-9" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.3.2-10">
+<p id="section-3.3.2-8">The repeated vmsas expand into a list of the same <code>PAGE_INFO</code> byte string repeated:<a href="#section-3.3.2-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3.2-9">
 <pre>
 mk_ap_vmsa_info(fms, #6.32872([vmsa, repeat])) =
   [mk_vmsa_info(fms)(vmsa)]*repeat
-</pre><a href="#section-3.3.2-10" class="pilcrow">¶</a>
+</pre><a href="#section-3.3.2-9" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
