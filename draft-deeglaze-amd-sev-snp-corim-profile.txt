@@ -4,8 +4,8 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                           7 August 2024
-Expires: 8 February 2025
+Intended status: Standards Track                          14 August 2024
+Expires: 15 February 2025
 
 
             CoRIM profile for AMD SEV-SNP attestation report
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 February 2025.
+   This Internet-Draft will expire on 15 February 2025.
 
 Copyright Notice
 
@@ -750,16 +750,11 @@ measurement({fms, baseline, updates, bsp, aps}) = iterate(baseline, infos)
      sha384(to_vmsa_page(sevsnp-vmsa-map-r1-55)) ||
      {0x70, 0, 0x2, sevsnp-vmsa-map-r1-55 / page-data} ||
      leuint64(sevsnp-vmsa-map-r1-55 / vmpl-perms) ||
-     leuint64(top_gpa(fms))
+     initial_vmsa_gpa
 
-   The top_gpa function provides the top-most representable page-aligned
-   address for the chip model:
-
-   top_gpa(fms) = ((1UL << bitWidth(fms)) - 1) & PAGE_MASK
-
-   PAGE_MASK = 0xfffffffffffff000
-   bitWidth(fms) = 48 if (fms >> 4) == 0xA00F0 ; Milan
-   bitWidth(fms) = 52 if (fms >> 4) == 0xA10F0 ; Genoa
+   The initial_vmsa_gpa is the little-endian representation of a high
+   memory address that is last page on an architecture with 48-bit width
+   addresses: {0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00}
 
    The to_vmsa_page function constructs a VMSA 4KiB page with fields
    written to their respective locations as specified by the [AMD.SPM].
