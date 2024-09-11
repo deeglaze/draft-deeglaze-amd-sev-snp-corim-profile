@@ -4,8 +4,8 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                           6 August 2024
-Expires: 7 February 2025
+Intended status: Standards Track                       11 September 2024
+Expires: 15 March 2025
 
 
             CoRIM profile for AMD SEV-SNP attestation report
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 February 2025.
+   This Internet-Draft will expire on 15 March 2025.
 
 Copyright Notice
 
@@ -65,30 +65,32 @@ Table of Contents
    3.  AMD SEV-SNP Attestation Reports
      3.1.  AMD SEV-SNP CoRIM Profile
        3.1.1.  AMD SEV-SNP Target Environment
-       3.1.2.  AMD SEV-SNP Attestation Report measurement values
-               extensions
-         3.1.2.1.  Version scheme extension
-         3.1.2.2.  Notional Instance Identity
+       3.1.2.  AMD SEV-SNP Attestation Report measurements
+         3.1.2.1.  AMD SEV-SNP flags-map extensions
+         3.1.2.2.  Version scheme extension
+         3.1.2.3.  AMD SEV-SNP mkeys
+         3.1.2.4.  Notional Instance Identity
        3.1.3.  AMD SEV-SNP Evidence Translation
          3.1.3.1.  environment-map
          3.1.3.2.  measurement-map
-         3.1.3.3.  measurement-values-map
-           3.1.3.3.1.  TCB comparison
-         3.1.3.4.  Key digest comparison
+         3.1.3.3.  Key digest comparison
      3.2.  AMD SEV-SNP Launch Event Log
        3.2.1.  VMSA evidence
        3.2.2.  VMSA default values
          3.2.2.1.  Example VMM reference values for VMSA
      3.3.  AMD SEV-SNP Launch Event Log Appraisal
-       3.3.1.  Comparisons for reference values
-       3.3.2.  Example: OVMF with SevMetadata
-         3.3.2.1.  OVMF data
-         3.3.2.2.  Kernel data
+       3.3.1.  Updates as PAGE_INFO without DIGEST_CUR.
+       3.3.2.  VMSAs as PAGE_INFO without DIGEST_CUR.
+       3.3.3.  Comparisons for reference values
+       3.3.4.  Example: OVMF with SevMetadata
+         3.3.4.1.  OVMF data
+         3.3.4.2.  Kernel data
    4.  IANA Considerations
      4.1.  New CBOR Tags
    5.  References
      5.1.  Normative References
      5.2.  Informative References
+   Appendix A.  CoRIM Extensions CDDL
    Contributors
    Author's Address
 
@@ -106,7 +108,9 @@ Table of Contents
 
    The reader is assumed to be familiar with the terms defined in
    [I-D.ietf-rats-corim] and Section 4 of [RFC9334].  The syntax of data
-   descriptions is CDDL as specified in [RFC8610].
+   descriptions is CDDL as specified in [RFC8610].  Fields of the AMD
+   SEV-SNP ATTESTATION_REPORT are referred to by their assigned names in
+   [SEV-SNP.API].
 
 3.  AMD SEV-SNP Attestation Reports
 
@@ -139,7 +143,7 @@ Table of Contents
    inside a CoRIM.
 
    The profile attribute in the CoRIM MUST be present and MUST have a
-   single entry set to the uri http://amd.com/please-permalink-me as
+   single entry set to the URI http://amd.com/please-permalink-me as
    shown in Figure 1.
 
    / corim-map / {
@@ -183,103 +187,26 @@ Table of Contents
      / group: / 2 => #6.560(CHIP_ID)
    }
 
-3.1.2.  AMD SEV-SNP Attestation Report measurement values extensions
+3.1.2.  AMD SEV-SNP Attestation Report measurements
 
-   The fields of an attestation report that have no direct analog in the
-   base CoRIM CDDL are given negative codepoints to be specific to this
-   profile.
+   The fields of an attestation report are named by mkey numbers that
+   map to appropriate measurement-values-map values.  This profile
+   defines no new measurement-values-map extensions for the
+   $$measurement-values-map-extensions socket.  The only extensions are
+   to $$flags-map-extensions.
 
-   The GUEST_POLICY field's least significant 16 bits represent a
-   Major.Minor minimum version number:
+   The VMPL field is a raw 0..3 value, so this profile extends the raw
+   value type choice of the CoRIM base CDDL:
 
-   sevsnpvm-policy-record = [
-     abi-major: byte,
-     abi-minor: byte
-   ]
+   $raw-value-type-choice /= uint
 
-   The policy's minimum ABI version is assigned codepoint -1:
+3.1.2.1.  AMD SEV-SNP flags-map extensions
 
-   $$measurement-values-map-extension //= (
-     &(sevsnpvm-policy-abi: -1) => sevsnpvm-policy-record
-   )
-
-   The attestation report's FAMILY_ID and IMAGE_ID are indirectly
-   represented through an extension to $version-scheme as described in
-   Section 3.1.2.1.
-
-   The attestation report's VMPL field is assigned codepoint -2:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnpvm-vmpl: -2) => 0..3
-   )
-
-   The attestation report's HOST_DATA is assigned codepoint -3:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnpvm-host-data: -3) => bstr .size 32
-   )
-
-   The SEV-SNP firmware build number and Minor.Minor version numbers are
-   provided for both the installed and committed versions of the
-   firmware to account for firmware hotloading.  The three values are
-   captured in a record type sevsnphost-sp-fw-version-record:
-
-   sevsnphost-sp-fw-version-record = [
-     build-number: uint .size 1,
-     major: uint .size 1,
-     minor: uint .size 1
-   ]
-
-   The current build/major/minor of the SP firmware is assigned
-   codepoint -4:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnphost-sp-fw-current: -4) => sevsnphost-sp-fw-version-record
-   )
-
-   The committed build/major/minor of the SP firmware is assigned
-   codepoint -5:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnphost-sp-fw-committed: -5) => sevsnphost-sp-fw-version-record
-   )
-
-   The host components other than AMD SP firmware are relevant to VM
-   security posture, so a combination of host components' security patch
-   levels are included as TCB versions.  The TCB versions are expressed
-   as a 64-bit number where each byte corresponds to a different
-   component's security patch level.  Reference value providers MUST
-   provide an overall minimum value for the combination of components,
-   since lexicographic ordering is vulnerable to downgrade attacks.
-   Tools for human readability MAY present the TCB version a component-
-   wise manner, but that is outside the scope of this document.
-
-   The CURRENT_TCB version of the host is assigned codepoint -6:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnphost-current-tcb: -6) => svn-type-choice
-   )
-
-   The COMMITTED_TCB version of the host is assigned codepoint -7:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnphost-committed-tcb: -7) => svn-type-choice
-   )
-
-   The LAUNCH_TCB version of the host is assigned codepoint -8:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnphost-launch-tcb: -8) => svn-type-choice
-   )
-
-   The REPORTED_TCB version of the host is assigned codepoint -9:
-
-   $$measurement-values-map-extension //= (
-     &(sevsnphost-reported-tcb: -9) => svn-type-choice
-   )
+   The GUEST_POLICY field and the PLATFORM_INFO field of the attestation
+   report contain flags distinguished from the base CoRIM CDDL.
 
    The GUEST_POLICY boolean flags are added as extensions to $$flags-
-   map-extension, starting from coedpoint -1.
+   map-extension, starting from codepoint -1.
 
    $$flags-map-extension //= &(
      sevsnpvm-policy-smt-allowed: -1,
@@ -290,6 +217,7 @@ Table of Contents
      sevsnpvm-policy-mem-aes-256-xts-required: -6,
      sevsnpvm-policy-rapl-must-be-disabled: -7,
      sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+     sevsnpvm-policy-reserved: -47..-9,
    )
 
    There are 47 available bits for selection when the mandatory 1 in
@@ -304,9 +232,13 @@ Table of Contents
      sevsnphost-ecc-mem-reported-enabled:-51,
      sevsnphost-rapl-disabled: -52,
      sevsnphost-ciphertext-hiding-enabled: -53
+     sevsnphost-reserved: -112..-49
    )
 
-3.1.2.1.  Version scheme extension
+   The entirety of the value space is reserved for AMD revisions to the
+   SEV-SNP firmware and corresponding ATTESTATION_REPORT API.
+
+3.1.2.2.  Version scheme extension
 
    Extend the $version-scheme type with as follows
 
@@ -320,7 +252,39 @@ Table of Contents
    An endorsement provider MAY use a different version scheme for the
    &(version: 0) codepoint.
 
-3.1.2.2.  Notional Instance Identity
+3.1.2.3.  AMD SEV-SNP mkeys
+
+   The measurements in an ATTESTATION_REPORT are grouped into 7 mkeys.
+
+   *  0: The GUEST measurements for FAMILY_ID and IMAGE_ID as &(version:
+      0),GUEST_SVN as &(svn: 1), MEASUREMENT in &(digests: 2), POLICY
+      flags in &(flags: 3).
+
+   *  1: The VMPL of the report as a &(raw-value: 5).
+
+   *  2: The HOST measurements for CURRENT_BUILD, CURRENT_MAJOR, and
+      CURRENT_MINOR as &(version: 0), CURRENT_TCB as &(svn: 1), HOSTDATA
+      as &(raw-value: 5), PLATFORM_INFO flags in &(flags: 3)
+
+   *  3: The COMMITTED host measurements for COMMITTED_BUILD,
+      CURRENT_MAJOR, and CURRENT_MINOR as &(version: 0), COMMITTED_TCB
+      as &(svn: 1).
+
+   *  4: The LAUNCH_TCB host measurement as &(svn: 1).
+
+   *  5: The REPORTED_TCB host measurement as &(svn: 1).
+
+   *  6: The MINIMUM_ABI guest measurement for POLICY's lower 16 bits
+      MAJOR_ABI and MINOR_ABI as &(version: 0).
+
+   The REPORT_DATA is meant for protocol use and not reference
+   measurements.  The REPORT_ID and REPORT_ID_MA are accounted for in
+   the environment-map's instance field.  The MAJOR_ABI, MINOR_ABI of
+   the POLICY are not entirely redundant with Verifier policy evaluation
+   against the HOST's &(version: 0) since the policy may relevant to key
+   derivations.
+
+3.1.2.4.  Notional Instance Identity
 
    A CoRIM instance identifier is universally unique, but there are
    different notions of identity within a single attestation report that
@@ -340,12 +304,12 @@ Table of Contents
 3.1.3.  AMD SEV-SNP Evidence Translation
 
    The ATTESTATION_REPORT Evidence is converted into a CoRIM endorsed-
-   triple-record using the rules in this section.  Fields of
-   ATTESTATION_REPORT are referred to by their assigned names in
-   [SEV-SNP.API].  If the ATTESTATION_REPORT contains ID_BLOCK
-   information, the relevant fields will be represented in a second
-   endorsed-triple-record with a different authorized-by field value, as
-   per the merging rules of [I-D.ietf-rats-corim].
+   triple-record using the rules in this section.  If the
+   ATTESTATION_REPORT contains ID_BLOCK information, the relevant fields
+   will be represented in a second endorsed-triple-record with a
+   different authorized-by field value, as per the merging rules of
+   [I-D.ietf-rats-corim].  An ATTESTATION_REPORT does not contain an
+   ID_BLOCK if the ID_KEY_DIGEST field is all zeros.
 
 3.1.3.1.  environment-map
 
@@ -364,116 +328,146 @@ Table of Contents
 
 3.1.3.2.  measurement-map
 
-   The mkey is left unset.  The authorized-by key SHALL be set to a
+   Different fields of the attestation report correspond to different
+   mkeys.  For each, the authorized-by key SHALL be set to a
    representation of the VEK that signed the ATTESTATION_REPORT, or a
    key along the certificate path to a self-signed root, i.e., the ASK,
-   ASVK, or ARK for the product line.  The measurement-values-map is set
-   as described in the following section.
+   ASVK, or ARK for the product line.
 
-3.1.3.3.  measurement-values-map
+   The translation makes use of the following metafunctions:
 
-   The function is-set(x, b) represents whether the bit at position b is
-   set in the number x.
+   *  The function is-set(x, b) represents whether the bit at position b
+      is set in the number x.
 
-   *  The digests: 2 codepoint SHALL be set to either [ / digest / {
-      alg: 7 val: MEASUREMENT } ] or [ / digest / { alg: "sha-384" val:
-      MEASUREMENT } ] as assigned in [named-info].
+   *  The function hex(bstr) represents the hexadecimal string encoding
+      of a byte string.
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-smt-allowed
-      codepoint SHALL be set to is-set(GUEST_POLICY, 16.
+   *  The function dec(b) represents a byte in its decimal string
+      rendering.
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-migration-agent-
-      allowed codepoint SHALL be set to is-set(GUEST_POLICY, 18).
+   *  The function leuint(bstr) represents the translation of a byte
+      string into a CBOR uint using a little-endian interpretation.
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-debug-allowed
-      codepoint SHALL be set to is-set(GUEST_POLICY, 19).
+   Juxtaposition of expressions with string literals is interpreted with
+   string concatenation.
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-single-socket-only
-      codepoint SHALL be set to is-set(GUEST_POLICY, 20).
+   Note: A value of 0 is not treated the same as unset given the
+   semantics for matching flags-map.
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-cxl-allowed
-      codepoint SHALL be set to is-set(GUEST_POLICY, 21).
+   *  / mkey: / 0, the guest data
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-mem-aes-256-xts-
-      required codepoint SHALL be set to is-set(GUEST_POLICY, 22).
+      -  The &(version: 0) codepoint MAY be unset if the report does not
+         contain ID_BLOCK data, otherwise the &(version: 0) codepoint
+         SHALL be set to / version-map / { / version: / 0: vstr /
+         version-scheme: / 1: -1 } with version string vstr constructed
+         as hex(FAMILY_ID) '/' hex(IMAGE_ID).
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-rapl-must-be-
-      disabled codepoint SHALL be set to is-set(GUEST_POLICY, 23).
+      -  The &(svn: 1) codepoint MAY be unset if the report dos not
+         contain ID_BLOCK data, otherwise the &(svn: 1) codepoint SHALL
+         be set to 552(leuint(GUEST_SVN)).
 
-   *  The &(flags: 3) / flags-map / sevsnpvm-policy-ciphertext-hiding-
-      must-be-enabled codepoint SHALL be set to is-set(GUEST_POLICY,
-      24).
+      -  The &(digests: 2) codepoint SHALL be set to [ / digest / [ /
+         alg: / 7, / val: / MEASUREMENT]].
 
-   *  The &(flags: 3) / flags-map / sevsnphost-smt-enabled codepoint
-      SHALL be set to is-set(PLATFORM_INFO, 0).
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-smt-allowed
+         codepoint SHALL be set to is-set(GUEST_POLICY, 16).
 
-   *  The &(flags: 3) / flags-map / sevsnphost-tsmu-enabled codepoint
-      SHALL be set to is-set(PLATFORM_INFO, 1).
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-migration-agent-
+         allowed codepoint SHALL be set to is-set(GUEST_POLICY, 18).
 
-   *  The &(flags: 3) / flags-map / sevsnphost-ecc-mem-reported-enabled
-      codepoint SHALL be set to is-set(PLATFORM_INFO, 2).
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-debug-allowed
+         codepoint SHALL be set to is-set(GUEST_POLICY, 19).
 
-   *  The &(flags: 3) / flags-map / sevsnphost-rapl-disabled codepoint
-      SHALL be set to is-set(PLATFORM_INFO, 3).
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-single-socket-
+         only codepoint SHALL be set to is-set(GUEST_POLICY, 20).
 
-   *  The &(flags: 3) / flags-map / sevsnphost-ciphertext-hiding-enabled
-      codepoint SHALL be set to is-set(PLATFORM_INFO, 4).
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-cxl-allowed
+         codepoint SHALL be set to is-set(GUEST_POLICY, 21).
 
-   *  The &(sevsnpvm-policy-abi: -1) codepoint SHALL be set to [
-      ABI_MAJOR, ABI_MINOR ].
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-mem-aes-256-xts-
+         required codepoint SHALL be set to is-set(GUEST_POLICY, 22).
 
-   *  The &(sevsnpvm-vmpl: -2) codepoint SHALL be set to VMPL.
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-rapl-must-be-
+         disabled codepoint SHALL be set to is-set(GUEST_POLICY, 23).
 
-   *  The &(sevsnpvm-hostdata: -3) codepoint SHALL be set to HOSTDATA if
-      nonzero.  It MAY be set to HOSTDATA if all zeroes.
+      -  The &(flags: 3) / flags-map / sevsnpvm-policy-ciphertext-
+         hiding-must-be-enabled codepoint SHALL be set to is-
+         set(GUEST_POLICY, 24).
 
-   *  The &(sevsnphost-sp-fw-current: -4) codepoint SHALL be set to [
-      CURRENT_BUILD, CURRENT_MAJOR, CURRENT_MINOR ].
+      -  Any further non-reserved bit position b of POLICY as the API
+         evolves will be set at flags-map codepoint 16-b.
 
-   *  The &(sevsnphost-sp-fw-committed: -5) codepoint SHALL be set to [
-      COMMITTED_BUILD, COMMITTED_MAJOR, COMMITTED_MINOR ].
+      -  / mkey: / 6, the &(version: 0) SHALL be set to / version-map /
+         { / version: /: POLICY[15:8] '.'  POLICY[7:0] '.0' , / version-
+         scheme: / 16384 } where the POLICY slices are translated to
+         decimal number strings and juxtaposition is string
+         concatenation.
 
-   *  The &(sevsnphost-current-tcb: -6) codepoint SHALL be set to
-      552(CURRENT_TCB).
+   *  / mkey: 1 / the report privilege level
 
-   *  The &(sevsnphost-committed-tcb: -7) codepoint SHALL be set to
-      552(COMMITTED_TCB)
+      -  The &(raw-value: 5) codepoint SHALL be set to VMPL as a uint.
 
-   *  The &(sevsnphost-launch-tcb: -8) codepoint SHALL be set to
-      552(LAUNCH_TCB).
+   *  / mkey: 2 / the current host info
 
-   *  The &(sevsnphost-reported-tcb: -9) codepoint SHALL be set to
-      552(REPORTED_TCB).
+      -  The &(version: 0) codepoint SHALL be set to / version-map / { /
+         version: 0 / vstr / version-scheme: / 1: 16384 } with version
+         string vstr constructed as dec(CURRENT_MAJOR) '.'
+         dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD).
+
+      -  The &(flags: 3) / flags-map / sevsnphost-smt-enabled codepoint
+         SHALL be set to is-set(PLATFORM_INFO, 0)
+
+      -  The &(flags: 3) / flags-map / sevsnphost-tsme-enabled codepoint
+         SHALL be set to is-set(PLATFORM_INFO, 1)
+
+      -  The &(flags: 3) / flags-map / sevsnphost-ecc-mem-reported-
+         enabled codepoint SHALL be set to is-set(PLATFORM_INFO, 2)
+
+      -  The &(flags: 3) / flags-map / sevsnphost-rapl-disabled
+         codepoint SHALL be set to is-set(PLATFORM_INFO, 3)
+
+      -  The &(flags: 3) / flags-map / sevsnphost-ciphertext-hiding-
+         enabled codepoint SHALL be set to is-set(PLATFORM_INFO, 4)
+
+      -  Any further non-reserved bit position b of PLATFORM_INFO will
+         be set at flags-map codepoint -1-b.
+
+      -  The &(raw-value: 5) codepoint SHALL be set to 560(HOSTDATA) and
+         MAY be omitted if all zeros.
+
+   *  / mkey: 3 / the committed host info
+
+      -  The &(svn: 1) codepoint SHALL be set to
+         552(leuint(COMMITTED_TCB)).
+
+   *  / mkey: 4 / the launch tcb
+
+      -  The &(svn: 1) codepoint SHALL be set to
+         552(leuint(LAUNCH_TCB)).
+
+   *  / mkey: 5 / the reported tcb
+
+      -  The &(svn: 1) codepoint SHALL be set to
+         552(leuint(REPORTED_TCB)).
+
+   *  / mkey: 6 / the guest policy's minimum SEV-SNP ABI version that
+      launch compares against CURRENT_MAJOR and CURRENT_MINOR.
+
+      -  The &(version: 0) codepoint SHALL be set to / version-map / { /
+         version: / 0: vstr / version-scheme: / 1: 16384 } with version
+         string vstr constructed as dec(MAJOR_ABI) '.' dec(MINOR_ABI)
+         '.0'.
 
    If ID_BLOCK information is available, it appears in its own
-   endorement-triple-record with additional values in authorized-by
+   endorsement-triple-record with additional values in authorized-by
    beyond the attestation key.  The authorized-by field is extended with
    32780(ID_KEY_DIGEST), and if AUTHOR_KEY_EN is 1, then it is also
    extended with 32780(AUTHOR_KEY_DIGEST).  The Verifier MAY use a base
    CDDL CoRIM $crypto-key-type-choice representation if its public key
    information's digest is equal to the #6.32780-tagged bytes, as
-   described it Section 3.1.3.4.
+   described it Section 3.1.3.3.
 
-   *  The version: 0 codepoint SHALL be set to ~~~cbor-diag / version-
-      map / { / version: / 0 => hexlify(FAMILY_ID) '/' hexlify(IMAGE_ID)
-      / version-scheme: -1 / => &(sevsnpvm-familyimageid-hex: -1) } ~~~
-      where hexlify is a function that translates the a byte string to
-      its hexadecimal string encoding.
-
-   *  The &(svn: 1) codepoint SHALL be set to 552(GUEST_SVN).
-
-   *  The &(digests: 2) codepoint is in the triple record.
-
-   *  The &(flags: 3) / flags-map codepoints prefixed by sevsnpvm-policy
-      SHALL be set in the triple's &(flags: 3) entry as per above
-      translation rules.
-
-3.1.3.3.1.  TCB comparison
-
-   The Verifier SHALL use tho svn-type-choice comparison algorithm from
-   {-rats-corim}}.
-
-3.1.3.4.  Key digest comparison
+3.1.3.3.  Key digest comparison
 
    When ID_BLOCK is used, the full key information needed for signature
    verification is provided by the VMM at launch in an ID_AUTH
@@ -561,9 +555,8 @@ Table of Contents
    If an update repeats many times, such as an application processor
    VMSA, then that can be compressed with the repeat field.
 
-   The bits 1..3 encode the PAGE_TYPE as documented in the
-   [SEV-SNP.API].  The content codepoint MUST NOT be present if the page
-   type is neither PAGE_TYPE_NORMAL (01h) nor PAGE_TYPE_VMSA (02h).
+   The content codepoint MUST NOT be present if the page type is neither
+   PAGE_TYPE_NORMAL (01h) nor PAGE_TYPE_VMSA (02h).
 
    For the VMM, there are some updates it does on behalf of a different
    principal than the firmware vendor, so it may choose to pass through
@@ -598,7 +591,10 @@ Table of Contents
    each AP's initial VMSA may be individually specified with a list of
    sevsnp-vmsa-type-choice.
 
-   sevsnp-repeated-vmsa = [ vmsa: sevsnp-vmsa-type-choice repeat: uint }
+   sevsnp-repeated-vmsa = [
+     vmsa: sevsnp-vmsa-type-choice
+     repeat: uint
+   }
 
    All VMSA fields are optional.  A missing VMSA field in evidence is
    treated as its default value.  A missing VMSA field in a reference
@@ -608,16 +604,19 @@ Table of Contents
 
    Unless otherwise stated, each field's default value is 0.  The
    [AMD.SPM] is the definitive source of initial state for CPU
-   registers.  Figure Figure 2 is a CBOR representation of the nonzero
+   registers, so any default value in this specification that diverges
+   is a flaw but still MUST be considered the default for a missing
+   value.  Figure Figure 2 is a CBOR representation of the nonzero
    default values that correspond to initial CPU register values as of
    the cited revision's Table 14-1.
 
+   / sevsnp-vmsa-map-r1-55 / {
      / es: / 0 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
      / cs: / 1 => / svm-vmcb-seg-map / {
        / selector: / 0 => 0xf000
        / attrib: / 1 => 0x9b
        / limit: / 2 => 0xffff
-       / base: / 3 =# 0xffff0000
+       / base: / 3 => 0xffff0000
      }
      / ss: / 2 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
      / ds: / 3 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
@@ -633,16 +632,24 @@ Table of Contents
      / rflags: / 36 => 0x2
      / rip: / 37 => 0xfff0
      / g_pat: / 63 => 0x7040600070406
+     / sev_features: / 91 => 0x1
      / xcr0: / 97 => 0x1
+     / mxcsr: / 99 => 0x1f80
+     / x87_ftw: / 100 => 0x5555
+     / x87_fcw: / 102 => 0x40
+   }
 
                    Figure 2: SEV-SNP default VMSA values
 
-   The ds, es, fs, gs, and ss attributes are all meant to be data
-   segment attributes 0x92 The rdx is expected to be the FMS of the
-   chip, but VMMs commonly disregard this, so it's left to a different
-   configuration field.  A VMM provider may therefore sign reference
-   values for a sevsnp-launch-configuration-map to specify non-default
-   values for the BSP and AP state.
+   The rdx is expected to be the FMS of the chip and SHOULD match the
+   fms field of the sevsnp-launch-configuration-map.  A VMM provider may
+   sign reference values for a sevsnp-launch-configuration-map to
+   specify just the non-default values for the BSP and AP state.
+
+   Note: This is the RESET state, not the INIT state.
+
+   The sev_features codepoint is not a typical AMD64 INIT state, but
+   specifies that SEV-SNP is in use for the virtual CPU.
 
 3.2.2.1.  Example VMM reference values for VMSA
 
@@ -654,14 +661,16 @@ Table of Contents
 
    Only Qemu follows the [AMD.SPM] specification for rdx, which is to
    match the family/model/stepping of the chip used.  GCE provides an
-   rdx of 0x600 regardless, and EC2 provides 0 regardless.  GCE sets the
-   G_PAT (guest page attribute table) register to 0x70406 to disable
-   PA4-PA7.  Both Qemu and GCE set the tr attrib to 0x8b, so it starts
-   as a busy 32-bit TSS instead of the default 16-bit.  GCE sets ds, es,
-   fs, gs, and ss attributes to 0x93.
+   rdx of 0x600 regardless (following the Intel spec), and EC2 provides
+   0 regardless.  GCE sets the G_PAT (guest page attribute table)
+   register to 0x70406 to disable PA4-PA7.  Both Qemu and GCE set the tr
+   attrib to 0x8b, so it starts as a busy 32-bit TSS instead of the
+   default 16-bit.  GCE sets ds, es, fs, gs, and ss attributes to 0x93
+   since that's the initial state on Intel processors and that works
+   fine too.
 
-   Qemu provides the RESET values on INIT for the mxcsr, x87_ftw,
-   x87_fcw registers.
+   Qemu uses the Intel INIT state for the x87 floating point control
+   word (0x37f), but 0 for the x87 floating point tag word.
 
 3.3.  AMD SEV-SNP Launch Event Log Appraisal
 
@@ -683,34 +692,82 @@ Table of Contents
    DIGEST_CUR field.  If the baseline is not provided, it is assumed to
    be all zeros.
 
-measurement({fms, baseline, updates}) = iterate(baseline, appendmap(mk_page_info(fms), updates))
+measurement({fms, baseline, updates, bsp, aps}) = iterate(baseline, infos)
+  where infos = update-info ++ [bsp-info] ++ ap-info
+        update-info = appendmap(mk_page_info(fms), updates)
+        bsp-info = mk_vmsa_info(fms)(bsp)
+        ap-info = mk_ap_vmsa_info(fms, aps)
 
-PAGE_SHIFT = 12
-bitWidth(fms) = 48 if (fms >> 4) == 0xA00F0 ; Milan
-bitWidth(fms) = 52 if (fms >> 4) == 0xA10F0 ; Genoa
+   The iterate function is applies a sha384 digest update operation on
+   all given PAGE_INFO byte strings:
 
-top_gpfn(fms) = ((1 << bitWidth(fms)) - 1) >> PAGE_SHIFT
-default_gpa(fms): uint64 = top_gpfn(fms) << PAGE_SHIFT
+   iterate(digest_cur, []) = digest_cur
+   iterate(digest_cur, info:infos) = iterate(digest_next , infos)
+     where digest_next = sha384(digest_cur || sha384(info))
 
-mk_page_info(fms)({page-type or PAGE_TYPE_NORMAL,
-                   contents,
-                   gpa or default_gpa(fms),
-                   page-data or 0,
-                   vmpl-perms or 0}):list[bytes] = [
-  contents || {0x70, 0, page-type,
-  page-data} || leuint64(vmpl-data) || leuint64(gpa),
-]
+   The appendmap function combines the list results of mapping a
+   function over a list by appending them:
 
-appendmap(f, []) = []
-appendmap(f, x:xs) = append(f(x), appendmap(f, xs))
+   appendmap(f, []) = []
+   appendmap(f, x:xs) = append(f(x), appendmap(f, xs))
 
-iterate(digest_cur, []) = digest_cur
-iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
+3.3.1.  Updates as PAGE_INFO without DIGEST_CUR.
 
-   The leuint64 metafunction translates a 64-bit unsigned integer into
-   its little endian byte string representation.
+   The mk_page_info function translates update components into a
+   singleton list of their PAGE_INFO byte string form:
 
-3.3.1.  Comparisons for reference values
+   mk_page_info(fms)({page-type or PAGE_TYPE_NORMAL,
+                      contents,
+                      gpa,
+                      page-data or 0,
+                      vmpl-perms or 0}):list[bytes] = [
+     contents || {0x70, 0, page-type, page-data} ||
+     leuint64(vmpl-data) || leuint64(gpa),
+   ]
+
+   The leuint64 function translates a 64-bit unsigned integer into its
+   little endian byte string representation.
+
+3.3.2.  VMSAs as PAGE_INFO without DIGEST_CUR.
+
+   The bsp-vmsa will always be measured.  If the VMM does not provide
+   it, the default values will be used.  If the $sevsnp-vmsa-type-choice
+   is a uuid-type or oid-type, the PAGE_INFO fields are "well-known" as
+   published by an entity claiming the identifier.  The well-known
+   values are expected to be provided by the Verifier in accordance with
+   the associated published values.
+
+   If the $sevsnp-vmsa-type-choice is a tagged-sevsnp-vmsa-map-r1-55,
+   then its PAGE_INFO byte string is to be defined as follows:
+
+   mk_vmsa_info(fms)(#6.32781(sevsnp-vmsa-map-r1-55)) =
+     sha384(to_vmsa_page(sevsnp-vmsa-map-r1-55)) ||
+     {0x70, 0, 0x2, sevsnp-vmsa-map-r1-55 / page-data} ||
+     leuint64(sevsnp-vmsa-map-r1-55 / vmpl-perms) ||
+     initial_vmsa_gpa
+
+   The initial_vmsa_gpa is the little-endian representation of a high
+   memory address that is last page on an architecture with 48-bit width
+   addresses: {0x00, 0xF0, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00}
+
+   The to_vmsa_page function constructs a VMSA 4KiB page with fields
+   written to their respective locations as specified by the [AMD.SPM].
+   Fields not represented in the map are taken to be their default value
+   from figure Figure 2.
+
+   The ap-vmsa will be measured only if present.  The list of VMSA type
+   choices is translated to a list of PAGE_INFO with the same operation:
+
+   mk_ap_vmsa_info(fms, [ + sevsnp-vmsa-type-choice ]) =
+     map(mk_vmsa_info(fms)([ sevsnp-vmsa-type-choice ... ])
+
+   The repeated vmsas expand into a list of the same PAGE_INFO byte
+   string repeated:
+
+   mk_ap_vmsa_info(fms, #6.32872([vmsa, repeat])) =
+     [mk_vmsa_info(fms)(vmsa)]*repeat
+
+3.3.3.  Comparisons for reference values
 
    An "any" sequence number matches any sequence number.  The uint
    sequence number starts counting after the baseline matches.  If there
@@ -732,7 +789,7 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
    VMM.  It is therefore advantageous to combine as many updates in the
    reference value into the baseline as is feasible.
 
-3.3.2.  Example: OVMF with SevMetadata
+3.3.4.  Example: OVMF with SevMetadata
 
    The Open Virtual Machine Firmware project directs the VMM to not just
    load the UEFI at the top of the 4GiB memory range, but also measure
@@ -742,7 +799,7 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
    the SNP_LAUNCH_UPDATE commands should be signed by the respective
    parties.
 
-3.3.2.1.  OVMF data
+3.3.4.1.  OVMF data
 
    The GUID table at the end of the ROM is terminated by the GUID
    96b582de-1fb2-45f7-baea-a366c55a082d starting at offset ROM_end -
@@ -753,16 +810,18 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
                         +===============+========+
                         | Type          | Name   |
                         +===============+========+
+                        | *             | *      |
+                        +---------------+--------+
                         | UINT8[Length] | Data   |
                         +---------------+--------+
                         | LE_UINT16     | Length |
                         +---------------+--------+
                         | EFI_GUID      | Name   |
                         +---------------+--------+
-                        | *             | *      |
-                        +---------------+--------+
 
-                                 Table 1
+                           Table 1: OVMF footer
+                             GUID table type
+                               description
 
    LE_UINT16 is the type of a little endian 16-bit unsigned integer.
    EFI_GUID is the UUID format specified in section 4 of [RFC4122].  The
@@ -782,7 +841,8 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
            | EFI_GUID  | dc886566-984a-4798-A75e-5585a7bf67cc |
            +-----------+--------------------------------------+
 
-                                 Table 2
+               Table 2: SevMetadataOffset GUID table entry
+                               description
 
    At this address when loaded, or at offset ROM_end - (4GiB - Address),
    the SevMetadata,
@@ -801,7 +861,7 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
               | SevMetadataSection[Sections] | Sections    |
               +------------------------------+-------------+
 
-                                 Table 3
+                  Table 3: SevMetadata type description
 
    The Signature value should be 'A', 'S', 'E', 'V' or "VESA" in big-
    endian order: 0x56455341.  Where SevMetadataSection is
@@ -816,7 +876,9 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
                           | LE_UINT32 | Kind    |
                           +-----------+---------+
 
-                                  Table 4
+                                  Table 4:
+                             SevMetadataSection
+                              type description
 
    A section references some slice of guest physical memory that has a
    certain purpose as labeled by Kind:
@@ -835,7 +897,7 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
     | 16    | OVMF_SECTION_TYPE_KERNEL_HASHES | PAGE_TYPE_NORMAL     |
     +-------+---------------------------------+----------------------+
 
-                                 Table 5
+         Table 5: OVMF section kind to SEV-SNP page type mapping
 
    The memory allocated to the initial UEFI boot phase, SEC, is
    unmeasured but must be marked for encryption without needing the GHCB
@@ -1063,7 +1125,7 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
      })
    }
 
-3.3.2.2.  Kernel data
+3.3.4.2.  Kernel data
 
    The OVMF image may be provided by a different vendor than the OS disk
    image.  The user of the VM platform may not have direct access to
@@ -1101,11 +1163,11 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
      |       | Item  |                                   |           |
      +=======+=======+===================================+===========+
      | 563   | map   | Keys are always int, values are   | RFCthis   |
-     |       |       | opaque bytes, see Section 3.1.2.2 |           |
+     |       |       | opaque bytes, see Section 3.1.2.4 |           |
      +-------+-------+-----------------------------------+-----------+
      | 32780 | bytes | A digest of an AMD public key     | RFCthis   |
      |       |       | format that compares with other   |           |
-     |       |       | keys Section 3.1.3.4              |           |
+     |       |       | keys Section 3.1.3.3              |           |
      +-------+-------+-----------------------------------+-----------+
      | 32781 | map   | A map of virtual machine vCPU     | RFCthis   |
      |       |       | registers (VMSA) to initial       |           |
@@ -1129,6 +1191,28 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
    [IANA.named-information]
               IANA, "Named Information",
               <https://www.iana.org/assignments/named-information>.
+
+   [RFC3280]  Housley, R., Polk, W., Ford, W., and D. Solo, "Internet
+              X.509 Public Key Infrastructure Certificate and
+              Certificate Revocation List (CRL) Profile", RFC 3280,
+              DOI 10.17487/RFC3280, April 2002,
+              <https://www.rfc-editor.org/rfc/rfc3280>.
+
+   [RFC4122]  Leach, P., Mealling, M., and R. Salz, "A Universally
+              Unique IDentifier (UUID) URN Namespace", RFC 4122,
+              DOI 10.17487/RFC4122, July 2005,
+              <https://www.rfc-editor.org/rfc/rfc4122>.
+
+   [RFC5480]  Turner, S., Brown, D., Yiu, K., Housley, R., and T. Polk,
+              "Elliptic Curve Cryptography Subject Public Key
+              Information", RFC 5480, DOI 10.17487/RFC5480, March 2009,
+              <https://www.rfc-editor.org/rfc/rfc5480>.
+
+   [RFC5758]  Dang, Q., Santesson, S., Moriarty, K., Brown, D., and T.
+              Polk, "Internet X.509 Public Key Infrastructure:
+              Additional Algorithms and Identifiers for DSA and ECDSA",
+              RFC 5758, DOI 10.17487/RFC5758, January 2010,
+              <https://www.rfc-editor.org/rfc/rfc5758>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -1199,6 +1283,231 @@ iterate(digest_cur, info:infos) = iterate(sha384(digest_cur || info), infos)
               <https://www.amd.com/content/dam/amd/en/documents/epyc-
               technical-docs/user-guides/58369-010-versioned-loaded-
               endorsement-key-certificate-definition.pdf>.
+
+Appendix A.  CoRIM Extensions CDDL
+
+   $crypto-key-type-choice /= #6.32780(bytes .size 48)
+
+   digest = [
+     alg: (int / text),
+     val: bytes
+   ]
+
+   int-bytes-map = { * int => bytes }
+
+   non-empty<M> = (M) .and ({ + any => any })
+
+   sevsnp-launch-configuration-map = {
+     ? (fms: 0) => uint
+     ? (sevsnpvm-launch-baseline: 1) => bytes .size 48
+     ? (sevsnpvm-launch-updates: 2) => [ + sevsnp-launch-update-data-map ]
+     ? (bsp-vmsa: 3) => sevsnp-vmsa-type-choice
+     ? (ap-vmsa: 4) => sevsnp-ap-vmsa-type-choice
+   }
+
+   sevsnp-launch-update-data-map = non-empty<{
+     ? &(page-type: 0) => 1..6
+     ? &(content: 1) => digest
+     ? &(gpa: 2) => uint
+     ? &(page-data: 3) => byte .bits sev-snp-page-data
+     ? &(vmpl-perms: 4) => uint64
+     ? &(seq-no: 5) => uint
+   }>
+
+   sevsnp-launch-update-sequence-map = [ sevsnp-launch-update-data-map ]
+
+   sev-snp-page-data = &(
+     imi-page: 0
+   )
+
+   sevsnp-repeated-vmsa = [
+     vmsa: sevsnp-vmsa-type-choice
+     repeat: uint
+   }
+
+   sevsnp-ap-vmsa-type-choice = [ + sevsnp-vmsa-type-choice ] / tagged-sevsnp-repeated-vmsa
+
+   $$flags-map-extension //= &(
+     sevsnpvm-policy-smt-allowed: -1,
+     sevsnpvm-policy-migration-agent-allowed: -2,
+     sevsnpvm-policy-debug-allowed: -3,
+     sevsnpvm-policy-single-socket-only: -4,
+     sevsnpvm-policy-cxl-allowed: -5,
+     sevsnpvm-policy-mem-aes-256-xts-required: -6,
+     sevsnpvm-policy-rapl-must-be-disabled: -7,
+     sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+     sevsnpvm-policy-reserved: -47..-9,
+   )
+
+   $version-scheme /= &(sevsnpvm-familyimageid-hex: -1)
+
+   $raw-value-type-choice /= uint
+
+   $$flags-map-extension //= &(
+     sevsnphost-smt-enabled: -49,
+     sevsnphost-tsme-enabled: -50,
+     sevsnphost-ecc-mem-reported-enabled:-51,
+     sevsnphost-rapl-disabled: -52,
+     sevsnphost-ciphertext-hiding-enabled: -53
+     sevsnphost-reserved: -112..-49
+   )
+
+
+   sevsnp-vmsa-map-r1-55 = { sevsnp-vmsa-r1-55 }
+
+   sevsnp-vmsa-r1-55 = &(
+     ? &(page-data: -2) => byte .bits sev-snp-page-data
+     ? &(vmpl-perms: -1) => uint64
+     ? &(es: 0) => svm-vmcb-seg-map
+     ? &(cs: 1) => svm-vmcb-seg-map
+     ? &(ss: 2) => svm-vmcb-seg-map
+     ? &(ds: 3) => svm-vmcb-seg-map
+     ? &(fs: 4) => svm-vmcb-seg-map
+     ? &(gs: 5) => svm-vmcb-seg-map
+     ? &(ldtr: 6) => svm-vmcb-seg-map
+     ? &(gdtr: 7) => svm-vmcb-seg-map
+     ? &(idtr: 8) => svm-vmcb-seg-map
+     ? &(tr: 9) => svm-vmcb-seg-map
+     ? &(pl0_ssp: 10) => uint64
+     ? &(pl1_ssp: 11) => uint64
+     ? &(pl2_ssp: 12) => uint64
+     ? &(pl3_ssp: 13) => uint64
+     ? &(u_cet: 14) => uint64
+     ? &(vmpl: 15) => byte
+     ? &(cpl: 16) => byte
+     ? &(efer: 17) => uint64
+     ? &(perf_ctl0: 18) => uint64
+     ? &(perf_ctr0: 19) => uint64
+     ? &(perf_ctl1: 20) => uint64
+     ? &(perf_ctr1: 21) => uint64
+     ? &(perf_ctl2: 22) => uint64
+     ? &(perf_ctr2: 23) => uint64
+     ? &(perf_ctl3: 24) => uint64
+     ? &(perf_ctr3: 25) => uint64
+     ? &(perf_ctl4: 26) => uint64
+     ? &(perf_ctr4: 27) => uint64
+     ? &(perf_ctl5: 28) => uint64
+     ? &(perf_ctr5: 29) => uint64
+     ? &(xss: 30) => uint64
+     ? &(cr4: 31) => uint64
+     ? &(cr3: 32) => uint64
+     ? &(cr0: 33) => uint64
+     ? &(dr7: 34) => uint64
+     ? &(dr6: 35) => uint64
+     ? &(rflags: 36) => uint64
+     ? &(rip: 37) => uint64
+     ? &(dr0: 38) => uint64
+     ? &(dr1: 39) => uint64
+     ? &(dr2: 40) => uint64
+     ? &(dr3: 41) => uint64
+     ? &(dr0_addr_mask: 42) => uint64
+     ? &(dr1_addr_mask: 43) => uint64
+     ? &(dr2_addr_mask: 44) => uint64
+     ? &(dr3_addr_mask: 45) => uint64
+     ? &(instr_retired_ctr: 46) => uint64
+     ? &(perf_ctr_global_sts: 47) => uint64
+     ? &(perf_ctr_global_ctl: 48) => uint64
+     ? &(rsp: 49) => uint64
+     ? &(s_cet: 50) => uint64
+     ? &(ssp: 51) => uint64
+     ? &(isst_addr: 52) => uint64
+     ? &(rax: 53) => uint64
+     ? &(star: 54) => uint64
+     ? &(lstar: 55) => uint64
+     ? &(cstar: 56) => uint64
+     ? &(sfmask: 57) => uint64
+     ? &(kernel_gs_base: 58) => uint64
+     ? &(sysenter_cs: 59) => uint64
+     ? &(sysenter_esp: 60) => uint64
+     ? &(sysenter_eip: 61) => uint64
+     ? &(cr2: 62) => uint64
+     ? &(g_pat: 63) => uint64
+     ? &(dbgctl: 64) => uint64
+     ? &(br_from: 65) => uint64
+     ? &(br_to: 66) => uint64
+     ? &(last_excp_from: 67) => uint64
+     ? &(last_excp_to: 68) => uint64
+     ? &(dbgextngfg: 69) => uint64
+     ? &(spec_ctrl: 70) => uint64
+     ? &(pkru: 71) => uint64
+     ? &(tsc_aux: 72) => uint64
+     ? &(guest_tsc_scale: 73) => uint64
+     ? &(guest_tsc_offset: 74) => uint64
+     ? &(reg_prot_nonce: 75) => uint64
+     ? &(rcx: 76) => uint64
+     ? &(rdx: 77) => uint64
+     ? &(rbx: 78) => uint64
+     ? &(secure_avic_ctl: 79) => uint64
+     ? &(rbp: 80) => uint64
+     ? &(rsi: 81) => uint64
+     ? &(rdi: 82) => uint64
+     ? &(r8: 83) => uint64
+     ? &(r9: 84) => uint64
+     ? &(r10: 85) => uint64
+     ? &(r11: 86) => uint64
+     ? &(r12: 87) => uint64
+     ? &(r13: 88) => uint64
+     ? &(r14: 89) => uint64
+     ? &(r15: 90) => uint64
+     ? &(sev_features: 91) => uint64
+     ? &(vintr_ctrl: 92) => uint64
+     ? &(virtual_tom: 93) => uint64
+     ? &(tlb_id: 94) => uint64
+     ? &(pcpu_id: 95) => uint64
+     ? &(event_inj: 96) => uint64
+     ? &(xcr0: 97) => uint64
+     ? &(x87_dp: 98) => uint64
+     ? &(mxcsr: 99) => uint32
+     ? &(x87_ftw: 100) => uint16
+     ? &(x87_fsw: 101) => uint16
+     ? &(x87_fcw: 102) => uint16
+     ? &(x87_fop: 103) => uint16
+     ? &(x87_ds: 104) => uint16
+     ? &(x87_rip: 105) => uint64
+     ? &(fpreg_87: 106) => bytes .size 80
+     ? &(fpreg_xmm: 107) => bytes .size 256
+     ? &(fpreg_ymm: 108) => bytes .size 256
+     ? &(lbr_stack: 109) => bytes .size 256
+     ? &(lbr_select: 110) => uint64
+     ? &(ibs_fetch_ctl: 111) => uint64
+     ? &(ibs_fetch_linaddr: 112) => uint64
+     ? &(ibs_op_ctl: 113) => uint64
+     ? &(ibs_op_rip: 114) => uint64
+     ? &(ibs_op_data: 115) => uint64
+     ? &(ibs_op_data2: 116) => uint64
+     ? &(ibs_op_data3: 117) => uint64
+     ? &(ibs_dc_linaddr: 118) => uint64
+     ? &(bp_ibstgt_rip: 119) => uint64
+     ? &(ic_ibs_extd_ctl: 120) => uint64
+   )
+
+   $sevsnp-vmsa-type-choice = tagged-sevsnp-vmsa-map-r1-55 / uuid-type / oid-type
+
+   svm-vmcb-seg-map = {
+     ? &(selector: 0) => uint16
+     ? &(attrib: 1) => uint16
+     ? &(limit: 2) => uint32
+     ? &(base: 3) => uint64
+   }
+
+   svn-type = uint
+   svn = svn-type
+   min-svn = svn-type
+   tagged-svn = #6.552(svn)
+   tagged-min-svn = #6.553(min-svn)
+   svn-type-choice = tagged-svn / tagged-min-svn
+
+   tagged-int-bytes-map = #6.563(int-bytes-map)
+
+   tagged-sevsnp-repeated-vmsa = #6.32872(sevsnp-repeated-vmsa)
+
+   tagged-sevsnp-vmsa-map-r1-55 = #6.32781(sevsnp-vmsa-map-r1-55)
+
+   uint16 = 0..65535
+
+   uint32 = 0..4294967295
+
+   uint64 = 0..18446744073709551615
 
 Contributors
 
