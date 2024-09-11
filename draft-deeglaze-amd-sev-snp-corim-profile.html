@@ -10,11 +10,11 @@
        AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) attestation reports comprise of reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
 This document specifies the information elements for representing SEV-SNP Reference Values in CoRIM format. 
     " name="description">
-<meta content="xml2rfc 3.22.0" name="generator">
+<meta content="xml2rfc 3.23.0" name="generator">
 <meta content="RIM, RATS, attestation, verifier, supply chain" name="keyword">
 <meta content="draft-deeglaze-amd-sev-snp-corim-profile-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.22.0
+  xml2rfc 3.23.0
     Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -25,7 +25,7 @@ This document specifies the information elements for representing SEV-SNP Refere
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.32.3
-    setuptools 69.5.1
+    setuptools 70.3.0
     wcwidth 0.2.13
 -->
 <link href="draft-deeglaze-amd-sev-snp-corim-profile.xml" rel="alternate" type="application/rfc+xml">
@@ -1025,11 +1025,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CoRIM-SEV</td>
-<td class="right">August 2024</td>
+<td class="right">September 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Glaze</td>
-<td class="center">Expires 15 February 2025</td>
+<td class="center">Expires 15 March 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1042,12 +1042,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-08-14" class="published">14 August 2024</time>
+<time datetime="2024-09-11" class="published">11 September 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-02-15">15 February 2025</time></dd>
+<dd class="expires"><time datetime="2025-03-15">15 March 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1090,7 +1090,7 @@ This document specifies the information elements for representing SEV-SNP Refere
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1135,13 +1135,19 @@ This document specifies the information elements for representing SEV-SNP Refere
                     <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-amd-sev-snp-target-environm" class="internal xref">AMD SEV-SNP Target Environment</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
-                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-amd-sev-snp-attestation-repo" class="internal xref">AMD SEV-SNP Attestation Report measurement values extensions</a></p>
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-amd-sev-snp-attestation-repo" class="internal xref">AMD SEV-SNP Attestation Report measurements</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2.2.1">
-                        <p id="section-toc.1-1.3.2.1.2.2.2.1.1"><a href="#section-3.1.2.1" class="auto internal xref">3.1.2.1</a>.  <a href="#name-version-scheme-extension" class="internal xref">Version scheme extension</a></p>
+                        <p id="section-toc.1-1.3.2.1.2.2.2.1.1"><a href="#section-3.1.2.1" class="auto internal xref">3.1.2.1</a>.  <a href="#name-amd-sev-snp-flags-map-exten" class="internal xref">AMD SEV-SNP <code>flags-map</code> extensions</a></p>
 </li>
                       <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2.2.2">
-                        <p id="section-toc.1-1.3.2.1.2.2.2.2.1"><a href="#section-3.1.2.2" class="auto internal xref">3.1.2.2</a>.  <a href="#name-notional-instance-identity" class="internal xref">Notional Instance Identity</a></p>
+                        <p id="section-toc.1-1.3.2.1.2.2.2.2.1"><a href="#section-3.1.2.2" class="auto internal xref">3.1.2.2</a>.  <a href="#name-version-scheme-extension" class="internal xref">Version scheme extension</a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2.2.3">
+                        <p id="section-toc.1-1.3.2.1.2.2.2.3.1"><a href="#section-3.1.2.3" class="auto internal xref">3.1.2.3</a>.  <a href="#name-amd-sev-snp-mkey-s" class="internal xref">AMD SEV-SNP <code>mkey</code>s</a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2.2.4">
+                        <p id="section-toc.1-1.3.2.1.2.2.2.4.1"><a href="#section-3.1.2.4" class="auto internal xref">3.1.2.4</a>.  <a href="#name-notional-instance-identity" class="internal xref">Notional Instance Identity</a></p>
 </li>
                     </ul>
 </li>
@@ -1155,15 +1161,7 @@ This document specifies the information elements for representing SEV-SNP Refere
                         <p id="section-toc.1-1.3.2.1.2.3.2.2.1"><a href="#section-3.1.3.2" class="auto internal xref">3.1.3.2</a>.  <a href="#name-measurement-map" class="internal xref"><code>measurement-map</code></a></p>
 </li>
                       <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.3">
-                        <p id="section-toc.1-1.3.2.1.2.3.2.3.1"><a href="#section-3.1.3.3" class="auto internal xref">3.1.3.3</a>.  <a href="#name-measurement-values-map" class="internal xref"><code>measurement-values-map</code></a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.3.2.1">
-                            <p id="section-toc.1-1.3.2.1.2.3.2.3.2.1.1"><a href="#section-3.1.3.3.1" class="auto internal xref">3.1.3.3.1</a>.  <a href="#name-tcb-comparison" class="internal xref">TCB comparison</a></p>
-</li>
-                        </ul>
-</li>
-                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.4">
-                        <p id="section-toc.1-1.3.2.1.2.3.2.4.1"><a href="#section-3.1.3.4" class="auto internal xref">3.1.3.4</a>.  <a href="#name-key-digest-comparison" class="internal xref">Key digest comparison</a></p>
+                        <p id="section-toc.1-1.3.2.1.2.3.2.3.1"><a href="#section-3.1.3.3" class="auto internal xref">3.1.3.3</a>.  <a href="#name-key-digest-comparison" class="internal xref">Key digest comparison</a></p>
 </li>
                     </ul>
 </li>
@@ -1259,7 +1257,8 @@ This document specifies the information elements for representing SEV-SNP Refere
       </h2>
 <p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <span><a href="#RFC8174" class="internal xref">RFC2119</a> [<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <p id="section-2-2">The reader is assumed to be familiar with the terms defined in <span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span> and Section 4 of <span>[<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>.
-The syntax of data descriptions is CDDL as specified in <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
+The syntax of data descriptions is CDDL as specified in <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>.
+Fields of the AMD SEV-SNP <code>ATTESTATION_REPORT</code> are referred to by their assigned names in <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="amd-sev-snp-attestation-reports">
@@ -1289,7 +1288,7 @@ This draft documents the normative representation of attestation report Evidence
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-amd-sev-snp-corim-profile" class="section-name selfRef">AMD SEV-SNP CoRIM Profile</a>
         </h3>
 <p id="section-3.1-1">AMD SEV-SNP launch endorsements are carried in one or more CoMIDs inside a CoRIM.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">The profile attribute in the CoRIM MUST be present and MUST have a single entry set to the uri http://amd.com/please-permalink-me as shown in <a href="#_figure-profile" class="auto internal xref">Figure 1</a>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">The profile attribute in the CoRIM MUST be present and MUST have a single entry set to the URI http://amd.com/please-permalink-me as shown in <a href="#_figure-profile" class="auto internal xref">Figure 1</a>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <span id="name-sev-snp-attestation-profile"></span><div id="_figure-profile">
 <figure id="figure-1">
           <div class="lang-cbor-diag sourcecode" id="section-3.1-3.1">
@@ -1337,111 +1336,28 @@ If the <code>SIGNING_KEY</code> bit of the attestation report is 1, then the <co
 </div>
 </section>
 </div>
-<div id="amd-sev-snp-attestation-report-measurement-values-extensions">
+<div id="amd-sev-snp-attestation-report-measurements">
 <section id="section-3.1.2">
           <h4 id="name-amd-sev-snp-attestation-repo">
-<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-amd-sev-snp-attestation-repo" class="section-name selfRef">AMD SEV-SNP Attestation Report measurement values extensions</a>
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-amd-sev-snp-attestation-repo" class="section-name selfRef">AMD SEV-SNP Attestation Report measurements</a>
           </h4>
-<p id="section-3.1.2-1">The fields of an attestation report that have no direct analog in the base CoRIM CDDL are given negative codepoints to be specific to this profile.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.2-2">The <code>GUEST_POLICY</code> field's least significant 16 bits represent a Major.Minor minimum version number:<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-1">The fields of an attestation report are named by <code>mkey</code> numbers that map to appropriate <code>measurement-values-map</code> values.
+This profile defines no new <code>measurement-values-map</code> extensions for the <code>$$measurement-values-map-extensions</code> socket.
+The only extensions are to <code>$$flags-map-extensions</code>.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-2">The VMPL field is a raw <code>0..3</code> value, so this profile extends the raw value type choice of the CoRIM base CDDL:<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.1.2-3">
 <pre>
-sevsnpvm-policy-record = [
-  abi-major: byte,
-  abi-minor: byte
-]
+$raw-value-type-choice /= uint
 </pre><a href="#section-3.1.2-3" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1.2-4">The policy's minimum ABI version is assigned codepoint -1:<a href="#section-3.1.2-4" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-5">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnpvm-policy-abi: -1) =&gt; sevsnpvm-policy-record
-)
-</pre><a href="#section-3.1.2-5" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-6">The attestation report's <code>FAMILY_ID</code> and <code>IMAGE_ID</code> are indirectly represented through an extension to <code>$version-scheme</code> as described in <a href="#sec-version-scheme" class="auto internal xref">Section 3.1.2.1</a>.<a href="#section-3.1.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.1.2-7">The attestation report's <code>VMPL</code> field is assigned codepoint -2:<a href="#section-3.1.2-7" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-8">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnpvm-vmpl: -2) =&gt; 0..3
-)
-</pre><a href="#section-3.1.2-8" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-9">The attestation report's <code>HOST_DATA</code> is assigned codepoint -3:<a href="#section-3.1.2-9" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-10">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnpvm-host-data: -3) =&gt; bstr .size 32
-)
-</pre><a href="#section-3.1.2-10" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-11">The SEV-SNP firmware build number and Minor.Minor version numbers are provided for both the installed and committed versions of the firmware to account for firmware hotloading.
-The three values are captured in a record type <code>sevsnphost-sp-fw-version-record</code>:<a href="#section-3.1.2-11" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-12">
-<pre>
-sevsnphost-sp-fw-version-record = [
-  build-number: uint .size 1,
-  major: uint .size 1,
-  minor: uint .size 1
-]
-</pre><a href="#section-3.1.2-12" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-13">The current build/major/minor of the SP firmware is assigned codepoint -4:<a href="#section-3.1.2-13" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-14">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-sp-fw-current: -4) =&gt; sevsnphost-sp-fw-version-record
-)
-</pre><a href="#section-3.1.2-14" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-15">The committed build/major/minor of the SP firmware is assigned codepoint -5:<a href="#section-3.1.2-15" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-16">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-sp-fw-committed: -5) =&gt; sevsnphost-sp-fw-version-record
-)
-</pre><a href="#section-3.1.2-16" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-17">The host components other than AMD SP firmware are relevant to VM security posture, so a combination of host components' security patch levels are included as TCB versions.
-The TCB versions are expressed as a 64-bit number where each byte corresponds to a different component's security patch level.
-Reference value providers MUST provide an overall minimum value for the combination of components, since lexicographic ordering is vulnerable to downgrade attacks.
-Tools for human readability MAY present the TCB version a component-wise manner, but that is outside the scope of this document.<a href="#section-3.1.2-17" class="pilcrow">¶</a></p>
-<p id="section-3.1.2-18">The <code>CURRENT_TCB</code> version of the host is assigned codepoint -6:<a href="#section-3.1.2-18" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-19">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-current-tcb: -6) =&gt; svn-type-choice
-)
-</pre><a href="#section-3.1.2-19" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-20">The <code>COMMITTED_TCB</code> version of the host is assigned codepoint -7:<a href="#section-3.1.2-20" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-21">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-committed-tcb: -7) =&gt; svn-type-choice
-)
-</pre><a href="#section-3.1.2-21" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-22">The <code>LAUNCH_TCB</code> version of the host is assigned codepoint -8:<a href="#section-3.1.2-22" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-23">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-launch-tcb: -8) =&gt; svn-type-choice
-)
-</pre><a href="#section-3.1.2-23" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-24">The <code>REPORTED_TCB</code> version of the host is assigned codepoint -9:<a href="#section-3.1.2-24" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-25">
-<pre>
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-reported-tcb: -9) =&gt; svn-type-choice
-)
-</pre><a href="#section-3.1.2-25" class="pilcrow">¶</a>
-</div>
-<p id="section-3.1.2-26">The <code>GUEST_POLICY</code> boolean flags are added as extensions to <code>$$flags-map-extension</code>, starting from coedpoint -1.<a href="#section-3.1.2-26" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-27">
+<div id="amd-sev-snp-flags-map-extensions">
+<section id="section-3.1.2.1">
+            <h5 id="name-amd-sev-snp-flags-map-exten">
+<a href="#section-3.1.2.1" class="section-number selfRef">3.1.2.1. </a><a href="#name-amd-sev-snp-flags-map-exten" class="section-name selfRef">AMD SEV-SNP <code>flags-map</code> extensions</a>
+            </h5>
+<p id="section-3.1.2.1-1">The <code>GUEST_POLICY</code> field and the <code>PLATFORM_INFO</code> field of the attestation report contain flags distinguished from the base CoRIM CDDL.<a href="#section-3.1.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.1-2">The <code>GUEST_POLICY</code> boolean flags are added as extensions to <code>$$flags-map-extension</code>, starting from codepoint -1.<a href="#section-3.1.2.1-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.1-3">
 <pre>
 $$flags-map-extension //= &amp;(
   sevsnpvm-policy-smt-allowed: -1,
@@ -1452,12 +1368,13 @@ $$flags-map-extension //= &amp;(
   sevsnpvm-policy-mem-aes-256-xts-required: -6,
   sevsnpvm-policy-rapl-must-be-disabled: -7,
   sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+  sevsnpvm-policy-reserved: -47..-9,
 )
-</pre><a href="#section-3.1.2-27" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.2.1-3" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1.2-28">There are 47 available bits for selection when the mandatory 1 in position 17 and the ABI Major.Minor values are excluded from the 64-bit <code>GUEST_POLICY</code>.
-The <code>PLATFORM_INFO</code> bits are host configuration that are added as extensions to <code>$$flags-map-extension</code> starting at <code>-49</code>.<a href="#section-3.1.2-28" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2-29">
+<p id="section-3.1.2.1-4">There are 47 available bits for selection when the mandatory 1 in position 17 and the ABI Major.Minor values are excluded from the 64-bit <code>GUEST_POLICY</code>.
+The <code>PLATFORM_INFO</code> bits are host configuration that are added as extensions to <code>$$flags-map-extension</code> starting at <code>-49</code>.<a href="#section-3.1.2.1-4" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.1-5">
 <pre>
 $$flags-map-extension //= &amp;(
   sevsnphost-smt-enabled: -49,
@@ -1465,45 +1382,83 @@ $$flags-map-extension //= &amp;(
   sevsnphost-ecc-mem-reported-enabled:-51,
   sevsnphost-rapl-disabled: -52,
   sevsnphost-ciphertext-hiding-enabled: -53
+  sevsnphost-reserved: -112..-49
 )
-</pre><a href="#section-3.1.2-29" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.2.1-5" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.2.1-6">The entirety of the value space is reserved for AMD revisions to the SEV-SNP firmware and corresponding ATTESTATION_REPORT API.<a href="#section-3.1.2.1-6" class="pilcrow">¶</a></p>
+</section>
 </div>
 <div id="sec-version-scheme">
-<section id="section-3.1.2.1">
+<section id="section-3.1.2.2">
             <h5 id="name-version-scheme-extension">
-<a href="#section-3.1.2.1" class="section-number selfRef">3.1.2.1. </a><a href="#name-version-scheme-extension" class="section-name selfRef">Version scheme extension</a>
+<a href="#section-3.1.2.2" class="section-number selfRef">3.1.2.2. </a><a href="#name-version-scheme-extension" class="section-name selfRef">Version scheme extension</a>
             </h5>
-<p id="section-3.1.2.1-1">Extend the <code>$version-scheme</code> type with as follows<a href="#section-3.1.2.1-1" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2.1-2">
+<p id="section-3.1.2.2-1">Extend the <code>$version-scheme</code> type with as follows<a href="#section-3.1.2.2-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.2-2">
 <pre>
 $version-scheme /= &amp;(sevsnpvm-familyimageid-hex: -1)
-</pre><a href="#section-3.1.2.1-2" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.2.2-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1.2.1-3">The <code>-1</code> scheme is a string representation of the two 128-bit identifiers in hexadecimal encoding as separated by <code>/</code>.
-The scheme allows for fuzzy comparison with <code>_</code> as a wildcard on either side of the <code>/</code>.<a href="#section-3.1.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1.2.1-4">An endorsement provider MAY use a different version scheme for the <code>&amp;(version: 0)</code> codepoint.<a href="#section-3.1.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-3">The <code>-1</code> scheme is a string representation of the two 128-bit identifiers in hexadecimal encoding as separated by <code>/</code>.
+The scheme allows for fuzzy comparison with <code>_</code> as a wildcard on either side of the <code>/</code>.<a href="#section-3.1.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-4">An endorsement provider MAY use a different version scheme for the <code>&amp;(version: 0)</code> codepoint.<a href="#section-3.1.2.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="amd-sev-snp-mkeys">
+<section id="section-3.1.2.3">
+            <h5 id="name-amd-sev-snp-mkey-s">
+<a href="#section-3.1.2.3" class="section-number selfRef">3.1.2.3. </a><a href="#name-amd-sev-snp-mkey-s" class="section-name selfRef">AMD SEV-SNP <code>mkey</code>s</a>
+            </h5>
+<p id="section-3.1.2.3-1">The measurements in an ATTESTATION_REPORT are grouped into 7 <code>mkey</code>s.<a href="#section-3.1.2.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.2.3-2.1">
+                <p id="section-3.1.2.3-2.1.1"><code>0</code>: The GUEST measurements for  <code>FAMILY_ID</code> and <code>IMAGE_ID</code> as <code>&amp;(version: 0)</code>,<code>GUEST_SVN</code> as <code>&amp;(svn: 1)</code>, <code>MEASUREMENT</code> in <code>&amp;(digests: 2)</code>, <code>POLICY</code> flags in <code>&amp;(flags: 3)</code>.<a href="#section-3.1.2.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.3-2.2">
+                <p id="section-3.1.2.3-2.2.1"><code>1</code>: The VMPL of the report as a <code>&amp;(raw-value: 5)</code>.<a href="#section-3.1.2.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.3-2.3">
+                <p id="section-3.1.2.3-2.3.1"><code>2</code>: The HOST measurements for <code>CURRENT_BUILD</code>, <code>CURRENT_MAJOR</code>, and <code>CURRENT_MINOR</code> as <code>&amp;(version: 0)</code>, <code>CURRENT_TCB</code> as <code>&amp;(svn: 1)</code>, <code>HOSTDATA</code> as <code>&amp;(raw-value: 5)</code>, <code>PLATFORM_INFO</code> flags in <code>&amp;(flags: 3)</code><a href="#section-3.1.2.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.3-2.4">
+                <p id="section-3.1.2.3-2.4.1"><code>3</code>: The COMMITTED host measurements for <code>COMMITTED_BUILD</code>, <code>CURRENT_MAJOR</code>, and <code>CURRENT_MINOR</code> as <code>&amp;(version: 0)</code>, <code>COMMITTED_TCB</code> as <code>&amp;(svn: 1)</code>.<a href="#section-3.1.2.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.3-2.5">
+                <p id="section-3.1.2.3-2.5.1"><code>4</code>: The LAUNCH_TCB host measurement as <code>&amp;(svn: 1)</code>.<a href="#section-3.1.2.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.3-2.6">
+                <p id="section-3.1.2.3-2.6.1"><code>5</code>: The REPORTED_TCB host measurement as <code>&amp;(svn: 1)</code>.<a href="#section-3.1.2.3-2.6.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.3-2.7">
+                <p id="section-3.1.2.3-2.7.1"><code>6</code>: The MINIMUM_ABI guest measurement for <code>POLICY</code>'s lower 16 bits <code>MAJOR_ABI</code> and <code>MINOR_ABI</code> as <code>&amp;(version: 0)</code>.<a href="#section-3.1.2.3-2.7.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.2.3-3">The <code>REPORT_DATA</code> is meant for protocol use and not reference measurements.
+The <code>REPORT_ID</code> and <code>REPORT_ID_MA</code> are accounted for in the <code>environment-map</code>'s instance field.
+The <code>MAJOR_ABI</code>, <code>MINOR_ABI</code> of the <code>POLICY</code> are not entirely redundant with Verifier policy evaluation against the <code>HOST</code>'s <code>&amp;(version: 0)</code> since the policy may relevant to key derivations.<a href="#section-3.1.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-id-tag">
-<section id="section-3.1.2.2">
+<section id="section-3.1.2.4">
             <h5 id="name-notional-instance-identity">
-<a href="#section-3.1.2.2" class="section-number selfRef">3.1.2.2. </a><a href="#name-notional-instance-identity" class="section-name selfRef">Notional Instance Identity</a>
+<a href="#section-3.1.2.4" class="section-number selfRef">3.1.2.4. </a><a href="#name-notional-instance-identity" class="section-name selfRef">Notional Instance Identity</a>
             </h5>
-<p id="section-3.1.2.2-1">A CoRIM instance identifier is universally unique, but there are different notions of identity within a single attestation report that are each unique within their notion.
-A notional instance identifier is a tagged CBOR map from integer codepoint to opaque bytes.<a href="#section-3.1.2.2-1" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2.2-2">
+<p id="section-3.1.2.4-1">A CoRIM instance identifier is universally unique, but there are different notions of identity within a single attestation report that are each unique within their notion.
+A notional instance identifier is a tagged CBOR map from integer codepoint to opaque bytes.<a href="#section-3.1.2.4-1" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.4-2">
 <pre>
 int-bytes-map = { * int =&gt; bytes }
-</pre><a href="#section-3.1.2.2-2" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.2.4-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1.2.2-3">Profiles may restrict which integers are valid codepoints, and may restrict the respective byte string sizes.
+<p id="section-3.1.2.4-3">Profiles may restrict which integers are valid codepoints, and may restrict the respective byte string sizes.
 For this profile, only codepoints 0 and 1 are valid.
 The expected byte string sizes are 32 bytes.
-For the <code>int-bytes-map</code> to be an interpretable extension of <code>$instance-id-type-choice</code>, there is <code>tagged-int-bytes-map</code>:<a href="#section-3.1.2.2-3" class="pilcrow">¶</a></p>
-<div class="lang-cddl sourcecode" id="section-3.1.2.2-4">
+For the <code>int-bytes-map</code> to be an interpretable extension of <code>$instance-id-type-choice</code>, there is <code>tagged-int-bytes-map</code>:<a href="#section-3.1.2.4-3" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.4-4">
 <pre>
 tagged-int-bytes-map = #6.563(int-bytes-map)
-</pre><a href="#section-3.1.2.2-4" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.2.4-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1515,8 +1470,8 @@ tagged-int-bytes-map = #6.563(int-bytes-map)
 <a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-amd-sev-snp-evidence-transl" class="section-name selfRef">AMD SEV-SNP Evidence Translation</a>
           </h4>
 <p id="section-3.1.3-1">The <code>ATTESTATION_REPORT</code> Evidence is converted into a CoRIM <code>endorsed-triple-record</code> using the rules in this section.
-Fields of <code>ATTESTATION_REPORT</code> are referred to by their assigned names in <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.
-If the <code>ATTESTATION_REPORT</code> contains <code>ID_BLOCK</code> information, the relevant fields will be represented in a second <code>endorsed-triple-record</code> with a different <code>authorized-by</code> field value, as per the merging rules of <span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span>.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+If the <code>ATTESTATION_REPORT</code> contains <code>ID_BLOCK</code> information, the relevant fields will be represented in a second <code>endorsed-triple-record</code> with a different <code>authorized-by</code> field value, as per the merging rules of <span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span>.
+An <code>ATTESTATION_REPORT</code> does not contain an <code>ID_BLOCK</code> if the <code>ID_KEY_DIGEST</code> field is all zeros.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
 <div id="environment-map">
 <section id="section-3.1.3.1">
             <h5 id="name-environment-map">
@@ -1543,150 +1498,173 @@ If <code>SIGNING_KEY</code> is 0, the field MAY be set to the VCEK <code>hwid</c
             <h5 id="name-measurement-map">
 <a href="#section-3.1.3.2" class="section-number selfRef">3.1.3.2. </a><a href="#name-measurement-map" class="section-name selfRef"><code>measurement-map</code></a>
             </h5>
-<p id="section-3.1.3.2-1">The <code>mkey</code> is left unset.
-The <code>authorized-by</code> key SHALL be set to a representation of the VEK that signed the <code>ATTESTATION_REPORT</code>, or a key along the certificate path to a self-signed root, i.e., the ASK, ASVK, or ARK for the product line.
-The <code>measurement-values-map</code> is set as described in the following section.<a href="#section-3.1.3.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="measurement-values-map">
-<section id="section-3.1.3.3">
-            <h5 id="name-measurement-values-map">
-<a href="#section-3.1.3.3" class="section-number selfRef">3.1.3.3. </a><a href="#name-measurement-values-map" class="section-name selfRef"><code>measurement-values-map</code></a>
-            </h5>
-<p id="section-3.1.3.3-1">The function <code>is-set(x, b)</code> represents whether the bit at position <code>b</code> is set in the number <code>x</code>.<a href="#section-3.1.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-1">Different fields of the attestation report correspond to different <code>mkey</code>s.
+For each, the <code>authorized-by</code> key SHALL be set to a representation of the VEK that signed the <code>ATTESTATION_REPORT</code>, or a key along the certificate path to a self-signed root, i.e., the ASK, ASVK, or ARK for the product line.<a href="#section-3.1.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-2">The translation makes use of the following metafunctions:<a href="#section-3.1.3.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1.3.3-2.1">
-                <p id="section-3.1.3.3-2.1.1">The <code>digests: 2</code> codepoint SHALL be set to either <code>[ / digest / { alg: 7 val: MEASUREMENT } ]</code> or <code>[ / digest / { alg: "sha-384" val: MEASUREMENT } ]</code> as assigned in <span>[<a href="#IANA.named-information" class="cite xref">IANA.named-information</a>]</span>.<a href="#section-3.1.3.3-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1.3.2-3.1">
+                <p id="section-3.1.3.2-3.1.1">The function <code>is-set(x, b)</code> represents whether the bit at position <code>b</code> is set in the number <code>x</code>.<a href="#section-3.1.3.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.3-2.2">
-                <p id="section-3.1.3.3-2.2.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-smt-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 16</code>.<a href="#section-3.1.3.3-2.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.2-3.2">
+                <p id="section-3.1.3.2-3.2.1">The function <code>hex(bstr)</code> represents the hexadecimal string encoding of a byte string.<a href="#section-3.1.3.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.3-2.3">
-                <p id="section-3.1.3.3-2.3.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-migration-agent-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 18)</code>.<a href="#section-3.1.3.3-2.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.2-3.3">
+                <p id="section-3.1.3.2-3.3.1">The function <code>dec(b)</code> represents a byte in its decimal string rendering.<a href="#section-3.1.3.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.3-2.4">
-                <p id="section-3.1.3.3-2.4.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-debug-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 19)</code>.<a href="#section-3.1.3.3-2.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.5">
-                <p id="section-3.1.3.3-2.5.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-single-socket-only</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 20)</code>.<a href="#section-3.1.3.3-2.5.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.6">
-                <p id="section-3.1.3.3-2.6.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-cxl-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 21)</code>.<a href="#section-3.1.3.3-2.6.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.7">
-                <p id="section-3.1.3.3-2.7.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-mem-aes-256-xts-required</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 22)</code>.<a href="#section-3.1.3.3-2.7.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.8">
-                <p id="section-3.1.3.3-2.8.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-rapl-must-be-disabled</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 23)</code>.<a href="#section-3.1.3.3-2.8.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.9">
-                <p id="section-3.1.3.3-2.9.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-ciphertext-hiding-must-be-enabled</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 24)</code>.<a href="#section-3.1.3.3-2.9.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.10">
-                <p id="section-3.1.3.3-2.10.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-smt-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 0)</code>.<a href="#section-3.1.3.3-2.10.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.11">
-                <p id="section-3.1.3.3-2.11.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-tsmu-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 1)</code>.<a href="#section-3.1.3.3-2.11.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.12">
-                <p id="section-3.1.3.3-2.12.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-ecc-mem-reported-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 2)</code>.<a href="#section-3.1.3.3-2.12.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.13">
-                <p id="section-3.1.3.3-2.13.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-rapl-disabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 3)</code>.<a href="#section-3.1.3.3-2.13.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.14">
-                <p id="section-3.1.3.3-2.14.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-ciphertext-hiding-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 4)</code>.<a href="#section-3.1.3.3-2.14.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.15">
-                <p id="section-3.1.3.3-2.15.1">The <code>&amp;(sevsnpvm-policy-abi: -1)</code> codepoint SHALL be set to  <code>[ ABI_MAJOR, ABI_MINOR ]</code>.<a href="#section-3.1.3.3-2.15.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.16">
-                <p id="section-3.1.3.3-2.16.1">The <code>&amp;(sevsnpvm-vmpl: -2)</code> codepoint SHALL be set to <code>VMPL</code>.<a href="#section-3.1.3.3-2.16.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.17">
-                <p id="section-3.1.3.3-2.17.1">The <code>&amp;(sevsnpvm-hostdata: -3)</code> codepoint SHALL be set to <code>HOSTDATA</code> if nonzero. It MAY be set to <code>HOSTDATA</code> if all zeroes.<a href="#section-3.1.3.3-2.17.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.18">
-                <p id="section-3.1.3.3-2.18.1">The <code>&amp;(sevsnphost-sp-fw-current: -4)</code> codepoint SHALL be set to <code>[ CURRENT_BUILD, CURRENT_MAJOR, CURRENT_MINOR ]</code>.<a href="#section-3.1.3.3-2.18.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.19">
-                <p id="section-3.1.3.3-2.19.1">The <code>&amp;(sevsnphost-sp-fw-committed: -5)</code> codepoint SHALL be set to <code>[ COMMITTED_BUILD, COMMITTED_MAJOR, COMMITTED_MINOR ]</code>.<a href="#section-3.1.3.3-2.19.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.20">
-                <p id="section-3.1.3.3-2.20.1">The <code>&amp;(sevsnphost-current-tcb: -6)</code> codepoint SHALL be set to <code>552(CURRENT_TCB)</code>.<a href="#section-3.1.3.3-2.20.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.21">
-                <p id="section-3.1.3.3-2.21.1">The <code>&amp;(sevsnphost-committed-tcb: -7)</code> codepoint SHALL be set to <code>552(COMMITTED_TCB)</code><a href="#section-3.1.3.3-2.21.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.22">
-                <p id="section-3.1.3.3-2.22.1">The <code>&amp;(sevsnphost-launch-tcb: -8)</code> codepoint SHALL be set to <code>552(LAUNCH_TCB)</code>.<a href="#section-3.1.3.3-2.22.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-2.23">
-                <p id="section-3.1.3.3-2.23.1">The <code>&amp;(sevsnphost-reported-tcb: -9)</code> codepoint SHALL be set to <code>552(REPORTED_TCB)</code>.<a href="#section-3.1.3.3-2.23.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.2-3.4">
+                <p id="section-3.1.3.2-3.4.1">The function <code>leuint(bstr)</code> represents the translation of a byte string into a CBOR <code>uint</code> using a little-endian interpretation.<a href="#section-3.1.3.2-3.4.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-3.1.3.3-3">If <code>ID_BLOCK</code> information is available, it appears in its own <code>endorement-triple-record</code> with additional values in <code>authorized-by</code> beyond the attestation key.
+<p id="section-3.1.3.2-4">Juxtaposition of expressions with string literals is interpreted with string concatenation.<a href="#section-3.1.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-5">Note: A value of <code>0</code> is not treated the same as unset given the semantics for matching <code>flags-map</code>.<a href="#section-3.1.3.2-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.1">
+                <p id="section-3.1.3.2-6.1.1"><code>/ mkey: / 0</code>, the guest data<a href="#section-3.1.3.2-6.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.1.2.1">
+                    <p id="section-3.1.3.2-6.1.2.1.1">The <code>&amp;(version: 0)</code> codepoint MAY be unset if the report does not contain <code>ID_BLOCK</code> data, otherwise the <code>&amp;(version: 0)</code> codepoint SHALL be set to <code>/ version-map / { / version: / 0: vstr / version-scheme: / 1: -1 }</code> with version string <code>vstr</code> constructed as <code>hex(FAMILY_ID) '/' hex(IMAGE_ID)</code>.<a href="#section-3.1.3.2-6.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.2">
+                    <p id="section-3.1.3.2-6.1.2.2.1">The <code>&amp;(svn: 1)</code> codepoint MAY be unset if the report dos not contain <code>ID_BLOCK</code> data, otherwise the <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(leuint(GUEST_SVN))</code>.<a href="#section-3.1.3.2-6.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.3">
+                    <p id="section-3.1.3.2-6.1.2.3.1">The <code>&amp;(digests: 2)</code> codepoint SHALL be set to <code>[ / digest / [ / alg: / 7, / val: / MEASUREMENT]]</code>.<a href="#section-3.1.3.2-6.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.4">
+                    <p id="section-3.1.3.2-6.1.2.4.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-smt-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 16)</code>.<a href="#section-3.1.3.2-6.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.5">
+                    <p id="section-3.1.3.2-6.1.2.5.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-migration-agent-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 18)</code>.<a href="#section-3.1.3.2-6.1.2.5.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.6">
+                    <p id="section-3.1.3.2-6.1.2.6.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-debug-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 19)</code>.<a href="#section-3.1.3.2-6.1.2.6.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.7">
+                    <p id="section-3.1.3.2-6.1.2.7.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-single-socket-only</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 20)</code>.<a href="#section-3.1.3.2-6.1.2.7.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.8">
+                    <p id="section-3.1.3.2-6.1.2.8.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-cxl-allowed</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 21)</code>.<a href="#section-3.1.3.2-6.1.2.8.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.9">
+                    <p id="section-3.1.3.2-6.1.2.9.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-mem-aes-256-xts-required</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 22)</code>.<a href="#section-3.1.3.2-6.1.2.9.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.10">
+                    <p id="section-3.1.3.2-6.1.2.10.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-rapl-must-be-disabled</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 23)</code>.<a href="#section-3.1.3.2-6.1.2.10.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.11">
+                    <p id="section-3.1.3.2-6.1.2.11.1">The <code>&amp;(flags: 3) / flags-map / sevsnpvm-policy-ciphertext-hiding-must-be-enabled</code> codepoint SHALL be set to <code>is-set(GUEST_POLICY, 24)</code>.<a href="#section-3.1.3.2-6.1.2.11.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.12">
+                    <p id="section-3.1.3.2-6.1.2.12.1">Any further non-reserved bit position <code>b</code> of <code>POLICY</code> as the API evolves will be set at <code>flags-map</code> codepoint <code>16-b</code>.<a href="#section-3.1.3.2-6.1.2.12.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.1.2.13">
+                    <p id="section-3.1.3.2-6.1.2.13.1"><code>/ mkey: / 6</code>, the <code>&amp;(version: 0)</code> SHALL be set to <code>/ version-map / { / version: /: POLICY[15:8] '.' POLICY[7:0] '.0' , / version-scheme: / 16384 }</code> where the <code>POLICY</code> slices are translated to decimal number strings and juxtaposition is string concatenation.<a href="#section-3.1.3.2-6.1.2.13.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-3.1.3.2-6.2">
+                <p id="section-3.1.3.2-6.2.1"><code>/ mkey: 1 /</code> the report privilege level<a href="#section-3.1.3.2-6.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.2.2.1">
+                    <p id="section-3.1.3.2-6.2.2.1.1">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>VMPL</code> as a <code>uint</code>.<a href="#section-3.1.3.2-6.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-3.1.3.2-6.3">
+                <p id="section-3.1.3.2-6.3.1"><code>/ mkey: 2 /</code> the current host info<a href="#section-3.1.3.2-6.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.3.2.1">
+                    <p id="section-3.1.3.2-6.3.2.1.1">The <code>&amp;(version: 0)</code> codepoint SHALL be set to <code>/ version-map / { / version: 0 / vstr / version-scheme: / 1: 16384 }</code> with version string <code>vstr</code> constructed as <code>dec(CURRENT_MAJOR) '.' dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD)</code>.<a href="#section-3.1.3.2-6.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.3.2.2">
+                    <p id="section-3.1.3.2-6.3.2.2.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-smt-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 0)</code><a href="#section-3.1.3.2-6.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.3.2.3">
+                    <p id="section-3.1.3.2-6.3.2.3.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-tsme-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 1)</code><a href="#section-3.1.3.2-6.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.3.2.4">
+                    <p id="section-3.1.3.2-6.3.2.4.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-ecc-mem-reported-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 2)</code><a href="#section-3.1.3.2-6.3.2.4.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.3.2.5">
+                    <p id="section-3.1.3.2-6.3.2.5.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-rapl-disabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 3)</code><a href="#section-3.1.3.2-6.3.2.5.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.3.2.6">
+                    <p id="section-3.1.3.2-6.3.2.6.1">The <code>&amp;(flags: 3) / flags-map / sevsnphost-ciphertext-hiding-enabled</code> codepoint SHALL be set to <code>is-set(PLATFORM_INFO, 4)</code><a href="#section-3.1.3.2-6.3.2.6.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.3.2.7">
+                    <p id="section-3.1.3.2-6.3.2.7.1">Any further non-reserved bit position <code>b</code> of <code>PLATFORM_INFO</code> will be set at <code>flags-map</code> codepoint <code>-1-b</code>.<a href="#section-3.1.3.2-6.3.2.7.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.2-6.3.2.8">
+                    <p id="section-3.1.3.2-6.3.2.8.1">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>560(HOSTDATA)</code> and MAY be omitted if all zeros.<a href="#section-3.1.3.2-6.3.2.8.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-3.1.3.2-6.4">
+                <p id="section-3.1.3.2-6.4.1"><code>/ mkey: 3 /</code> the committed host info<a href="#section-3.1.3.2-6.4.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.4.2.1">
+                    <p id="section-3.1.3.2-6.4.2.1.1">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(leuint(COMMITTED_TCB))</code>.<a href="#section-3.1.3.2-6.4.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-3.1.3.2-6.5">
+                <p id="section-3.1.3.2-6.5.1"><code>/ mkey: 4 /</code> the launch tcb<a href="#section-3.1.3.2-6.5.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.5.2.1">
+                    <p id="section-3.1.3.2-6.5.2.1.1">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(leuint(LAUNCH_TCB))</code>.<a href="#section-3.1.3.2-6.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-3.1.3.2-6.6">
+                <p id="section-3.1.3.2-6.6.1"><code>/ mkey: 5 /</code> the reported tcb<a href="#section-3.1.3.2-6.6.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.6.2.1">
+                    <p id="section-3.1.3.2-6.6.2.1.1">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(leuint(REPORTED_TCB))</code>.<a href="#section-3.1.3.2-6.6.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-3.1.3.2-6.7">
+                <p id="section-3.1.3.2-6.7.1"><code>/ mkey: 6 /</code> the guest policy's minimum SEV-SNP ABI version that launch compares against <code>CURRENT_MAJOR</code> and <code>CURRENT_MINOR</code>.<a href="#section-3.1.3.2-6.7.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-6.7.2.1">
+                    <p id="section-3.1.3.2-6.7.2.1.1">The <code>&amp;(version: 0)</code> codepoint SHALL be set to <code>/ version-map / { / version: / 0: vstr / version-scheme: / 1: 16384 }</code> with version string <code>vstr</code> constructed as <code>dec(MAJOR_ABI) '.' dec(MINOR_ABI) '.0'</code>.<a href="#section-3.1.3.2-6.7.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+<p id="section-3.1.3.2-7">If <code>ID_BLOCK</code> information is available, it appears in its own <code>endorsement-triple-record</code> with additional values in <code>authorized-by</code> beyond the attestation key.
 The <code>authorized-by</code> field is extended with <code>32780(ID_KEY_DIGEST)</code>, and if <code>AUTHOR_KEY_EN</code> is 1, then it is also extended with <code>32780(AUTHOR_KEY_DIGEST)</code>.
-The Verifier MAY use a base CDDL CoRIM <code>$crypto-key-type-choice</code> representation if its public key information's digest is equal to the #6.32780-tagged bytes, as described it <a href="#sec-key-digest" class="auto internal xref">Section 3.1.3.4</a>.<a href="#section-3.1.3.3-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-3.1.3.3-4.1">
-                <p id="section-3.1.3.3-4.1.1">The <code>version: 0</code> codepoint SHALL be set to
-~~~cbor-diag
-/ version-map / {
-  / version: / 0 =&gt; hexlify(FAMILY_ID) '/' hexlify(IMAGE_ID)
-  / version-scheme: -1 / =&gt; &amp;(sevsnpvm-familyimageid-hex: -1)
-}
-~~~
-where <code>hexlify</code> is a function that translates the a byte string to its hexadecimal string encoding.<a href="#section-3.1.3.3-4.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-4.2">
-                <p id="section-3.1.3.3-4.2.1">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(GUEST_SVN)</code>.<a href="#section-3.1.3.3-4.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-4.3">
-                <p id="section-3.1.3.3-4.3.1">The <code>&amp;(digests: 2)</code> codepoint is in the triple record.<a href="#section-3.1.3.3-4.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-3.1.3.3-4.4">
-                <p id="section-3.1.3.3-4.4.1">The <code>&amp;(flags: 3) / flags-map</code> codepoints prefixed by <code>sevsnpvm-policy</code> SHALL be set in the triple's <code>&amp;(flags: 3)</code> entry as per above translation rules.<a href="#section-3.1.3.3-4.4.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-<div id="tcb-comparison">
-<section id="section-3.1.3.3.1">
-              <h6 id="name-tcb-comparison">
-<a href="#section-3.1.3.3.1" class="section-number selfRef">3.1.3.3.1. </a><a href="#name-tcb-comparison" class="section-name selfRef">TCB comparison</a>
-              </h6>
-<p id="section-3.1.3.3.1-1">The Verifier SHALL use tho <code>svn-type-choice</code> comparison algorithm from {-rats-corim}}.<a href="#section-3.1.3.3.1-1" class="pilcrow">¶</a></p>
-</section>
-</div>
+The Verifier MAY use a base CDDL CoRIM <code>$crypto-key-type-choice</code> representation if its public key information's digest is equal to the #6.32780-tagged bytes, as described it <a href="#sec-key-digest" class="auto internal xref">Section 3.1.3.3</a>.<a href="#section-3.1.3.2-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-key-digest">
-<section id="section-3.1.3.4">
+<section id="section-3.1.3.3">
             <h5 id="name-key-digest-comparison">
-<a href="#section-3.1.3.4" class="section-number selfRef">3.1.3.4. </a><a href="#name-key-digest-comparison" class="section-name selfRef">Key digest comparison</a>
+<a href="#section-3.1.3.3" class="section-number selfRef">3.1.3.3. </a><a href="#name-key-digest-comparison" class="section-name selfRef">Key digest comparison</a>
             </h5>
-<p id="section-3.1.3.4-1">When <code>ID_BLOCK</code> is used, the full key information needed for signature verification is provided by the VMM at launch in an <code>ID_AUTH</code> structure.
+<p id="section-3.1.3.3-1">When <code>ID_BLOCK</code> is used, the full key information needed for signature verification is provided by the VMM at launch in an <code>ID_AUTH</code> structure.
 The SNP firmware verifies the signatures and adds digests of the signing key(s) to the attestation report as evidence of successful signature verification.
-When a Verifier does not have access to the original public key information used in <code>ID_AUTH</code>, the attestation report key digests can still be used as a representation of authority.<a href="#section-3.1.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.4-2">The APPENDIX: Digital Signatures section of <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span> specifies a representation of public keys and signatures.
+When a Verifier does not have access to the original public key information used in <code>ID_AUTH</code>, the attestation report key digests can still be used as a representation of authority.<a href="#section-3.1.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.3-2">The APPENDIX: Digital Signatures section of <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span> specifies a representation of public keys and signatures.
 An attestation report key digest will be a SHA-384 digest of the 0x403 byte buffer representation of a public key.
-If an author key is used, its signature of the ID_KEY is assumed to exist and have passed given the SNP firmware specification.<a href="#section-3.1.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.4-3">If a <code>$crypto-key-type-choice</code> key representation specifies an algorithm and parameters that are included in the Digital Signatures appendix, it is comparable to a #6.32780-tagged byte string.<a href="#section-3.1.3.4-3" class="pilcrow">¶</a></p>
+If an author key is used, its signature of the ID_KEY is assumed to exist and have passed given the SNP firmware specification.<a href="#section-3.1.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.3-3">If a <code>$crypto-key-type-choice</code> key representation specifies an algorithm and parameters that are included in the Digital Signatures appendix, it is comparable to a #6.32780-tagged byte string.<a href="#section-3.1.3.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1.3.4-4.1">
-                <p id="section-3.1.3.4-4.1.1">Two #6.32780-tagged byte strings match if and only if their encodings are bitwise equal.<a href="#section-3.1.3.4-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1.3.3-4.1">
+                <p id="section-3.1.3.3-4.1.1">Two #6.32780-tagged byte strings match if and only if their encodings are bitwise equal.<a href="#section-3.1.3.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.4-4.2">
-                <p id="section-3.1.3.4-4.2.1">A thumbprint representation of a key is not comparable to a #6.32780-tagged byte string since the parameters are not extractable.<a href="#section-3.1.3.4-4.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.3-4.2">
+                <p id="section-3.1.3.3-4.2.1">A thumbprint representation of a key is not comparable to a #6.32780-tagged byte string since the parameters are not extractable.<a href="#section-3.1.3.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.4-4.3">
-                <p id="section-3.1.3.4-4.3.1">A PKIX public key (#6.554-tagged <code>tstr</code>) or PKIX certificate (#6.555-tagged <code>tstr</code>) MAY be comparable to a #6.32780-tagged byte string.<a href="#section-3.1.3.4-4.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.3-4.3">
+                <p id="section-3.1.3.3-4.3.1">A PKIX public key (#6.554-tagged <code>tstr</code>) or PKIX certificate (#6.555-tagged <code>tstr</code>) MAY be comparable to a #6.32780-tagged byte string.<a href="#section-3.1.3.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
-<p id="section-3.1.3.4-5">The <span>[<a href="#RFC3280" class="cite xref">RFC3280</a>]</span> specified <code>AlgorithmIdentifier</code> has optional parameters based on the algorithm identifier.
+<p id="section-3.1.3.3-5">The <span>[<a href="#RFC3280" class="cite xref">RFC3280</a>]</span> specified <code>AlgorithmIdentifier</code> has optional parameters based on the algorithm identifier.
 The AMD signature algorithm <code>1h</code> corresponds to algorithm <code>ecdsa-with-sha384</code> from section 3.2 of <span>[<a href="#RFC5758" class="cite xref">RFC5758</a>]</span>, but the parameters MUST be omitted.
 The <code>SubjectPublicKeyInfo</code> is therefore <code>id-ecPublicKey</code> from section 2.1.1 of <span>[<a href="#RFC5480" class="cite xref">RFC5480</a>]</span> to further allow the curve to be specified, despite not further specifying that the signature is of a SHA-384 digest.
 The AMD ECSDA curve name <code>2h</code> corresponds to named curve <code>secp384r1</code> from section 2.2 of <span>[<a href="#RFC5480" class="cite xref">RFC5480</a>]</span>.
-The <code>ECPoint</code> conversion routines in section 2 of <span>[<a href="#SEC1" class="cite xref">SEC1</a>]</span> provide guidance on how the <code>QX</code> and <code>QY</code> little-endian big integers zero-padded to 72 bytes may be constructed.<a href="#section-3.1.3.4-5" class="pilcrow">¶</a></p>
+The <code>ECPoint</code> conversion routines in section 2 of <span>[<a href="#SEC1" class="cite xref">SEC1</a>]</span> provide guidance on how the <code>QX</code> and <code>QY</code> little-endian big integers zero-padded to 72 bytes may be constructed.<a href="#section-3.1.3.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1750,10 +1728,14 @@ The digest alone for the VMSA launch update command is insufficient to represent
 <p id="section-3.2.1-3">The bootstrap processor (BSP) and application processors (APs) typically have different initial values.
 The APs typically all have the same initial value, so the <code>ap-vmsa</code> codepoint MAY be a single <code>sevsnp-vmsa-type-choice</code> to represent its replication.
 Alternatively, each AP's initial VMSA may be individually specified with a list of <code>sevsnp-vmsa-type-choice</code>.<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-4">sevsnp-repeated-vmsa = [
+<div class="lang-cddl sourcecode" id="section-3.2.1-4">
+<pre>
+sevsnp-repeated-vmsa = [
   vmsa: sevsnp-vmsa-type-choice
   repeat: uint
-}<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+}
+</pre><a href="#section-3.2.1-4" class="pilcrow">¶</a>
+</div>
 <p id="section-3.2.1-5">All VMSA fields are optional.
 A missing VMSA field in evidence is treated as its default value.
 A missing VMSA field in a reference value is one less matching condition.<a href="#section-3.2.1-5" class="pilcrow">¶</a></p>
@@ -2396,7 +2378,7 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
               <td class="text-left" rowspan="1" colspan="1">
                 <code>map</code>
 </td>
-              <td class="text-left" rowspan="1" colspan="1">Keys are always int, values are opaque bytes, see <a href="#sec-id-tag" class="auto internal xref">Section 3.1.2.2</a>
+              <td class="text-left" rowspan="1" colspan="1">Keys are always int, values are opaque bytes, see <a href="#sec-id-tag" class="auto internal xref">Section 3.1.2.4</a>
 </td>
               <td class="text-left" rowspan="1" colspan="1">RFCthis</td>
             </tr>
@@ -2405,7 +2387,7 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
               <td class="text-left" rowspan="1" colspan="1">
                 <code>bytes</code>
 </td>
-              <td class="text-left" rowspan="1" colspan="1">A digest of an AMD public key format that compares with other keys <a href="#sec-key-digest" class="auto internal xref">Section 3.1.3.4</a>
+              <td class="text-left" rowspan="1" colspan="1">A digest of an AMD public key format that compares with other keys <a href="#sec-key-digest" class="auto internal xref">Section 3.1.3.3</a>
 </td>
               <td class="text-left" rowspan="1" colspan="1">RFCthis</td>
             </tr>
@@ -2588,38 +2570,12 @@ $$flags-map-extension //= &amp;(
   sevsnpvm-policy-mem-aes-256-xts-required: -6,
   sevsnpvm-policy-rapl-must-be-disabled: -7,
   sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+  sevsnpvm-policy-reserved: -47..-9,
 )
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnpvm-host-data: -3) =&gt; bstr .size 32
-)
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnpvm-policy-abi: -1) =&gt; sevsnpvm-policy-record
-)
-
-sevsnpvm-policy-record = [
-  abi-major: byte,
-  abi-minor: byte
-]
 
 $version-scheme /= &amp;(sevsnpvm-familyimageid-hex: -1)
 
-$$measurement-values-map-extension //= (
-  &amp;(sevsnpvm-vmpl: -2) =&gt; 0..3
-)
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-committed-tcb: -7) =&gt; svn-type-choice
-)
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-current-tcb: -6) =&gt; svn-type-choice
-)
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-launch-tcb: -8) =&gt; svn-type-choice
-)
+$raw-value-type-choice /= uint
 
 $$flags-map-extension //= &amp;(
   sevsnphost-smt-enabled: -49,
@@ -2627,38 +2583,8 @@ $$flags-map-extension //= &amp;(
   sevsnphost-ecc-mem-reported-enabled:-51,
   sevsnphost-rapl-disabled: -52,
   sevsnphost-ciphertext-hiding-enabled: -53
+  sevsnphost-reserved: -112..-49
 )
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-reported-tcb: -9) =&gt; svn-type-choice
-)
-
-sevsnphost-sp-fw-version-record = [
-  build-number: uint .size 1,
-  major: uint .size 1,
-  minor: uint .size 1
-]
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-sp-fw-current: -4) =&gt; sevsnphost-sp-fw-version-record
-)
-
-$$measurement-values-map-extension //= (
-  &amp;(sevsnphost-sp-fw-committed: -5) =&gt; sevsnphost-sp-fw-version-record
-)
-
-sevsnp-tcb-version-type-choice = sevsnphost-tcb-map / svn-type-choice
-
-sevsnphost-tcb-map = {
-  &amp;(blspl: 0) =&gt; uint
-  &amp;(teespl: 1) =&gt; svn-type
-  ? &amp;(spl4: 2) =&gt; svn-type
-  ? &amp;(spl5: 3) =&gt; svn-type
-  ? &amp;(spl6: 4) =&gt; svn-type
-  ? &amp;(spl7: 5) =&gt; svn-type
-  &amp;(snpspl: 6) =&gt; svn-type
-  &amp;(ucodespl: 7) =&gt; svn-type
-}
 
 
 sevsnp-vmsa-map-r1-55 = { sevsnp-vmsa-r1-55 }
