@@ -48,38 +48,12 @@ $$flags-map-extension //= &(
   sevsnpvm-policy-mem-aes-256-xts-required: -6,
   sevsnpvm-policy-rapl-must-be-disabled: -7,
   sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+  sevsnpvm-policy-reserved: -47..-9,
 )
-
-$$measurement-values-map-extension //= (
-  &(sevsnpvm-host-data: -3) => bstr .size 32
-)
-
-$$measurement-values-map-extension //= (
-  &(sevsnpvm-policy-abi: -1) => sevsnpvm-policy-record
-)
-
-sevsnpvm-policy-record = [
-  abi-major: byte,
-  abi-minor: byte
-]
 
 $version-scheme /= &(sevsnpvm-familyimageid-hex: -1)
 
-$$measurement-values-map-extension //= (
-  &(sevsnpvm-vmpl: -2) => 0..3
-)
-
-$$measurement-values-map-extension //= (
-  &(sevsnphost-committed-tcb: -7) => svn-type-choice
-)
-
-$$measurement-values-map-extension //= (
-  &(sevsnphost-current-tcb: -6) => svn-type-choice
-)
-
-$$measurement-values-map-extension //= (
-  &(sevsnphost-launch-tcb: -8) => svn-type-choice
-)
+$raw-value-type-choice /= uint
 
 $$flags-map-extension //= &(
   sevsnphost-smt-enabled: -49,
@@ -87,38 +61,8 @@ $$flags-map-extension //= &(
   sevsnphost-ecc-mem-reported-enabled:-51,
   sevsnphost-rapl-disabled: -52,
   sevsnphost-ciphertext-hiding-enabled: -53
+  sevsnphost-reserved: -112..-49
 )
-
-$$measurement-values-map-extension //= (
-  &(sevsnphost-reported-tcb: -9) => svn-type-choice
-)
-
-sevsnphost-sp-fw-version-record = [
-  build-number: uint .size 1,
-  major: uint .size 1,
-  minor: uint .size 1
-]
-
-$$measurement-values-map-extension //= (
-  &(sevsnphost-sp-fw-current: -4) => sevsnphost-sp-fw-version-record
-)
-
-$$measurement-values-map-extension //= (
-  &(sevsnphost-sp-fw-committed: -5) => sevsnphost-sp-fw-version-record
-)
-
-sevsnp-tcb-version-type-choice = sevsnphost-tcb-map / svn-type-choice
-
-sevsnphost-tcb-map = {
-  &(blspl: 0) => uint
-  &(teespl: 1) => svn-type
-  ? &(spl4: 2) => svn-type
-  ? &(spl5: 3) => svn-type
-  ? &(spl6: 4) => svn-type
-  ? &(spl7: 5) => svn-type
-  &(snpspl: 6) => svn-type
-  &(ucodespl: 7) => svn-type
-}
 
 
 sevsnp-vmsa-map-r1-55 = { sevsnp-vmsa-r1-55 }

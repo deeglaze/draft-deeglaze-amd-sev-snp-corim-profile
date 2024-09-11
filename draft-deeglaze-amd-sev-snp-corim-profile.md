@@ -221,6 +221,7 @@ The `PLATFORM_INFO` bits are host configuration that are added as extensions to 
 {::include cddl/sevsnphost-platform-info-flags-ext.cddl}
 ~~~
 
+The `sevsnpvm-policy-debug-allowed` flag is redundant with `flags-map / is-debug`, so either representation is valid.
 The entirety of the value space is reserved for AMD revisions to the SEV-SNP firmware and corresponding ATTESTATION_REPORT API.
 
 #### Version scheme extension {#sec-version-scheme}
@@ -304,10 +305,13 @@ Note: A value of `0` is not treated the same as unset given the semantics for ma
 * `/ mkey: / 0`, the guest data
   +  The `&(version: 0)` codepoint MAY be unset if the report does not contain `ID_BLOCK` data, otherwise the `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: vstr / version-scheme: / 1: -1 }` with version string `vstr` constructed as `hex(FAMILY_ID) '/' hex(IMAGE_ID)`.
   +  The `&(svn: 1)` codepoint MAY be unset if the report dos not contain `ID_BLOCK` data, otherwise the `&(svn: 1)` codepoint SHALL be set to `552(leuint(GUEST_SVN))`.
-  +  The `&(digests: 2)` codepoint SHALL be set to `[ / digest / [ / alg: / 7, / val: / MEASUREMENT]]`.
+  +  The `&(digests: 2)` codepoint SHALL be set to `[ / digest / [ / alg: / 7, / val: / MEASUREMENT ] ]`.
+  +  The `&(flags: 3) / flags-map / is-confidentiality-protected` codepoint MAY be set to true.
+  +  The `&(flags: 3) / flags-map / is-integrity-protected` codepoint MAY be set to true.
+  +  The `&(flags: 3) / flags-map / is-replay-protected` codepoint MAY be set to true.
   +  The `&(flags: 3) / flags-map / sevsnpvm-policy-smt-allowed` codepoint SHALL be set to `is-set(GUEST_POLICY, 16)`.
   +  The `&(flags: 3) / flags-map / sevsnpvm-policy-migration-agent-allowed` codepoint SHALL be set to `is-set(GUEST_POLICY, 18)`.
-  +  The `&(flags: 3) / flags-map / sevsnpvm-policy-debug-allowed` codepoint SHALL be set to `is-set(GUEST_POLICY, 19)`.
+  +  One or both of `&(flags: 3) / flags-map / sevsnpvm-policy-debug-allowed` and `is-debug` codepoints SHALL be set to `is-set(GUEST_POLICY, 19)`.
   +  The `&(flags: 3) / flags-map / sevsnpvm-policy-single-socket-only` codepoint SHALL be set to `is-set(GUEST_POLICY, 20)`.
   +  The `&(flags: 3) / flags-map / sevsnpvm-policy-cxl-allowed` codepoint SHALL be set to `is-set(GUEST_POLICY, 21)`.
   +  The `&(flags: 3) / flags-map / sevsnpvm-policy-mem-aes-256-xts-required` codepoint SHALL be set to `is-set(GUEST_POLICY, 22)`.
@@ -337,7 +341,7 @@ Note: A value of `0` is not treated the same as unset given the semantics for ma
 
 If `ID_BLOCK` information is available, it appears in its own `endorsement-triple-record` with additional values in `authorized-by` beyond the attestation key.
 The `authorized-by` field is extended with `32780(ID_KEY_DIGEST)`, and if `AUTHOR_KEY_EN` is 1, then it is also extended with `32780(AUTHOR_KEY_DIGEST)`.
-The Verifier MAY use a base CDDL CoRIM `$crypto-key-type-choice` representation if its public key information's digest is equal to the #6.32780-tagged bytes, as described it {{sec-key-digest}}.
+The Verifier MAY use a base CDDL CoRIM `$crypto-key-type-choice` representation if its public key information's digest compares equal to the #6.32780-tagged bytes, as described in {{sec-key-digest}}.
 
 #### Key digest comparison {#sec-key-digest}
 
@@ -373,7 +377,7 @@ The content media type shall be `application/vnd.amd.sevsnp.launch-updates+cbor`
 {::include cddl/sevsnp-launch-configuration-map.cddl}
 ~~~
 
-*  The `fms` field if included SHALL contain the CPUID[1]_EAX value masked with `0x0fff3fff` to provide chip family, model, stepping information.
+*  The `fms` field if included SHALL contain the `CPUID[1]_EAX` value masked with `0x0fff3fff` to provide chip family, model, stepping information.
   If not included, the Verifier may reference the VEK certificate's extension for `productName`.
 *  The `sevsnpvm-launch-baseline` field if not included is SHALL be interpreted as an all zero SHA-384 digest.
 The calculation of the launch measurement SHALL use the value is the initial `PAGE_INFO`'s `DIGEST_CUR` value.
@@ -593,9 +597,9 @@ At offset `ROM_end - 0x32 - length` there is a table with format
 | Type | Name |
 | ---- | ---- |
 | * | * |
-| UINT8[Length] | Data |
-| LE_UINT16 | Length |
-| EFI_GUID | Name |
+| `UINT8[Length]` | Data |
+| `LE_UINT16` | Length |
+| `EFI_GUID` | Name |
 {: title="OVMF footer GUID table type description"}
 
 `LE_UINT16` is the type of a little endian 16-bit unsigned integer.
@@ -606,20 +610,20 @@ Within this table there is an entry that specifies the guest physical address th
 
 | Type | Name |
 | ---- | ---- |
-| LE_UINT32 | Address |
-| LE_UINT16 | Length |
-| EFI_GUID | dc886566-984a-4798-A75e-5585a7bf67cc |
+| `LE_UINT32` | Address |
+| `LE_UINT16` | Length |
+| `EFI_GUID` | dc886566-984a-4798-A75e-5585a7bf67cc |
 {: title="SevMetadataOffset GUID table entry description"}
 
 At this address when loaded, or at offset `ROM_end - (4GiB - Address)`, the `SevMetadata`,
 
 | Type | Name |
 | ---- | ---- |
-| LE_UINT32 | Signature |
-| LE_UINT32 | Length |
-| LE_UINT32 | Version |
-| LE_UINT32 | NumSections |
-| SevMetadataSection[Sections] | Sections |
+| `LE_UINT32` | Signature |
+| `LE_UINT32` | Length |
+| `LE_UINT32` | Version |
+| `LE_UINT32` | NumSections |
+| `SevMetadataSection[Sections]` | Sections |
 {: title="SevMetadata type description" }
 
 The `Signature` value should be `'A', 'S', 'E', 'V'` or "VESA" in big-endian order: `0x56455341`.
@@ -627,9 +631,9 @@ Where `SevMetadataSection` is
 
 | Type | Name |
 | ---- | ---- |
-| LE_UINT32 | Address |
-| LE_UINT32 | Length |
-| LE_UINT32 | Kind |
+| `LE_UINT32` | Address |
+| `LE_UINT32` | Length |
+| `LE_UINT32` | Kind |
 {: title="SevMetadataSection type description"}
 
 A section references some slice of guest physical memory that has a certain purpose as labeled by `Kind`:
