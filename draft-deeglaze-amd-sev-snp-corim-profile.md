@@ -43,6 +43,7 @@ normative:
   RFC8610: cddl
   RFC9334: rats-arch
   RFC9090: cbor-oids
+  I-D.ietf-rats-corim: rats-corim
   X.690:
     title: >
       Information technology — ASN.1 encoding rules:
@@ -57,7 +58,6 @@ normative:
   IANA.named-information: named-info
 
 informative:
-  I-D.ietf-rats-corim: rats-corim
   SEV-SNP.API:
     title: SEV Secure Nested Paging Firmware ABI Specification
     author:
