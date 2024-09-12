@@ -1,1 +1,4 @@
-sevsnp-ap-vmsa-type-choice = [ + sevsnp-vmsa-type-choice ] / tagged-sevsnp-repeated-vmsa
+sevsnp-ap-vmsa-type-choice = (
+  [ + sevsnp-vmsa-type-choice ] /
+  tagged-sevsnp-repeated-vmsa
+)

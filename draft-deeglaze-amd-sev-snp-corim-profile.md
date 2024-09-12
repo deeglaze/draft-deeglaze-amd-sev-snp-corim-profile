@@ -429,21 +429,42 @@ Figure {{figure-vmsa-defaults}} is a CBOR representation of the nonzero default 
 
 ~~~ cbor-diag
 / sevsnp-vmsa-map-r1-55 / {
-  / es: / 0 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
+  / es: / 0 => / svm-vmcb-seg-map / {
+    / attrib: / 1 => 0x92
+    / limit: / 2 => 0xffff
+  }
   / cs: / 1 => / svm-vmcb-seg-map / {
     / selector: / 0 => 0xf000
     / attrib: / 1 => 0x9b
     / limit: / 2 => 0xffff
     / base: / 3 => 0xffff0000
   }
-  / ss: / 2 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
-  / ds: / 3 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
-  / fs: / 4 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
-  / gs: / 5 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
+  / ss: / 2 => / svm-vmcb-seg-map / {
+    / attrib: / 1 => 0x92
+    / limit: / 2 => 0xffff
+  }
+  / ds: / 3 => / svm-vmcb-seg-map / {
+    / attrib: / 1 => 0x92
+    / limit: / 2 => 0xffff
+  }
+  / fs: / 4 => / svm-vmcb-seg-map / {
+    / attrib: / 1 => 0x92
+    / limit: / 2 => 0xffff
+  }
+  / gs: / 5 => / svm-vmcb-seg-map / {
+    / attrib: / 1 => 0x92
+    / limit: / 2 => 0xffff
+  }
   / gdtr: / 6 => / svm-vmcb-seg-map / { / limit: / 2 => 0xffff }
-  / ldtr: / 7 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x82 / limit: / 2 => 0xffff }
+  / ldtr: / 7 => / svm-vmcb-seg-map / {
+    / attrib: / 1 => 0x82
+    / limit: / 2 => 0xffff
+  }
   / idtr: / 8 => / svm-vmcb-seg-map / { / limit: / 2 => 0xffff }
-  / tr: / 9 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x83 / limit: / 2 => 0xffff }
+  / tr: / 9 => / svm-vmcb-seg-map / {
+    / attrib: / 1 => 0x83
+    / limit: / 2 => 0xffff
+  }
   / cr0: / 33 => 0x10
   / dr7: / 34 => 0x400
   / dr6: / 35 => 0xffff0ff0
@@ -491,7 +512,7 @@ Since the VMM only has to provide the gpa, page type, and digest of the contents
 If the baseline is not provided, it is assumed to be all zeros.
 
 ~~~
-measurement({fms, baseline, updates, bsp, aps}) = iterate(baseline, infos)
+measurement({fms, base, updates, bsp, aps}) = iterate(base, infos)
   where infos = update-info ++ [bsp-info] ++ ap-info
         update-info = appendmap(mk_page_info(fms), updates)
         bsp-info = mk_vmsa_info(fms)(bsp)
