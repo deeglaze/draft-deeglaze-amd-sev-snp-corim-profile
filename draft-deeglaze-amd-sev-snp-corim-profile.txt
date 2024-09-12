@@ -623,21 +623,42 @@ Table of Contents
    the cited revision's Table 14-1.
 
    / sevsnp-vmsa-map-r1-55 / {
-     / es: / 0 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
+     / es: / 0 => / svm-vmcb-seg-map / {
+       / attrib: / 1 => 0x92
+       / limit: / 2 => 0xffff
+     }
      / cs: / 1 => / svm-vmcb-seg-map / {
        / selector: / 0 => 0xf000
        / attrib: / 1 => 0x9b
        / limit: / 2 => 0xffff
        / base: / 3 => 0xffff0000
      }
-     / ss: / 2 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
-     / ds: / 3 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
-     / fs: / 4 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
-     / gs: / 5 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x92 / limit: / 2 => 0xffff }
+     / ss: / 2 => / svm-vmcb-seg-map / {
+       / attrib: / 1 => 0x92
+       / limit: / 2 => 0xffff
+     }
+     / ds: / 3 => / svm-vmcb-seg-map / {
+       / attrib: / 1 => 0x92
+       / limit: / 2 => 0xffff
+     }
+     / fs: / 4 => / svm-vmcb-seg-map / {
+       / attrib: / 1 => 0x92
+       / limit: / 2 => 0xffff
+     }
+     / gs: / 5 => / svm-vmcb-seg-map / {
+       / attrib: / 1 => 0x92
+       / limit: / 2 => 0xffff
+     }
      / gdtr: / 6 => / svm-vmcb-seg-map / { / limit: / 2 => 0xffff }
-     / ldtr: / 7 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x82 / limit: / 2 => 0xffff }
+     / ldtr: / 7 => / svm-vmcb-seg-map / {
+       / attrib: / 1 => 0x82
+       / limit: / 2 => 0xffff
+     }
      / idtr: / 8 => / svm-vmcb-seg-map / { / limit: / 2 => 0xffff }
-     / tr: / 9 => / svm-vmcb-seg-map / { / attrib: / 1 => 0x83 / limit: / 2 => 0xffff }
+     / tr: / 9 => / svm-vmcb-seg-map / {
+       / attrib: / 1 => 0x83
+       / limit: / 2 => 0xffff
+     }
      / cr0: / 33 => 0x10
      / dr7: / 34 => 0x400
      / dr6: / 35 => 0xffff0ff0
@@ -704,11 +725,11 @@ Table of Contents
    DIGEST_CUR field.  If the baseline is not provided, it is assumed to
    be all zeros.
 
-measurement({fms, baseline, updates, bsp, aps}) = iterate(baseline, infos)
-  where infos = update-info ++ [bsp-info] ++ ap-info
-        update-info = appendmap(mk_page_info(fms), updates)
-        bsp-info = mk_vmsa_info(fms)(bsp)
-        ap-info = mk_ap_vmsa_info(fms, aps)
+   measurement({fms, base, updates, bsp, aps}) = iterate(base, infos)
+     where infos = update-info ++ [bsp-info] ++ ap-info
+           update-info = appendmap(mk_page_info(fms), updates)
+           bsp-info = mk_vmsa_info(fms)(bsp)
+           ap-info = mk_ap_vmsa_info(fms, aps)
 
    The iterate function is applies a sha384 digest update operation on
    all given PAGE_INFO byte strings:
@@ -1196,6 +1217,13 @@ measurement({fms, baseline, updates, bsp, aps}) = iterate(baseline, infos)
 
 5.1.  Normative References
 
+   [I-D.ietf-rats-corim]
+              Birkholz, H., Fossati, T., Deshpande, Y., Smith, N., and
+              W. Pan, "Concise Reference Integrity Manifest", Work in
+              Progress, Internet-Draft, draft-ietf-rats-corim-05, 8 July
+              2024, <https://datatracker.ietf.org/doc/html/draft-ietf-
+              rats-corim-05>.
+
    [IANA.cbor-tags]
               IANA, "Concise Binary Object Representation (CBOR) Tags",
               <https://www.iana.org/assignments/cbor-tags>.
@@ -1265,13 +1293,6 @@ measurement({fms, baseline, updates, bsp, aps}) = iterate(baseline, infos)
               2023, <https://www.amd.com/content/dam/amd/en/documents/
               epyc-technical-docs/specifications/56421.pdf>.
 
-   [I-D.ietf-rats-corim]
-              Birkholz, H., Fossati, T., Deshpande, Y., Smith, N., and
-              W. Pan, "Concise Reference Integrity Manifest", Work in
-              Progress, Internet-Draft, draft-ietf-rats-corim-05, 8 July
-              2024, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              rats-corim-05>.
-
    [SEC1]     Certicom Corp., "Standards for Efficient Cryptography
               Group (SECG), "SEC1: Elliptic Curve Cryptography"",
               Version 1.0 , September 2000,
@@ -1337,7 +1358,10 @@ Appendix A.  CoRIM Extensions CDDL
      repeat: uint
    }
 
-   sevsnp-ap-vmsa-type-choice = [ + sevsnp-vmsa-type-choice ] / tagged-sevsnp-repeated-vmsa
+   sevsnp-ap-vmsa-type-choice = (
+     [ + sevsnp-vmsa-type-choice ] /
+     tagged-sevsnp-repeated-vmsa
+   )
 
    $$flags-map-extension //= &(
      sevsnpvm-policy-smt-allowed: -1,
@@ -1493,7 +1517,11 @@ Appendix A.  CoRIM Extensions CDDL
      ? &(ic_ibs_extd_ctl: 120) => uint64
    )
 
-   $sevsnp-vmsa-type-choice = tagged-sevsnp-vmsa-map-r1-55 / uuid-type / oid-type
+   $sevsnp-vmsa-type-choice = (
+     tagged-sevsnp-vmsa-map-r1-55 /
+     uuid-type /
+     oid-type
+   )
 
    svm-vmcb-seg-map = {
      ? &(selector: 0) => uint16
