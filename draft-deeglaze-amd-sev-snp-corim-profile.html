@@ -10,11 +10,11 @@
        AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) attestation reports comprise of reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
 This document specifies the information elements for representing SEV-SNP Reference Values in CoRIM format. 
     " name="description">
-<meta content="xml2rfc 3.23.0" name="generator">
+<meta content="xml2rfc 3.21.0" name="generator">
 <meta content="RIM, RATS, attestation, verifier, supply chain" name="keyword">
 <meta content="draft-deeglaze-amd-sev-snp-corim-profile-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.23.0
+  xml2rfc 3.21.0
     Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -24,8 +24,9 @@ This document specifies the information elements for representing SEV-SNP Refere
     platformdirs 4.2.2
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.32.3
-    setuptools 70.3.0
+    requests 2.31.0
+    setuptools 69.5.1
+    six 1.16.0
     wcwidth 0.2.13
 -->
 <link href="draft-deeglaze-amd-sev-snp-corim-profile.xml" rel="alternate" type="application/rfc+xml">
@@ -1761,24 +1762,45 @@ The <span>[<a href="#AMD.SPM" class="cite xref">AMD.SPM</a>]</span> is the defin
 Figure <a href="#_figure-vmsa-defaults" class="auto internal xref">Figure 2</a> is a CBOR representation of the nonzero default values that correspond to initial CPU register values as of the cited revision's Table 14-1.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <span id="name-sev-snp-default-vmsa-values"></span><div id="_figure-vmsa-defaults">
 <figure id="figure-2">
-            <div class="lang-cbor-diag sourcecode" id="section-3.2.2-2.1">
+            <div class="breakable lang-cbor-diag sourcecode" id="section-3.2.2-2.1">
 <pre>
 / sevsnp-vmsa-map-r1-55 / {
-  / es: / 0 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
+  / es: / 0 =&gt; / svm-vmcb-seg-map / {
+    / attrib: / 1 =&gt; 0x92
+    / limit: / 2 =&gt; 0xffff
+  }
   / cs: / 1 =&gt; / svm-vmcb-seg-map / {
     / selector: / 0 =&gt; 0xf000
     / attrib: / 1 =&gt; 0x9b
     / limit: / 2 =&gt; 0xffff
     / base: / 3 =&gt; 0xffff0000
   }
-  / ss: / 2 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
-  / ds: / 3 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
-  / fs: / 4 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
-  / gs: / 5 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x92 / limit: / 2 =&gt; 0xffff }
+  / ss: / 2 =&gt; / svm-vmcb-seg-map / {
+    / attrib: / 1 =&gt; 0x92
+    / limit: / 2 =&gt; 0xffff
+  }
+  / ds: / 3 =&gt; / svm-vmcb-seg-map / {
+    / attrib: / 1 =&gt; 0x92
+    / limit: / 2 =&gt; 0xffff
+  }
+  / fs: / 4 =&gt; / svm-vmcb-seg-map / {
+    / attrib: / 1 =&gt; 0x92
+    / limit: / 2 =&gt; 0xffff
+  }
+  / gs: / 5 =&gt; / svm-vmcb-seg-map / {
+    / attrib: / 1 =&gt; 0x92
+    / limit: / 2 =&gt; 0xffff
+  }
   / gdtr: / 6 =&gt; / svm-vmcb-seg-map / { / limit: / 2 =&gt; 0xffff }
-  / ldtr: / 7 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x82 / limit: / 2 =&gt; 0xffff }
+  / ldtr: / 7 =&gt; / svm-vmcb-seg-map / {
+    / attrib: / 1 =&gt; 0x82
+    / limit: / 2 =&gt; 0xffff
+  }
   / idtr: / 8 =&gt; / svm-vmcb-seg-map / { / limit: / 2 =&gt; 0xffff }
-  / tr: / 9 =&gt; / svm-vmcb-seg-map / { / attrib: / 1 =&gt; 0x83 / limit: / 2 =&gt; 0xffff }
+  / tr: / 9 =&gt; / svm-vmcb-seg-map / {
+    / attrib: / 1 =&gt; 0x83
+    / limit: / 2 =&gt; 0xffff
+  }
   / cr0: / 33 =&gt; 0x10
   / dr7: / 34 =&gt; 0x400
   / dr6: / 35 =&gt; 0xffff0ff0
@@ -1833,7 +1855,7 @@ If this measurement equals the digests value with VCEK authority, then add the b
 If the baseline is not provided, it is assumed to be all zeros.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3-4">
 <pre>
-measurement({fms, baseline, updates, bsp, aps}) = iterate(baseline, infos)
+measurement({fms, base, updates, bsp, aps}) = iterate(base, infos)
   where infos = update-info ++ [bsp-info] ++ ap-info
         update-info = appendmap(mk_page_info(fms), updates)
         bsp-info = mk_vmsa_info(fms)(bsp)
@@ -2454,7 +2476,6 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </div>
 </section>
 </div>
-<div id="sec-combined-references">
 <section id="section-5">
       <h2 id="name-references">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-references" class="section-name selfRef">References</a>
@@ -2465,6 +2486,10 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.ietf-rats-corim">[I-D.ietf-rats-corim]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-05</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-05">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="IANA.cbor-tags">[IANA.cbor-tags]</dt>
         <dd>
 <span class="refAuthor">IANA</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cbor-tags">https://www.iana.org/assignments/cbor-tags</a>&gt;</span>. </dd>
@@ -2526,10 +2551,6 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
         <dd>
 <span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"SEV-ES Guest-Hypervisor Communication Block Standardization"</span>, <span class="seriesInfo">Revision 2.03 </span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56421.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56421.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-rats-corim">[I-D.ietf-rats-corim]</dt>
-        <dd>
-<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-05</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-05">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-05</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="SEC1">[SEC1]</dt>
         <dd>
 <span class="refAuthor">Certicom Corp.</span>, <span class="refTitle">"Standards for Efficient Cryptography Group (SECG), "SEC1: Elliptic Curve Cryptography""</span>, <span class="seriesInfo">Version 1.0 </span>, <time datetime="2000-09" class="refDate">September 2000</time>, <span>&lt;<a href="https://www.secg.org/SEC1-Ver-1.0.pdf">https://www.secg.org/SEC1-Ver-1.0.pdf</a>&gt;</span>. </dd>
@@ -2550,7 +2571,6 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </section>
 </div>
 </section>
-</div>
 <div id="sec-corim-cddl">
 <section id="appendix-A">
       <h2 id="name-corim-extensions-cddl">
@@ -2597,7 +2617,10 @@ sevsnp-repeated-vmsa = [
   repeat: uint
 }
 
-sevsnp-ap-vmsa-type-choice = [ + sevsnp-vmsa-type-choice ] / tagged-sevsnp-repeated-vmsa
+sevsnp-ap-vmsa-type-choice = (
+  [ + sevsnp-vmsa-type-choice ] /
+  tagged-sevsnp-repeated-vmsa
+)
 
 $$flags-map-extension //= &amp;(
   sevsnpvm-policy-smt-allowed: -1,
@@ -2753,7 +2776,11 @@ sevsnp-vmsa-r1-55 = &amp;(
   ? &amp;(ic_ibs_extd_ctl: 120) =&gt; uint64
 )
 
-$sevsnp-vmsa-type-choice = tagged-sevsnp-vmsa-map-r1-55 / uuid-type / oid-type
+$sevsnp-vmsa-type-choice = (
+  tagged-sevsnp-vmsa-map-r1-55 /
+  uuid-type /
+  oid-type
+)
 
 svm-vmcb-seg-map = {
   ? &amp;(selector: 0) =&gt; uint16
