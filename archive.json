@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-11T18:24:58.368339+00:00",
+  "timestamp": "2024-09-12T22:25:24.882674+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -167,16 +167,24 @@
       "id": "I_kwDOMdG_Uc6SUtpE",
       "title": "CoRIM must be a \"normative\" reference",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thomas-fossati",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "It is currently in the \"informative\" block.",
       "createdAt": "2024-08-08T05:30:21Z",
-      "updatedAt": "2024-08-08T05:30:21Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-09-12T22:16:31Z",
+      "closedAt": "2024-09-12T22:16:31Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Fixed.",
+          "createdAt": "2024-09-12T22:16:31Z",
+          "updatedAt": "2024-09-12T22:16:31Z"
+        }
+      ]
     },
     {
       "number": 7,
@@ -190,9 +198,17 @@
       "labels": [],
       "body": "When I clone this repo I get:\r\n```\r\n\u279c  deeglaze gh repo clone deeglaze/draft-deeglaze-amd-sev-snp-corim-profile\r\nCloning into 'draft-deeglaze-amd-sev-snp-corim-profile'...\r\n[...]\r\nFrom https://github.com/martinthomson/internet-draft-template\r\n * [new branch]      main       -> upstream/main\r\n! Repository martinthomson/internet-draft-template set as the default repository. To learn more about the default repository, run: gh repo set-default --help\r\n```\r\nwhich doesn't sound right.",
       "createdAt": "2024-08-08T05:36:10Z",
-      "updatedAt": "2024-08-08T05:36:10Z",
+      "updatedAt": "2024-09-12T22:15:36Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "I turned off the template repo setting. I don't see this same `* [new branch]` output on clone.",
+          "createdAt": "2024-09-12T22:15:35Z",
+          "updatedAt": "2024-09-12T22:15:35Z"
+        }
+      ]
     },
     {
       "number": 8,
