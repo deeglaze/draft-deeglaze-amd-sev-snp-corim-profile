@@ -37,7 +37,10 @@ sevsnp-repeated-vmsa = [
   repeat: uint
 }
 
-sevsnp-ap-vmsa-type-choice = [ + sevsnp-vmsa-type-choice ] / tagged-sevsnp-repeated-vmsa
+sevsnp-ap-vmsa-type-choice = (
+  [ + sevsnp-vmsa-type-choice ] /
+  tagged-sevsnp-repeated-vmsa
+)
 
 $$flags-map-extension //= &(
   sevsnpvm-policy-smt-allowed: -1,
@@ -193,7 +196,11 @@ sevsnp-vmsa-r1-55 = &(
   ? &(ic_ibs_extd_ctl: 120) => uint64
 )
 
-$sevsnp-vmsa-type-choice = tagged-sevsnp-vmsa-map-r1-55 / uuid-type / oid-type
+$sevsnp-vmsa-type-choice = (
+  tagged-sevsnp-vmsa-map-r1-55 /
+  uuid-type /
+  oid-type
+)
 
 svm-vmcb-seg-map = {
   ? &(selector: 0) => uint16

@@ -72,6 +72,13 @@ informative:
     seriesinfo: Revision 2.03
     date: July 2023
     target: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56421.pdf
+  SVSM:
+    title: Secure VM Services Module
+    author:
+      org: Advanced Micro Devices Inc.
+    seriesinfo: Revision 1.00
+    date: July 2023
+    target: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf
   VCEK:
     title: Versioned Chip Endorsement Key (VCEK) Certificate and KDS Interface Specification
     author:
@@ -365,13 +372,13 @@ The `SubjectPublicKeyInfo` is therefore `id-ecPublicKey` from section 2.1.1 of [
 The AMD ECSDA curve name `2h` corresponds to named curve `secp384r1` from section 2.2 of [RFC5480].
 The `ECPoint` conversion routines in section 2 of [SEC1] provide guidance on how the `QX` and `QY` little-endian big integers zero-padded to 72 bytes may be constructed.
 
-## AMD SEV-SNP Launch Event Log
+## AMD SEV-SNP Launch Event Log {#sec-launch-config}
 
 The composition of a SEV-SNP VM may be comprised of measurements from multiple principals, such that no one principal has absolute authority to endorse the overall measurement value represented in the attestation report.
 If one principal does have that authority, the `ID_BLOCK` mechanism provides a convenient launch configuration endorsement mechanism without need for distributing a CoRIM.
 This section documents an event log format the Virtual Machine Monitor (VMM) may construct at launch time and provide in the data pages of an extended guest request, as documented in [GHCB].
 
-The content media type shall be `application/vnd.amd.sevsnp.launch-updates+cbor` for the encoding of a `sevsnp-launch-configuration-map`:
+The content media type shall be `application/vnd.amd.sev.snp.launch-config.v1+cbor` for the encoding of a `sevsnp-launch-configuration-map`:
 
 ~~~ cddl
 {::include cddl/sevsnp-launch-configuration-map.cddl}
@@ -672,7 +679,7 @@ The memory allocated to the initial UEFI boot phase, `SEC`, is unmeasured but mu
 The `SEC_MEM` sections contain the initial `GHCB` pages, page tables, and temporary memory for stack and heap.
 The secrets section is memory allocated specifically for holding secrets that the AMD-SP populates at launch.
 The cpuid section is memory allocated to the CPUID source of truth, which shouldn't be measured for portability and host security, but should be verified by AMD-SP for validity.
-The SVSM calling area address section is to enable the firmware to communicate with a secure VM services module running at VMPL0.
+The [SVSM] calling area address section is to enable the firmware to communicate with a secure VM services module running at VMPL0.
 The kernel hashes section is populated with expected measurements when boot advances to load Linux directly and must fail if the disk contents' digests disagree with the measured hashes.
 
 The producer of the OVMF binary may therefore decide to sign a verbose representation or a compact representation.
@@ -731,6 +738,32 @@ The choice of the CoRIM-earmarked value is intentional.
 | 32781 | `map`   | A map of virtual machine vCPU registers (VMSA) to initial values {{vmsa-evidence}} | {{&SELF}} |
 | 32782 | `array`   | A record of a single VMSA and a count of how many times it repeats {{vmsa-evidence}} | {{&SELF}} |
 {: #cbor-tags title="Added CBOR tags"}
+
+## New media types
+
+### `application/vnd.amd.sev.snp.launch-config.v1+cbor`
+
+Described in {{sec-launch-config}}.
+
+### `application/vnd.amd.sev.snp.attestation-report`
+
+An octet-stream that is expected to be interpreted as an AMD SEV-SNP ATTESTATION_REPORT.
+
+### `application/vnd.amd.ghcb.guid-table`
+
+An octet-stream that follows the [GHCB]'s GUID table ABI, recounted here.
+A GUID table is a header followed by an octet-stream body.
+The header is a sequence of entries described in {{guid_table_entry}} terminated by an all zero entry.
+After the all zero entry are the bytes that the header entries index into.
+
+| Type | Name | Description |
+| ---- | ---- |
+| `UUID` | GUID | An [RFC4122] byte format UUID |
+| `LE_UINT32` | Offset | A little-endian offset into the body |
+| `LE_UINT32` | Length | A little-endian byte length of the span |
+{: #guid_table_entry title="guid_table_entry type description"}
+
+A header entry is valid if its Offset+Length is less than or equal to the body size.
 
 --- back
 
