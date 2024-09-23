@@ -4,8 +4,8 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                       12 September 2024
-Expires: 16 March 2025
+Intended status: Standards Track                       23 September 2024
+Expires: 27 March 2025
 
 
             CoRIM profile for AMD SEV-SNP attestation report
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 March 2025.
+   This Internet-Draft will expire on 27 March 2025.
 
 Copyright Notice
 
@@ -87,6 +87,10 @@ Table of Contents
          3.3.4.2.  Kernel data
    4.  IANA Considerations
      4.1.  New CBOR Tags
+     4.2.  New media types
+       4.2.1.  application/vnd.amd.sev.snp.launch-config.v1+cbor
+       4.2.2.  application/vnd.amd.sev.snp.attestation-report
+       4.2.3.  application/vnd.amd.ghcb.guid-table
    5.  References
      5.1.  Normative References
      5.2.  Informative References
@@ -536,8 +540,8 @@ Table of Contents
    (VMM) may construct at launch time and provide in the data pages of
    an extended guest request, as documented in [GHCB].
 
-   The content media type shall be application/vnd.amd.sevsnp.launch-
-   updates+cbor for the encoding of a sevsnp-launch-configuration-map:
+   The content media type shall be application/vnd.amd.sev.snp.launch-
+   config.v1+cbor for the encoding of a sevsnp-launch-configuration-map:
 
    sevsnp-launch-configuration-map = {
      ? (fms: 0) => uint
@@ -940,9 +944,9 @@ Table of Contents
    that the AMD-SP populates at launch.  The cpuid section is memory
    allocated to the CPUID source of truth, which shouldn't be measured
    for portability and host security, but should be verified by AMD-SP
-   for validity.  The SVSM calling area address section is to enable the
-   firmware to communicate with a secure VM services module running at
-   VMPL0.  The kernel hashes section is populated with expected
+   for validity.  The [SVSM] calling area address section is to enable
+   the firmware to communicate with a secure VM services module running
+   at VMPL0.  The kernel hashes section is populated with expected
    measurements when boot advances to load Linux directly and must fail
    if the disk contents' digests disagree with the measured hashes.
 
@@ -1213,6 +1217,40 @@ Table of Contents
 
                           Table 6: Added CBOR tags
 
+4.2.  New media types
+
+4.2.1.  application/vnd.amd.sev.snp.launch-config.v1+cbor
+
+   Described in Section 3.2.
+
+4.2.2.  application/vnd.amd.sev.snp.attestation-report
+
+   An octet-stream that is expected to be interpreted as an AMD SEV-SNP
+   ATTESTATION_REPORT.
+
+4.2.3.  application/vnd.amd.ghcb.guid-table
+
+   An octet-stream that follows the [GHCB]'s GUID table ABI, recounted
+   here.  A GUID table is a header followed by an octet-stream body.
+   The header is a sequence of entries described in Table 7 terminated
+   by an all zero entry.  After the all zero entry are the bytes that
+   the header entries index into.
+
+     +===========+========+=========================================+
+     | Type      | Name   | Description                             |
+     +===========+========+=========================================+
+     | UUID      | GUID   | An [RFC4122] byte format UUID           |
+     +-----------+--------+-----------------------------------------+
+     | LE_UINT32 | Offset | A little-endian offset into the body    |
+     +-----------+--------+-----------------------------------------+
+     | LE_UINT32 | Length | A little-endian byte length of the span |
+     +-----------+--------+-----------------------------------------+
+
+                Table 7: guid_table_entry type description
+
+   A header entry is valid if its Offset+Length is less than or equal to
+   the body size.
+
 5.  References
 
 5.1.  Normative References
@@ -1303,6 +1341,11 @@ Table of Contents
               Firmware ABI Specification", Revision 1.55 , September
               2023, <https://www.amd.com/content/dam/amd/en/documents/
               epyc-technical-docs/specifications/56860.pdf>.
+
+   [SVSM]     Advanced Micro Devices Inc., "Secure VM Services Module",
+              Revision 1.00 , July 2023,
+              <https://www.amd.com/content/dam/amd/en/documents/epyc-
+              technical-docs/specifications/58019.pdf>.
 
    [VCEK]     Advanced Micro Devices Inc., "Versioned Chip Endorsement
               Key (VCEK) Certificate and KDS Interface Specification",
