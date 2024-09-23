@@ -1030,7 +1030,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Glaze</td>
-<td class="center">Expires 16 March 2025</td>
+<td class="center">Expires 27 March 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1043,12 +1043,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-09-12" class="published">12 September 2024</time>
+<time datetime="2024-09-23" class="published">23 September 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-03-16">16 March 2025</time></dd>
+<dd class="expires"><time datetime="2025-03-27">27 March 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1091,7 +1091,7 @@ This document specifies the information elements for representing SEV-SNP Refere
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1216,6 +1216,20 @@ This document specifies the information elements for representing SEV-SNP Refere
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
                 <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-new-cbor-tags" class="internal xref">New CBOR Tags</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-new-media-types" class="internal xref">New media types</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-application-vndamdsevsnplau" class="internal xref"><code>application/vnd.amd.sev.snp.launch-config.v1+cbor</code></a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.2">
+                    <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="auto internal xref">4.2.2</a>.  <a href="#name-application-vndamdsevsnpatt" class="internal xref"><code>application/vnd.amd.sev.snp.attestation-report</code></a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.3">
+                    <p id="section-toc.1-1.4.2.2.2.3.1"><a href="#section-4.2.3" class="auto internal xref">4.2.3</a>.  <a href="#name-application-vndamdghcbguid-" class="internal xref"><code>application/vnd.amd.ghcb.guid-table</code></a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -1682,7 +1696,7 @@ The <code>ECPoint</code> conversion routines in section 2 of <span>[<a href="#SE
 </div>
 </section>
 </div>
-<div id="amd-sev-snp-launch-event-log">
+<div id="sec-launch-config">
 <section id="section-3.2">
         <h3 id="name-amd-sev-snp-launch-event-lo">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-amd-sev-snp-launch-event-lo" class="section-name selfRef">AMD SEV-SNP Launch Event Log</a>
@@ -1690,7 +1704,7 @@ The <code>ECPoint</code> conversion routines in section 2 of <span>[<a href="#SE
 <p id="section-3.2-1">The composition of a SEV-SNP VM may be comprised of measurements from multiple principals, such that no one principal has absolute authority to endorse the overall measurement value represented in the attestation report.
 If one principal does have that authority, the <code>ID_BLOCK</code> mechanism provides a convenient launch configuration endorsement mechanism without need for distributing a CoRIM.
 This section documents an event log format the Virtual Machine Monitor (VMM) may construct at launch time and provide in the data pages of an extended guest request, as documented in <span>[<a href="#GHCB" class="cite xref">GHCB</a>]</span>.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">The content media type shall be <code>application/vnd.amd.sevsnp.launch-updates+cbor</code> for the encoding of a <code>sevsnp-launch-configuration-map</code>:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">The content media type shall be <code>application/vnd.amd.sev.snp.launch-config.v1+cbor</code> for the encoding of a <code>sevsnp-launch-configuration-map</code>:<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <div class="lang-cddl sourcecode" id="section-3.2-3">
 <pre>
 sevsnp-launch-configuration-map = {
@@ -2166,7 +2180,7 @@ Where <code>SevMetadataSection</code> is<a href="#section-3.3.4.1-8" class="pilc
 The <code>SEC_MEM</code> sections contain the initial <code>GHCB</code> pages, page tables, and temporary memory for stack and heap.
 The secrets section is memory allocated specifically for holding secrets that the AMD-SP populates at launch.
 The cpuid section is memory allocated to the CPUID source of truth, which shouldn't be measured for portability and host security, but should be verified by AMD-SP for validity.
-The SVSM calling area address section is to enable the firmware to communicate with a secure VM services module running at VMPL0.
+The <span>[<a href="#SVSM" class="cite xref">SVSM</a>]</span> calling area address section is to enable the firmware to communicate with a secure VM services module running at VMPL0.
 The kernel hashes section is populated with expected measurements when boot advances to load Linux directly and must fail if the disk contents' digests disagree with the measured hashes.<a href="#section-3.3.4.1-12" class="pilcrow">¶</a></p>
 <p id="section-3.3.4.1-13">The producer of the OVMF binary may therefore decide to sign a verbose representation or a compact representation.
 A verbose representation would have hundreds of updates given that every 4KiB page must be represented.
@@ -2474,6 +2488,79 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 </div>
 </section>
 </div>
+<div id="new-media-types">
+<section id="section-4.2">
+        <h3 id="name-new-media-types">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-new-media-types" class="section-name selfRef">New media types</a>
+        </h3>
+<div id="applicationvndamdsevsnplaunch-configv1cbor">
+<section id="section-4.2.1">
+          <h4 id="name-application-vndamdsevsnplau">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-application-vndamdsevsnplau" class="section-name selfRef"><code>application/vnd.amd.sev.snp.launch-config.v1+cbor</code></a>
+          </h4>
+<p id="section-4.2.1-1">Described in <a href="#sec-launch-config" class="auto internal xref">Section 3.2</a>.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="applicationvndamdsevsnpattestation-report">
+<section id="section-4.2.2">
+          <h4 id="name-application-vndamdsevsnpatt">
+<a href="#section-4.2.2" class="section-number selfRef">4.2.2. </a><a href="#name-application-vndamdsevsnpatt" class="section-name selfRef"><code>application/vnd.amd.sev.snp.attestation-report</code></a>
+          </h4>
+<p id="section-4.2.2-1">An octet-stream that is expected to be interpreted as an AMD SEV-SNP ATTESTATION_REPORT.<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="applicationvndamdghcbguid-table">
+<section id="section-4.2.3">
+          <h4 id="name-application-vndamdghcbguid-">
+<a href="#section-4.2.3" class="section-number selfRef">4.2.3. </a><a href="#name-application-vndamdghcbguid-" class="section-name selfRef"><code>application/vnd.amd.ghcb.guid-table</code></a>
+          </h4>
+<p id="section-4.2.3-1">An octet-stream that follows the <span>[<a href="#GHCB" class="cite xref">GHCB</a>]</span>'s GUID table ABI, recounted here.
+A GUID table is a header followed by an octet-stream body.
+The header is a sequence of entries described in <a href="#guid_table_entry" class="auto internal xref">Table 7</a> terminated by an all zero entry.
+After the all zero entry are the bytes that the header entries index into.<a href="#section-4.2.3-1" class="pilcrow">¶</a></p>
+<span id="name-guid_table_entry-type-descr"></span><div id="guid_table_entry">
+<table class="center" id="table-7">
+            <caption>
+<a href="#table-7" class="selfRef">Table 7</a>:
+<a href="#name-guid_table_entry-type-descr" class="selfRef">guid_table_entry type description</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Type</th>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>UUID</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">GUID</td>
+                <td class="text-left" rowspan="1" colspan="1">An <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span> byte format UUID</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>LE_UINT32</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">Offset</td>
+                <td class="text-left" rowspan="1" colspan="1">A little-endian offset into the body</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>LE_UINT32</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">Length</td>
+                <td class="text-left" rowspan="1" colspan="1">A little-endian byte length of the span</td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+<p id="section-4.2.3-3">A header entry is valid if its Offset+Length is less than or equal to the body size.<a href="#section-4.2.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
 </section>
 </div>
 <section id="section-5">
@@ -2558,6 +2645,10 @@ The choice of the CoRIM-earmarked value is intentional.<a href="#section-4.1-1" 
 <dt id="SEV-SNP.API">[SEV-SNP.API]</dt>
         <dd>
 <span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"SEV Secure Nested Paging Firmware ABI Specification"</span>, <span class="seriesInfo">Revision 1.55 </span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SVSM">[SVSM]</dt>
+        <dd>
+<span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"Secure VM Services Module"</span>, <span class="seriesInfo">Revision 1.00 </span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="VCEK">[VCEK]</dt>
         <dd>
