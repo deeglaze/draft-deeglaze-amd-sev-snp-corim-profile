@@ -107,7 +107,7 @@ Table of Contents
    extends the $version-scheme enumeration to account for the FAMILY_ID
    and IMAGE_ID fields of the ID block.  The profile extends the
    $crypto-key-type-choice to represent the SHA-384 digest of a key in
-   AMD format from the [SEV-SNP.API].
+   AMD format from Appendix: Digital Signatures of [SEV-SNP.API].
 
 2.  Conventions and Definitions
 
@@ -633,27 +633,10 @@ Table of Contents
               IANA, "Named Information",
               <https://www.iana.org/assignments/named-information>.
 
-   [RFC3280]  Housley, R., Polk, W., Ford, W., and D. Solo, "Internet
-              X.509 Public Key Infrastructure Certificate and
-              Certificate Revocation List (CRL) Profile", RFC 3280,
-              DOI 10.17487/RFC3280, April 2002,
-              <https://www.rfc-editor.org/rfc/rfc3280>.
-
    [RFC4122]  Leach, P., Mealling, M., and R. Salz, "A Universally
               Unique IDentifier (UUID) URN Namespace", RFC 4122,
               DOI 10.17487/RFC4122, July 2005,
               <https://www.rfc-editor.org/rfc/rfc4122>.
-
-   [RFC5480]  Turner, S., Brown, D., Yiu, K., Housley, R., and T. Polk,
-              "Elliptic Curve Cryptography Subject Public Key
-              Information", RFC 5480, DOI 10.17487/RFC5480, March 2009,
-              <https://www.rfc-editor.org/rfc/rfc5480>.
-
-   [RFC5758]  Dang, Q., Santesson, S., Moriarty, K., Brown, D., and T.
-              Polk, "Internet X.509 Public Key Infrastructure:
-              Additional Algorithms and Identifiers for DSA and ECDSA",
-              RFC 5758, DOI 10.17487/RFC5758, January 2010,
-              <https://www.rfc-editor.org/rfc/rfc5758>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -665,21 +648,10 @@ Table of Contents
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/rfc/rfc8610>.
 
-   [RFC9090]  Bormann, C., "Concise Binary Object Representation (CBOR)
-              Tags for Object Identifiers", RFC 9090,
-              DOI 10.17487/RFC9090, July 2021,
-              <https://www.rfc-editor.org/rfc/rfc9090>.
-
    [RFC9334]  Birkholz, H., Thaler, D., Richardson, M., Smith, N., and
               W. Pan, "Remote ATtestation procedureS (RATS)
               Architecture", RFC 9334, DOI 10.17487/RFC9334, January
               2023, <https://www.rfc-editor.org/rfc/rfc9334>.
-
-   [X.690]    International Telecommunications Union, "Information
-              technology — ASN.1 encoding rules: Specification of Basic
-              Encoding Rules (BER), Canonical Encoding Rules (CER) and
-              Distinguished Encoding Rules (DER)", ITU-T Recommendation
-              X.690, August 2015, <https://www.itu.int/rec/T-REC-X.690>.
 
 5.2.  Informative References
 
@@ -687,11 +659,6 @@ Table of Contents
               Communication Block Standardization", Revision 2.03 , July
               2023, <https://www.amd.com/content/dam/amd/en/documents/
               epyc-technical-docs/specifications/56421.pdf>.
-
-   [SEC1]     Certicom Corp., "Standards for Efficient Cryptography
-              Group (SECG), "SEC1: Elliptic Curve Cryptography"",
-              Version 1.0 , September 2000,
-              <https://www.secg.org/SEC1-Ver-1.0.pdf>.
 
    [SEV-SNP.API]
               Advanced Micro Devices Inc., "SEV Secure Nested Paging
