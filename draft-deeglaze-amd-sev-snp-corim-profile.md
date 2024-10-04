@@ -122,7 +122,8 @@ The AMD SEV-SNP attestation report byte format is specified by AMD.
 The profile defines a transformation from the AMD byte format into a CoMID representation for use in appraisal.
 
 This profile extends the `flags-map` to represent the guest policy and host platform info that are unique to AMD SEV-SNP.
-This profile extends the `$version-scheme` enumeration to account for the `FAMILY_ID` and `IMAGE_ID` fields of the IDBLOCK.
+This profile extends the `$version-scheme` enumeration to account for the `FAMILY_ID` and `IMAGE_ID` fields of the ID block.
+The profile extends the `$crypto-key-type-choice` to represent the SHA-384 digest of a key in AMD format from the [SEV-SNP.API].
 
 #  Conventions and Definitions
 
@@ -177,26 +178,30 @@ The profile attribute in the CoRIM MUST be present and MUST have a single entry 
 The `ATTESTATION_REPORT` structure as understood in the RATS Architecture [RFC9334] is a signed collection of Claims that constitute Evidence about the Target Environment.
 The Attester for the `ATTESTATION_REPORT` is specialized hardware that will only run AMD-signed firmware.
 
-The `class-id` for the Target Environment measured by the AMD-SP is the tagged OID `#6.111(1.3.6.1.4.1.3704.2.1)`.
-The launched VM on SEV-SNP has an ephemeral identifier `REPORT_ID`.
-If the VM is the continuation of some instance as carried by a migration agent, there is also a possible `REPORT_ID_MA` value to identify the instance.
-The attester, however, is always on the same `CHIP_ID`.
-Given that the `CHIP_ID` is not uniquely identifying for a VM instance, it is better classified as a group.
-The `CSP_ID` is similarly better classified as a group.
-Either the `CHIP_ID` or the `CSP_ID` may be represented in the `group` codepoint as a tagged-bytes.
-If the `SIGNING_KEY` bit of the attestation report is 1, then the `group` MUST be the `CSP_ID` of the VLEK.
+The instance identifier can be argued as any of `REPORT_ID`, `REPORT_ID_MA` when non-zero, `CHIP_ID` (for VCEK), or `CSP_ID` (for VLEK).
+Given that `REPORT_ID` and `REPORT_ID_MA` are more ephemeral measured values and not the instance of the AMD-SP as the attesting environment, they are relegated to measurements.
+Any endorsement of VM instances specific to either the `REPORT_ID` or `REPORT_ID_MA` values SHOULD use a conditional endorsement triple.
+
+The different notions of identity induce different classes of attestation to identify target environments.
+The different classes of attestation are
+
+*  By chip: The `environment-map / instance` is `560(CHIP_ID)`.
+*  By CSP: The `environment-map / instance is `560(CSP_ID)`.
+
+The `class-id` for the Target Environment measured by the AMD-SP is a tagged UUID that corresponds to the attestation class:
+
+*  By chip: d05e6d1b-9f46-4ae2-a610-ce3e6ee7e153
+*  By CSP: 89a7a1f0-e704-4faa-acbd-81c86df8a961
+
+TODO: AMD to assign OIDs for the above classes, e.g., `#6.111(1.3.6.1.4.1.3704.2.1)` through `#6.111(1.3.6.1.4.1.3704.2.4)`.
+The rest of the `class-map` MUST remain empty, since `class` is compared for deterministic CBOR binary encoding equality.
+
+The `group` is free for a CoRIM issuer to assign.
+
+If the `SIGNING_KEY` bit of the attestation report is 1 indicating VLEK use, then the `class-id` MUST NOT be by chip.
 
 ~~~ cbor-diag
-/ environment-map / {
-  / class-map / {
-    / class-id: / 0 => #6.111(1.3.6.1.4.1.3704.2.1)
-  }
-  / instance: / 1 => #6.563({
-    / report-id: / 0 => REPORT_ID,
-    / report-id-ma: / 1 => REPORT_ID_MA
-    })
-  / group: / 2 => #6.560(CHIP_ID)
-}
+{::include cddl/examples/environment.diag}
 ~~~
 
 ### AMD SEV-SNP Attestation Report measurements
@@ -248,55 +253,42 @@ An endorsement provider MAY use a different version scheme for the `&(version: 0
 
 The measurements in an ATTESTATION_REPORT are grouped into 7 `mkey`s.
 
-* `0`: The GUEST measurements for  `FAMILY_ID` and `IMAGE_ID` as `&(version: 0)`,`GUEST_SVN` as `&(svn: 1)`, `MEASUREMENT` in `&(digests: 2)`, `POLICY` flags in `&(flags: 3)`.
-* `1`: The VMPL of the report as a `&(raw-value: 5)`.
-* `2`: The HOST measurements for `CURRENT_BUILD`, `CURRENT_MAJOR`, and `CURRENT_MINOR` as `&(version: 0)`, `CURRENT_TCB` as `&(svn: 1)`, `HOSTDATA` as `&(raw-value: 5)`, `PLATFORM_INFO` flags in `&(flags: 3)`
-* `3`: The COMMITTED host measurements for `COMMITTED_BUILD`, `CURRENT_MAJOR`, and `CURRENT_MINOR` as `&(version: 0)`, `COMMITTED_TCB` as `&(svn: 1)`.
-* `4`: The LAUNCH_TCB host measurement as `&(svn: 1)`.
-* `5`: The REPORTED_TCB host measurement as `&(svn: 1)`.
-* `6`: The MINIMUM_ABI guest measurement for `POLICY`'s lower 16 bits `MAJOR_ABI` and `MINOR_ABI` as `&(version: 0)`.
+* `0x0`: The GUEST measurements for `FAMILY_ID`, `IMAGE_ID`, `GUEST_SVN`, `MEASUREMENT`, `POLICY` flags.
+* `0x1`: The MINIMUM_ABI guest measurement for `POLICY`'s lower 16 bits `MAJOR_ABI` and `MINOR_ABI`.
+* `0x2`: The VMPL of the report.
+* `0x3`: The REPORT_ID.
+* `0x4`: The REPORT_ID_MA.
+* `0x5`: The ID_KEY_DIGEST.
+* `0x6`: The AUTHOR_KEY_DIGEST.
+* `0x7`: The REPORTED_TCB host measurement.
+* `0x8`: The HOST measurements for `CURRENT_BUILD`, `CURRENT_MAJOR`, `CURRENT_MINOR`, `CURRENT_TCB`, `HOSTDATA`, and `PLATFORM_INFO` flags in `&(flags: 3)`.
+* `0x9`: The COMMITTED host measurements for `COMMITTED_BUILD`, `CURRENT_MAJOR`, `CURRENT_MINOR`, and `COMMITTED_TCB`.
+* `0xa`: The LAUNCH_TCB host measurement.
 
 The `REPORT_DATA` is meant for protocol use and not reference measurements.
-The `REPORT_ID` and `REPORT_ID_MA` are accounted for in the `environment-map`'s instance field.
 The `MAJOR_ABI`, `MINOR_ABI` of the `POLICY` are not entirely redundant with Verifier policy evaluation against the `HOST`'s `&(version: 0)` since the policy may relevant to key derivations.
-
-#### Notional Instance Identity {#sec-id-tag}
-
-A CoRIM instance identifier is universally unique, but there are different notions of identity within a single attestation report that are each unique within their notion.
-A notional instance identifier is a tagged CBOR map from integer codepoint to opaque bytes.
-
-~~~ cddl
-{::include cddl/int-bytes-map.cddl}
-~~~
-
-Profiles may restrict which integers are valid codepoints, and may restrict the respective byte string sizes.
-For this profile, only codepoints 0 and 1 are valid.
-The expected byte string sizes are 32 bytes.
-For the `int-bytes-map` to be an interpretable extension of `$instance-id-type-choice`, there is `tagged-int-bytes-map`:
-
-~~~ cddl
-{::include cddl/tagged-int-bytes-map.cddl}
-~~~
 
 ### AMD SEV-SNP Evidence Translation
 
-The `ATTESTATION_REPORT` Evidence is converted into a CoRIM `endorsed-triple-record` using the rules in this section.
-If the `ATTESTATION_REPORT` contains `ID_BLOCK` information, the relevant fields will be represented in a second `endorsed-triple-record` with a different `authorized-by` field value, as per the merging rules of {{-rats-corim}}.
-An `ATTESTATION_REPORT` does not contain an `ID_BLOCK` if the `ID_KEY_DIGEST` field is all zeros.
+The `ATTESTATION_REPORT` Evidence is converted into a CoRIM internal representation ECT for the `ae` relation using the rules in this section.
 
-#### `environment-map`
+#### `environment`
 
-*  The `environment-map / class / class-id` field SHALL be set to the BER {{X.690}} encoding of OID {{-cbor-oids}} `1.3.6.1.4.1.3704.2.1` and tagged with #6.111.
-*  The `environment-map / instance ` field SHALL be set to an `int-bytes-map` tagged with #6.111 with at least one codepoint 0 or 1.
-   If codepoint 0 is populated, it SHALL be set to `REPORT_ID`.
-   If codepoint 1 is populated, it SHALL be set to `REPORT_ID_MA`.
-*  The `environment-map / group ` field SHALL be set to the VLEK `csp_id` and tagged with #6.111 if `SIGNING_KEY` is 1.
-   If `SIGNING_KEY` is 0, the field MAY be set to the VCEK `hwid` and tagged with #6.111.
+If `SIGNING_KEY` is 0
 
-#### `measurement-map`
+*  The `environment-map / class / class-id` field SHALL be set to `37(h'd05e6d1b9f464ae2a610ce3e6ee7e153')`.
+*  The `environment-map / instance ` field
+   - MAY be `560(CHIP_ID)` only if `MASK_CHIP_KEY` is 0, or
+   - MAY be `560(hwid)` where `hwid` is from the VCEK certificate extension value of `1.3.6.1.4.1.3704.1.4`.
 
-Different fields of the attestation report correspond to different `mkey`s.
-For each, the `authorized-by` key SHALL be set to a representation of the VEK that signed the `ATTESTATION_REPORT`, or a key along the certificate path to a self-signed root, i.e., the ASK, ASVK, or ARK for the product line.
+If `SIGNING_KEY` is 1
+
+*  The `environment-map / class / class-id` field SHALL be set to `37(h'89a7a1f0e7044faaacbd81c86df8a961')`.
+*  The `environment-map / instance ` field SHALL be `560(CSP_ID)`.
+
+#### `element-list`
+
+Different fields of the attestation report correspond to different `element-id`s that correspond to their `mkey` value of a CoMID.
 
 The translation makes use of the following metafunctions:
 
@@ -309,9 +301,9 @@ Juxtaposition of expressions with string literals is interpreted with string con
 
 Note: A value of `0` is not treated the same as unset given the semantics for matching `flags-map`.
 
-* `/ mkey: / 0`, the guest data
-  +  The `&(version: 0)` codepoint MAY be unset if the report does not contain `ID_BLOCK` data, otherwise the `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: vstr / version-scheme: / 1: -1 }` with version string `vstr` constructed as `hex(FAMILY_ID) '/' hex(IMAGE_ID)`.
-  +  The `&(svn: 1)` codepoint MAY be unset if the report dos not contain `ID_BLOCK` data, otherwise the `&(svn: 1)` codepoint SHALL be set to `552(leuint(GUEST_SVN))`.
+* `/ element-id: / 0`, the guest data `element-claims`
+  +  The `&(version: 0)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: vstr / version-scheme: / 1: -1 }` with version string `vstr` constructed as `hex(FAMILY_ID) '/' hex(IMAGE_ID)`.
+  +  The `&(svn: 1)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(svn: 1)` codepoint SHALL be set to `552(leuint(GUEST_SVN))`.
   +  The `&(digests: 2)` codepoint SHALL be set to `[ / digest / [ / alg: / 7, / val: / MEASUREMENT ] ]`. The algorithm assignment is from {{-named-info}} for SHA384.
   +  The `&(flags: 3) / flags-map / is-confidentiality-protected` codepoint MAY be set to true.
   +  The `&(flags: 3) / flags-map / is-integrity-protected` codepoint MAY be set to true.
@@ -325,10 +317,21 @@ Note: A value of `0` is not treated the same as unset given the semantics for ma
   +  The `&(flags: 3) / flags-map / sevsnpvm-policy-rapl-must-be-disabled` codepoint SHALL be set to `is-set(GUEST_POLICY, 23)`.
   +  The `&(flags: 3) / flags-map / sevsnpvm-policy-ciphertext-hiding-must-be-enabled` codepoint SHALL be set to `is-set(GUEST_POLICY, 24)`.
   +  Any further non-reserved bit position `b` of `POLICY` as the API evolves will be set at `flags-map` codepoint `16-b`.
-  * `/ mkey: / 6`, the `&(version: 0)` SHALL be set to `/ version-map / { / version: /: POLICY[15:8] '.' POLICY[7:0] '.0' , / version-scheme: / 16384 }` where the `POLICY` slices are translated to decimal number strings and juxtaposition is string concatenation.
-* `/ mkey: 1 /` the report privilege level
+* `/ element-id: / 1`, guest policy minimum firmware `element-claims`
+  + The `&(version: 0)` SHALL be set to `/ version-map / { / version: /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0' , / version-scheme: / 16384 }`.
+* `/ element-id: 2 /` the report privilege level `element-claims`
   + The `&(raw-value: 5)` codepoint SHALL be set to `VMPL` as a `uint`.
-* `/ mkey: 2 /` the current host info
+* `/ element-id: 3 /` the per-launch `REPORT_ID` `element-claims`
+  + The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID)`.
+* `/ element-id: 4 /` the migration agent–assigned `REPORT_ID_MA` `element-claims`
+  + The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID_MA)` if nonzero.
+* `/ element-id: 5 /` the ID block–signing key digest `ID_KEY_DIGEST` `element-claims`
+  + The `&(raw-value: 5)` codepoint SHALL be set to `560(ID_KEY_DIGEST)` if nonzero.
+* `/ element-id: 6 /` the ID block–signing key's certifying key digest `AUTHOR_KEY_DIGEST` `element-claims`
+  + The `&(raw-value: 5)` codepoint SHALL be set to `560(AUTHOR_KEY_DIGEST)` if nonzero.
+* `/ element-id: 7 /` the REPORTED_TCB `element-claims`
+  + The `&(svn: 1)` codepoint SHALL be set to `552(leuint(REPORTED_TCB))`.
+* `/ element-id: 8 /` the current host info `element-claims`
   + The `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: 0 / vstr / version-scheme: / 1: 16384 }` with version string `vstr` constructed as `dec(CURRENT_MAJOR) '.' dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD)`.
   + The `&(flags: 3) / flags-map / sevsnphost-smt-enabled` codepoint SHALL be set to `is-set(PLATFORM_INFO, 0)`
   + The `&(flags: 3) / flags-map / sevsnphost-tsme-enabled` codepoint SHALL be set to `is-set(PLATFORM_INFO, 1)`
@@ -337,52 +340,56 @@ Note: A value of `0` is not treated the same as unset given the semantics for ma
   + The `&(flags: 3) / flags-map / sevsnphost-ciphertext-hiding-enabled` codepoint SHALL be set to `is-set(PLATFORM_INFO, 4)`
   + Any further non-reserved bit position `b` of `PLATFORM_INFO` will be set at `flags-map` codepoint `-1-b`.
   + The `&(raw-value: 5)` codepoint SHALL be set to `560(HOSTDATA)` and MAY be omitted if all zeros.
-* `/ mkey: 3 /` the committed host info
+* `/ element-id: 9 /` the committed host info `element-claims`
   + The `&(svn: 1)` codepoint SHALL be set to `552(leuint(COMMITTED_TCB))`.
-* `/ mkey: 4 /` the launch tcb
+* `/ element-id: 4 /` the TCB at launch `element-claims`
   + The `&(svn: 1)` codepoint SHALL be set to `552(leuint(LAUNCH_TCB))`.
-* `/ mkey: 5 /` the reported tcb
-  + The `&(svn: 1)` codepoint SHALL be set to `552(leuint(REPORTED_TCB))`.
-* `/ mkey: 6 /` the guest policy's minimum SEV-SNP ABI version that launch compares against `CURRENT_MAJOR` and `CURRENT_MINOR`.
+* `/ element-id: 10 /` the guest policy's minimum SEV-SNP ABI version that launch compares against `CURRENT_MAJOR` and `CURRENT_MINOR`.
   + The `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: vstr / version-scheme: / 1: 16384 }` with version string `vstr` constructed as `dec(MAJOR_ABI) '.' dec(MINOR_ABI) '.0'`.
 
-If `ID_BLOCK` information is available, it appears in its own `endorsement-triple-record` with additional values in `authorized-by` beyond the attestation key.
-The `authorized-by` field is extended with `32780(ID_KEY_DIGEST)`, and if `AUTHOR_KEY_EN` is 1, then it is also extended with `32780(AUTHOR_KEY_DIGEST)`.
-The Verifier MAY use a base CDDL CoRIM `$crypto-key-type-choice` representation if its public key information's digest compares equal to the #6.32780-tagged bytes, as described in {{sec-key-digest}}.
+#### `authority`
 
-#### Key digest comparison {#sec-key-digest}
+The `authority` SHALL be set to an array of the `tagged-pkix-asn1der-cert-type` forms of the VEK certificate for the `ATTESTATION_REPORT` signing key, the intermediate key, and the AMD root key for the product line.
 
-When `ID_BLOCK` is used, the full key information needed for signature verification is provided by the VMM at launch in an `ID_AUTH` structure.
-The SNP firmware verifies the signatures and adds digests of the signing key(s) to the attestation report as evidence of successful signature verification.
-When a Verifier does not have access to the original public key information used in `ID_AUTH`, the attestation report key digests can still be used as a representation of authority.
+The Verifier MAY add additional encodings of these keys.
 
-The APPENDIX: Digital Signatures section of [SEV-SNP.API] specifies a representation of public keys and signatures.
-An attestation report key digest will be a SHA-384 digest of the 0x403 byte buffer representation of a public key.
-If an author key is used, its signature of the ID_KEY is assumed to exist and have passed given the SNP firmware specification.
+#### `cmtype`
 
-If a `$crypto-key-type-choice` key representation specifies an algorithm and parameters that are included in the Digital Signatures appendix, it is comparable to a #6.32780-tagged byte string.
+The `cmtype` SHALL be `evidence: 2`.
 
-*  Two #6.32780-tagged byte strings match if and only if their encodings are bitwise equal.
-*  A thumbprint representation of a key is not comparable to a #6.32780-tagged byte string since the parameters are not extractable.
-*  A PKIX public key (#6.554-tagged `tstr`) or PKIX certificate (#6.555-tagged `tstr`) MAY be comparable to a #6.32780-tagged byte string.
 
-The [RFC3280] specified `AlgorithmIdentifier` has optional parameters based on the algorithm identifier.
-The AMD signature algorithm `1h` corresponds to algorithm `ecdsa-with-sha384` from section 3.2 of [RFC5758], but the parameters MUST be omitted.
-The `SubjectPublicKeyInfo` is therefore `id-ecPublicKey` from section 2.1.1 of [RFC5480] to further allow the curve to be specified, despite not further specifying that the signature is of a SHA-384 digest.
-The AMD ECSDA curve name `2h` corresponds to named curve `secp384r1` from section 2.2 of [RFC5480].
-The `ECPoint` conversion routines in section 2 of [SEC1] provide guidance on how the `QX` and `QY` little-endian big integers zero-padded to 72 bytes may be constructed.
+#### `profile`
+
+The `profile` SHALL be set to this profile's identifier, `32("http://amd.com/please-permalink-me")`
+
+#### Optional: ID block as reference value
+
+If an ID block is provided at VM launch, it is authenticated by an ID key.
+The ID block authentication is checked by the AMD-SP firmware.
+The firmware will only launch the VM if the authenticated policy matches.
+The firmware indicates that the authentication passed by populating fields of the attestation report to bind the evidence to the authentication key(s) `ID_KEY_DIGEST` and/or `AUTHOR_KEY_DIGEST`.
+The ID block authentication as reference value SHALL NOT be retained by the Verifier to apply to another appraisal session.
+The reference value qualification is meant to be considered valid only for the duration of the appraisal session.
+
+The Verifier MAY allocate an `rv` for an addition ECT to represent the authentication at `SNP_LAUNCH_FINISH`.
+
+* The `environment` SHALL be equal to the `environment` of the evidence ECT.
+* The `element-list` SHALL contain two `element-map` entries
+  + The first `element-map` SHALL set `element-id` to 0 and the `element-claims` to a copy of the evidence claims for `element-id: 0`.
+  + The second `element-map` SHALL set `element-id` to 1 and the `element-claims` to a copy of the evidence claims for `element-id: 1`.
+* The `authority` SHALL be an array containing `32780(ID_KEY_DIGEST)` and `32780(AUTHOR_KEY_DIGEST)` if nonzero. The Verifier MAY add more encodings of the same keys.
+* The `cmtype` SHALL be set to `reference-values: 0`
+* The `profile` SHALL be set to this profile's identifier, `32("http://amd.com/please-permalink-me")`.
 
 # IANA Considerations
 
 ## New CBOR Tags
 
 IANA is requested to allocate the following tags in the "CBOR Tags" registry {{!IANA.cbor-tags}}.
-The choice of the CoRIM-earmarked value is intentional.
 
-| Tag   | Data Item | Semantics                                                                             | Reference |
-| ---   | --------- | ---------                                                                             | --------- |
-| 563   | `map`     | Keys are always int, values are opaque bytes, see {{sec-id-tag}}                      | {{&SELF}} |
-| 32780 | `bytes`   | A digest of an AMD public key format that compares with other keys {{sec-key-digest}} | {{&SELF}} |
+| Tag   | Data Item | Semantics                              | Reference |
+| ---   | --------- | ---------                              | --------- |
+| 32780 | `bytes`   | A digest of an AMD public key format.  | {{&SELF}} |
 {: #cbor-tags title="Added CBOR tags"}
 
 ## New media types
