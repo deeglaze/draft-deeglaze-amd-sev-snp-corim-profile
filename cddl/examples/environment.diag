@@ -1,0 +1,6 @@
+/ environment-map / {
+  / class-map / {
+    / class-id: / 0 => #6.111(1.3.6.1.4.1.3704.2.1)
+  }
+  / instance: / 1 => #6.560(REPORT_ID)
+}
