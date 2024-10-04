@@ -35,26 +35,11 @@ contributor:
       Yogesh Deshpande contributed to the data model by providing advice about CoRIM founding principles.
 
 normative:
-  RFC3280:
   RFC4122:
-  RFC5480:
-  RFC5758:
   RFC8174:
   RFC8610: cddl
   RFC9334: rats-arch
-  RFC9090: cbor-oids
   I-D.ietf-rats-corim: rats-corim
-  X.690:
-    title: >
-      Information technology — ASN.1 encoding rules:
-      Specification of Basic Encoding Rules (BER), Canonical Encoding
-      Rules (CER) and Distinguished Encoding Rules (DER)
-    author:
-      org: International Telecommunications Union
-    date: 2015-08
-    seriesinfo:
-      ITU-T: Recommendation X.690
-    target: https://www.itu.int/rec/T-REC-X.690
   IANA.named-information: named-info
 
 informative:
@@ -93,14 +78,6 @@ informative:
     seriesinfo: Revision 0.10
     date: October 2023
     target: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/user-guides/58369-010-versioned-loaded-endorsement-key-certificate-definition.pdf
-  SEC1:
-    title: >
-      Standards for Efficient Cryptography Group (SECG), "SEC1: Elliptic Curve Cryptography"
-    author:
-      org: Certicom Corp.
-    seriesinfo: Version 1.0
-    date: September 2000
-    target: https://www.secg.org/SEC1-Ver-1.0.pdf
 
 entity:
   SELF: "RFCthis"
