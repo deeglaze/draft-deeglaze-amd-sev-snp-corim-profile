@@ -726,8 +726,6 @@ Appendix A.  CoRIM Extensions CDDL
      val: bytes
    ]
 
-   int-bytes-map = { * int => bytes }
-
    non-empty<M> = (M) .and ({ + any => any })
 
    $$flags-map-extension //= &(
@@ -761,8 +759,6 @@ Appendix A.  CoRIM Extensions CDDL
    tagged-svn = #6.552(svn)
    tagged-min-svn = #6.553(min-svn)
    svn-type-choice = tagged-svn / tagged-min-svn
-
-   tagged-int-bytes-map = #6.563(int-bytes-map)
 
    uint16 = 0..65535
 
