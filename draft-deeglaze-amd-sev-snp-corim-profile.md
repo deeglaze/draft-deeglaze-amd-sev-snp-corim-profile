@@ -123,7 +123,7 @@ The profile defines a transformation from the AMD byte format into a CoMID repre
 
 This profile extends the `flags-map` to represent the guest policy and host platform info that are unique to AMD SEV-SNP.
 This profile extends the `$version-scheme` enumeration to account for the `FAMILY_ID` and `IMAGE_ID` fields of the ID block.
-The profile extends the `$crypto-key-type-choice` to represent the SHA-384 digest of a key in AMD format from the [SEV-SNP.API].
+The profile extends the `$crypto-key-type-choice` to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of {{SEV-SNP.API}}.
 
 #  Conventions and Definitions
 
@@ -143,12 +143,12 @@ AMD-SP:
   A separate core that provides the confidentiality and integrity properties of AMD SEV-SNP.
   The function that is relevant to this document is its construction of signed virtual machine attestation reports.
 
-[VCEK]:
+{{VCEK}}:
   Versioned Chip Endorsement Key.
   A key for signing the SEV-SNP Attestation Report.
   The key is derived from a unique device secret as well as the security patch levels of relevant host components.
 
-[VLEK]:
+{{VLEK}}:
   Version Loaded Endorsement Key.
   An alternative SEV-SNP Attestation Report signing key that is derived from a secret shared between AMD and a Cloud Service Provider.
   The key is encrypted with a per-device per-version wrapping key that is then decrypted and stored by the AMD-SP.
@@ -162,14 +162,8 @@ AMD SEV-SNP launch endorsements are carried in one or more CoMIDs inside a CoRIM
 
 The profile attribute in the CoRIM MUST be present and MUST have a single entry set to the URI http://amd.com/please-permalink-me as shown in {{figure-profile}}.
 
-
 ~~~ cbor-diag
-/ corim-map / {
-  / corim.profile / 3: [
-    32("http://amd.com/please-permalink-me")
-  ]
-  / ... /
-}
+{::include cddl/examples/profile.diag}
 ~~~
 {: #figure-profile title="SEV-SNP attestation profile version 1, CoRIM profile" }
 
@@ -400,7 +394,7 @@ An octet-stream that is expected to be interpreted as an AMD SEV-SNP ATTESTATION
 
 ### `application/vnd.amd.ghcb.guid-table`
 
-An octet-stream that follows the [GHCB]'s GUID table ABI, which is the same as the [SVSM] service manifest ABI, recounted here.
+An octet-stream that follows the {{GHCB}}'s GUID table ABI, which is the same as the [SVSM] service manifest ABI, recounted here.
 A GUID table is a header followed by an octet-stream body.
 The header is a sequence of entries described in {{guid_table_entry}} terminated by an all zero entry.
 After the all zero entry are the bytes that the header entries index into.
