@@ -1,0 +1,11 @@
+/ measurement-values-map / {
+  / version: / 0: / version-map / {
+    / version: / 0: "1.55.20"
+    / version-scheme / 1: 16384
+  }
+  / flags: / 3: / flags-map / {
+    -49: true
+    -52: true
+  }
+  / raw-value: / 4: 560(h'00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff')
+}

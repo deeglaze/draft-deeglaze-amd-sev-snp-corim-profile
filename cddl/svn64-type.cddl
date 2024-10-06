@@ -1,0 +1,3 @@
+svn64-type = tagged-svn64 / tagged-min-svn64
+tagged-svn64 = #6.552(uint64)
+tagged-min-svn64 = #6.553(uint64)
