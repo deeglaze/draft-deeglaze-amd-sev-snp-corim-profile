@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-04T03:57:32.435939+00:00",
+  "timestamp": "2024-10-06T01:45:28.912692+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -215,15 +215,15 @@
       "id": "I_kwDOMdG_Uc6SUxC3",
       "title": "examples with too long lines",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/8",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thomas-fossati",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "They render suboptimally.\r\n\r\nI suggest running `fold -w72` automatically on all the CBOR diagnostic files.",
       "createdAt": "2024-08-08T05:43:26Z",
-      "updatedAt": "2024-08-08T05:43:40Z",
-      "closedAt": null,
+      "updatedAt": "2024-10-04T04:13:20Z",
+      "closedAt": "2024-10-04T04:13:20Z",
       "comments": []
     }
   ],
