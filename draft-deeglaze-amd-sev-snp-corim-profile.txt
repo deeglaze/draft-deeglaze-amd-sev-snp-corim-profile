@@ -4,8 +4,8 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                          4 October 2024
-Expires: 7 April 2025
+Intended status: Standards Track                          6 October 2024
+Expires: 9 April 2025
 
 
             CoRIM profile for AMD SEV-SNP attestation report
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 April 2025.
+   This Internet-Draft will expire on 9 April 2025.
 
 Copyright Notice
 
@@ -67,8 +67,8 @@ Table of Contents
        3.1.1.  AMD SEV-SNP Target Environment
        3.1.2.  AMD SEV-SNP Attestation Report measurements
          3.1.2.1.  AMD SEV-SNP flags-map extensions
-         3.1.2.2.  Version scheme extension
-         3.1.2.3.  AMD SEV-SNP mkeys
+         3.1.2.2.  Version scheme extension*
+         3.1.2.3.  AMD SEV-SNP measurements
        3.1.3.  AMD SEV-SNP Evidence Translation
          3.1.3.1.  environment
          3.1.3.2.  element-list
@@ -76,14 +76,15 @@ Table of Contents
          3.1.3.4.  cmtype
          3.1.3.5.  profile
          3.1.3.6.  Optional: ID block as reference value
-   4.  IANA Considerations
-     4.1.  New CBOR Tags
-     4.2.  New media types
-       4.2.1.  application/vnd.amd.sev.snp.attestation-report
-       4.2.2.  application/vnd.amd.ghcb.guid-table
-   5.  References
-     5.1.  Normative References
-     5.2.  Informative References
+   4.  TCG considerations
+   5.  IANA Considerations
+     5.1.  New CBOR Tags
+     5.2.  New media types
+       5.2.1.  application/vnd.amd.sev.snp.attestation-report
+       5.2.2.  application/vnd.amd.ghcb.guid-table
+   6.  References
+     6.1.  Normative References
+     6.2.  Informative References
    Appendix A.  CoRIM Extensions CDDL
    Contributors
    Author's Address
@@ -101,6 +102,13 @@ Table of Contents
    SEV-SNP attestation report byte format is specified by AMD.  The
    profile defines a transformation from the AMD byte format into a
    CoMID representation for use in appraisal.
+
+   This profile is meant for expressing reference values and
+   endorsements of specific environments.  It is not meant to encode
+   complex policy decisions about the acceptability of measurements.
+   The accepted claim set construction (ACS) this profile enables does
+   lay a foundation for policy engines that enable further evaluation
+   over complete ACS constructions.
 
    This profile extends the flags-map to represent the guest policy and
    host platform info that are unique to AMD SEV-SNP.  This profile
@@ -189,7 +197,7 @@ Table of Contents
 
    *  By chip: The environment-map / instance is 560(CHIP_ID).
 
-   *  By CSP: The environment-map / instance is560(CSP_ID)`.
+   *  By CSP: The environment-map / instance is 560(CSP_ID).
 
    The class-id for the Target Environment measured by the AMD-SP is a
    tagged UUID that corresponds to the attestation class:
@@ -199,9 +207,9 @@ Table of Contents
    *  By CSP: 89a7a1f0-e704-4faa-acbd-81c86df8a961
 
    TODO: AMD to assign OIDs for the above classes, e.g.,
-   #6.111(1.3.6.1.4.1.3704.2.1) through #6.111(1.3.6.1.4.1.3704.2.4).
-   The rest of the class-map MUST remain empty, since class is compared
-   for deterministic CBOR binary encoding equality.
+   #6.111(1.3.6.1.4.1.3704.2.1) and #6.111(1.3.6.1.4.1.3704.2.2).  The
+   rest of the class-map MUST remain empty, since class is compared for
+   deterministic CBOR binary encoding equality.
 
    The group is free for a CoRIM issuer to assign.
 
@@ -230,11 +238,11 @@ Table of Contents
 
 3.1.2.1.  AMD SEV-SNP flags-map extensions
 
-   The GUEST_POLICY field and the PLATFORM_INFO field of the attestation
+   The POLICY field and the PLATFORM_INFO field of the attestation
    report contain flags distinguished from the base CoRIM CDDL.
 
-   The GUEST_POLICY boolean flags are added as extensions to $$flags-
-   map-extension, starting from codepoint -1.
+   The POLICY boolean flags are added as extensions to $$flags-map-
+   extension, starting from codepoint -1.
 
    $$flags-map-extension //= &(
      sevsnpvm-policy-smt-allowed: -1,
@@ -248,11 +256,36 @@ Table of Contents
      sevsnpvm-policy-reserved: -47..-9,
    )
 
+   The sevsnpvm-policy- flag extensions correspond to the
+   ATTESTATION_REPORT POLICY bit positions with the following
+   correspondence:
+
+   *  sevsnpvm-policy-smt-allowed refers to bit 16 of POLICY.
+
+   *  sevsnpvm-policy-migration-agent-allowed refers to bit 18 of
+      POLICY.
+
+   *  sevsnpvm-policy-debug-allowed refers to bit 19 of POLICY.
+
+   *  sevsnpvm-policy-single-socket-only refers to bit 20 of POLICY.
+
+   *  sevsnpvm-policy-cxl-allowed refers to bit 21 of POLICY.
+
+   *  sevsnpvm-policy-mem-aes-256-xts-required refers to bit 22 of
+      POLICY.
+
+   *  sevsnpvm-policy-rapl-must-be-disabled refers to bit 23 of POLICY.
+
+   *  sevsnpvm-policy-ciphertext-hiding-must-be-enabled refers to bit 24
+      of POLICY.
+
+   *  Bit position b greater than 24 of POLICY corresponds to extension
+      16-b.
+
    There are 47 available bits for selection when the mandatory 1 in
    position 17 and the ABI Major.Minor values are excluded from the
-   64-bit GUEST_POLICY.  The PLATFORM_INFO bits are host configuration
-   that are added as extensions to $$flags-map-extension starting at
-   -49.
+   64-bit POLICY.  The PLATFORM_INFO bits are host configuration that
+   are added as extensions to $$flags-map-extension starting at -49.
 
    $$flags-map-extension //= &(
      sevsnphost-smt-enabled: -49,
@@ -263,14 +296,32 @@ Table of Contents
      sevsnphost-reserved: -112..-49
    )
 
+   The sevsnphost- flag extensions correspond to ATTESTATION_REPORT
+   PLATFORM_INFO bit positions with the following correspondence:
+
+   *  sevsnphost-smt-enabled refers to bit 0 of PLATFORM_INFO.
+
+   *  sevsnphost-tsme-enabled refers to bit 1 of PLATFORM_INFO.
+
+   *  sevsnphost-ecc-mem-reported-enabled refers to bit 2 of
+      PLATFORM_INFO.
+
+   *  sevsnphost-rapl-disabled refers to bit 3 of PLATFORM_INFO.
+
+   *  sevsnphost-ciphertext-hiding-enabled refers to bit 4 of
+      PLATFORM_INFO.
+
+   *  Bit position b greater than 4 of PLATFORM_INFO corresponds to
+      extension -49-b.
+
    The sevsnpvm-policy-debug-allowed flag is redundant with flags-map /
    is-debug, so either representation is valid.  The entirety of the
    value space is reserved for AMD revisions to the SEV-SNP firmware and
    corresponding ATTESTATION_REPORT API.
 
-3.1.2.2.  Version scheme extension
+3.1.2.2.  Version scheme extension*
 
-   Extend the $version-scheme type with as follows
+   Extend the $version-scheme type as follows
 
    $version-scheme /= &(sevsnpvm-familyimageid-hex: -1)
 
@@ -282,41 +333,158 @@ Table of Contents
    An endorsement provider MAY use a different version scheme for the
    &(version: 0) codepoint.
 
-3.1.2.3.  AMD SEV-SNP mkeys
+   For an example of a specific identifier pair, take
+   h'0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' and
+   h'0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'.  They may be referenced as
 
-   The measurements in an ATTESTATION_REPORT are grouped into 7 mkeys.
+   / version: / 0: / version-map / {
+     / version: / 0: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+     / version-scheme: / 1: -1
+   }
 
-   *  0x0: The GUEST measurements for FAMILY_ID, IMAGE_ID, GUEST_SVN,
-      MEASUREMENT, POLICY flags.
+   The first identifier with any permissible second identifier may be
+   referenced with
 
-   *  0x1: The MINIMUM_ABI guest measurement for POLICY's lower 16 bits
-      MAJOR_ABI and MINOR_ABI.
+   / version: / 0: / version-map / {
+     / version: / 0: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/_"
+     / version-scheme: / 1: -1
+   }
 
-   *  0x2: The VMPL of the report.
+   The second identifier with any permissible first identifier may be
+   referenced with
 
-   *  0x3: The REPORT_ID.
+   / version: / 0: / version-map / {
+     / version: / 0: "_/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+     / version-scheme: / 1: -1
+   }
 
-   *  0x4: The REPORT_ID_MA.
+3.1.2.3.  AMD SEV-SNP measurements
 
-   *  0x5: The ID_KEY_DIGEST.
+   The measurements in an ATTESTATION_REPORT are grouped into 10 mkeys
+   that can refer to one or more measured values.
 
-   *  0x6: The AUTHOR_KEY_DIGEST.
+   The REPORT_DATA is meant for protocol use and not reference
+   measurements.
 
-   *  0x7: The REPORTED_TCB host measurement.
+   *mkey 0*: primary guest measurements
 
-   *  0x8: The HOST measurements for CURRENT_BUILD, CURRENT_MAJOR,
-      CURRENT_MINOR, CURRENT_TCB, HOSTDATA, and PLATFORM_INFO flags in
-      &(flags: 3).
+   The mval measurement-values-map may contain values for GUEST_SVN,
+   MEASUREMENT, POLICY flags, FAMILY_ID and/or IMAGE_ID.
+
+   *  The GUEST_SVN 32-bit unsigned integer may be given a reference
+      value as an svn-type with a tagged-svn or tagged-min-svn encoding
+      around a uint32 in an &(svn: 1): svn-type entry.
+
+   *  The MEASUREMENT 384-bit digest may be referenced with a &(digest:
+      2): [[7, MEASUREMENT]] entry.
+
+   *  The POLICY flags may be referenced with a &(flags: 3): flags-map
+      entry following the correspondence defined in Section 3.1.2.1
+
+   *  The FAMILY_ID and IMAGE_ID may be referenced with a &(version: 0):
+      version-map with the -1 as version scheme extension option as
+      described in Section 3.1.2.2
+
+   *mkey 1*: The minimum ABI guest policy
+
+   The ATTESTATION_REPORT POLICY's lower 16 bits MAJOR_ABI and MINOR_ABI
+   is expressed as version with semantic versioning scheme that has
+   patch version 0.
+
+   / measurement-values-map / {
+     / version: / 0: / version-map / {
+       / version: / 0: "1.55.0"
+     }
+   }
+
+   The MAJOR_ABI, MINOR_ABI of the POLICY are not entirely redundant
+   with Verifier policy evaluation against host's (mkey 8) &(version: 0)
+   since the policy may relevant to key derivations.
+
+   *mkey 2* The VMPL of the report.
+
+   The VMPL is expressed as a raw value that makes use of the extended
+   $raw-value-type-choice to use a uint.  To refer to VMPL 2, say
+
+   / measurement-values-map / {
+     / raw-value: / 4: 2
+   }
+
+   *mkey 3*: The REPORT_ID.
+
+   The REPORT_ID is expressed as a &(raw-value: 4): tagged-bytes.
+
+   *mkey 4*: The REPORT_ID_MA.
+
+   The REPORT_ID_MA is expressed as a &(raw-value: 4): tagged-bytes.
+
+   *mkey 5*: The ID_KEY_DIGEST.
+
+   The ID_KEY_DIGEST is expressed as a &(raw-value: 4): tagged-bytes.
+
+   *mkey 6*: The AUTHOR_KEY_DIGEST.
+
+   The AUTHOR_KEY_DIGEST is expressed as a &(raw-value: 4): tagged-
+   bytes.
+
+   *mkey 7*: The REPORTED_TCB host measurement.
+
+   The REPORTED_TCB is interpreted as a little-endian 64-bit unsigned
+   integer and expressed as an &(svn: 1): svn-type .and svn64-type,
+   where
+
+   svn64-type = tagged-svn64 / tagged-min-svn64
+   tagged-svn64 = #6.552(uint64)
+   tagged-min-svn64 = #6.553(uint64)
+
+   *mkey 8*: The current host measurements
+
+   The CURRENT_MAJOR, CURRENT_MINOR, and CURRENT_BUILD fields are
+   expressed as a version with semantic version scheme.  The version
+   text is the three numbers in decimal form, separated by '.'
+   (U+002E), in major, minor, build order.
+
+   The HOSTDATA field is expressed as a raw value.  The PLATFORM_INFO
+   are expressed with a flags measurement with the specified flag
+   extensions.  For example,
+
+   / measurement-values-map / {
+     / version: / 0: / version-map / {
+       / version: / 0: "1.55.20"
+       / version-scheme / 1: 16384
+     }
+     / flags: / 3: / flags-map / {
+       -49: true
+       -52: true
+     }
+     / raw-value: / 4: 560(h'00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff')
+   }
 
    *  0x9: The COMMITTED host measurements for COMMITTED_BUILD,
       CURRENT_MAJOR, CURRENT_MINOR, and COMMITTED_TCB.
 
+   The COMMITTED_MAJOR, COMMITTED_MINOR, and COMMITTED_BUILD fields are
+   expressed as a version with semantic version scheme.  The version
+   text is the three numbers in decimal form, separated by '.'
+   (U+002E), in major, minor, build order.
+
+   The COMMITTED_TCB is interpreted as a little-endian 64-bit unsigned
+   integer and expressed as an &(svn: 1): svn-type .and svn64-type.  For
+   example, suppose the committed TCB has microcode SVN 209, SNP
+   firmware version 22, TEE version 0, and bootloader version 3
+
+   / measurement-values-map / {
+     / version: / 0: / version-map / {
+       / version: / 0: "1.55.20"
+       / version-scheme: / 16384
+     }
+     / svn: / 1: 552(0xd116000000000003)
+   }
+
    *  0xa: The LAUNCH_TCB host measurement.
 
-   The REPORT_DATA is meant for protocol use and not reference
-   measurements.  The MAJOR_ABI, MINOR_ABI of the POLICY are not
-   entirely redundant with Verifier policy evaluation against the HOST's
-   &(version: 0) since the policy may relevant to key derivations.
+   The LAUNCH_TCB is interpreted as a little-endian 64-bit unsigned
+   integer and expressed as an &(svn: 1): svn-type .and svn64-type.
 
 3.1.3.  AMD SEV-SNP Evidence Translation
 
@@ -351,9 +519,6 @@ Table of Contents
    element-ids that correspond to their mkey value of a CoMID.
 
    The translation makes use of the following metafunctions:
-
-   *  The function is-set(x, b) represents whether the bit at position b
-      is set in the number x.
 
    *  The function hex(bstr) represents the hexadecimal string encoding
       of a byte string.
@@ -395,34 +560,11 @@ Table of Contents
       -  The &(flags: 3) / flags-map / is-replay-protected codepoint MAY
          be set to true.
 
-      -  The &(flags: 3) / flags-map / sevsnpvm-policy-smt-allowed
-         codepoint SHALL be set to is-set(GUEST_POLICY, 16).
+      -  The &(flags: 3) / flags-map / is-debug codepoint SHALL be set
+         to the truth value of bit 19 of POLICY.
 
-      -  The &(flags: 3) / flags-map / sevsnpvm-policy-migration-agent-
-         allowed codepoint SHALL be set to is-set(GUEST_POLICY, 18).
-
-      -  One or both of &(flags: 3) / flags-map / sevsnpvm-policy-debug-
-         allowed and is-debug codepoints SHALL be set to is-
-         set(GUEST_POLICY, 19).
-
-      -  The &(flags: 3) / flags-map / sevsnpvm-policy-single-socket-
-         only codepoint SHALL be set to is-set(GUEST_POLICY, 20).
-
-      -  The &(flags: 3) / flags-map / sevsnpvm-policy-cxl-allowed
-         codepoint SHALL be set to is-set(GUEST_POLICY, 21).
-
-      -  The &(flags: 3) / flags-map / sevsnpvm-policy-mem-aes-256-xts-
-         required codepoint SHALL be set to is-set(GUEST_POLICY, 22).
-
-      -  The &(flags: 3) / flags-map / sevsnpvm-policy-rapl-must-be-
-         disabled codepoint SHALL be set to is-set(GUEST_POLICY, 23).
-
-      -  The &(flags: 3) / flags-map / sevsnpvm-policy-ciphertext-
-         hiding-must-be-enabled codepoint SHALL be set to is-
-         set(GUEST_POLICY, 24).
-
-      -  Any further non-reserved bit position b of POLICY as the API
-         evolves will be set at flags-map codepoint 16-b.
+      -  The flags-map extensions for POLICY are assigned their truth
+         values following the correspondence in Section 3.1.2.1.
 
    *  / element-id: / 1, guest policy minimum firmware element-claims
 
@@ -468,23 +610,9 @@ Table of Contents
          string vstr constructed as dec(CURRENT_MAJOR) '.'
          dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD).
 
-      -  The &(flags: 3) / flags-map / sevsnphost-smt-enabled codepoint
-         SHALL be set to is-set(PLATFORM_INFO, 0)
-
-      -  The &(flags: 3) / flags-map / sevsnphost-tsme-enabled codepoint
-         SHALL be set to is-set(PLATFORM_INFO, 1)
-
-      -  The &(flags: 3) / flags-map / sevsnphost-ecc-mem-reported-
-         enabled codepoint SHALL be set to is-set(PLATFORM_INFO, 2)
-
-      -  The &(flags: 3) / flags-map / sevsnphost-rapl-disabled
-         codepoint SHALL be set to is-set(PLATFORM_INFO, 3)
-
-      -  The &(flags: 3) / flags-map / sevsnphost-ciphertext-hiding-
-         enabled codepoint SHALL be set to is-set(PLATFORM_INFO, 4)
-
-      -  Any further non-reserved bit position b of PLATFORM_INFO will
-         be set at flags-map codepoint -1-b.
+      -  The &(flags: 3) / flags-map extensions for PLATFORM_INFO SHALL
+         be assign their truth values following the correspondence is
+         Section 3.1.2.1.
 
       -  The &(raw-value: 5) codepoint SHALL be set to 560(HOSTDATA) and
          MAY be omitted if all zeros.
@@ -563,9 +691,18 @@ Table of Contents
    *  The profile SHALL be set to this profile's identifier,
       32("http://amd.com/please-permalink-me").
 
-4.  IANA Considerations
+4.  TCG considerations
 
-4.1.  New CBOR Tags
+   The Trusted Computing Group has standardized the PCClient Platform
+   Firmware Profile to specify expected TPM event log processing.  Since
+   AMD SEV-SNP launch measurements are of virtual firmware, they can
+   supplement the EV_POST_CODE2 event measured into PCR0 for the
+   EV_EFI_PLATFORM_FIRMWARE_BLOB2 since the bits of the firmware are
+   more specific than embedded firmware version strings.
+
+5.  IANA Considerations
+
+5.1.  New CBOR Tags
 
    IANA is requested to allocate the following tags in the "CBOR Tags"
    registry [IANA.cbor-tags].
@@ -579,14 +716,14 @@ Table of Contents
 
                          Table 1: Added CBOR tags
 
-4.2.  New media types
+5.2.  New media types
 
-4.2.1.  application/vnd.amd.sev.snp.attestation-report
+5.2.1.  application/vnd.amd.sev.snp.attestation-report
 
    An octet-stream that is expected to be interpreted as an AMD SEV-SNP
    ATTESTATION_REPORT.
 
-4.2.2.  application/vnd.amd.ghcb.guid-table
+5.2.2.  application/vnd.amd.ghcb.guid-table
 
    An octet-stream that follows the [GHCB]'s GUID table ABI, which is
    the same as the [SVSM] service manifest ABI, recounted here.  A GUID
@@ -614,9 +751,9 @@ Table of Contents
    A header entry is valid if its Offset+Length is less than or equal to
    the size of the entire GUID table.
 
-5.  References
+6.  References
 
-5.1.  Normative References
+6.1.  Normative References
 
    [I-D.ietf-rats-corim]
               Birkholz, H., Fossati, T., Deshpande, Y., Smith, N., and
@@ -653,7 +790,7 @@ Table of Contents
               Architecture", RFC 9334, DOI 10.17487/RFC9334, January
               2023, <https://www.rfc-editor.org/rfc/rfc9334>.
 
-5.2.  Informative References
+6.2.  Informative References
 
    [GHCB]     Advanced Micro Devices Inc., "SEV-ES Guest-Hypervisor
               Communication Block Standardization", Revision 2.03 , July
@@ -726,6 +863,10 @@ Appendix A.  CoRIM Extensions CDDL
    tagged-svn = #6.552(svn)
    tagged-min-svn = #6.553(min-svn)
    svn-type-choice = tagged-svn / tagged-min-svn
+
+   svn64-type = tagged-svn64 / tagged-min-svn64
+   tagged-svn64 = #6.552(uint64)
+   tagged-min-svn64 = #6.553(uint64)
 
    uint16 = 0..65535
 
