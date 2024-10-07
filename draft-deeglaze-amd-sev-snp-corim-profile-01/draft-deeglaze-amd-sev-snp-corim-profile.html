@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>CoRIM profile for AMD SEV-SNP attestation report</title>
+<meta content="Dionna Glaze" name="author">
+<meta content="
+       AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) attestation reports comprise of reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
+This document specifies the information elements for representing SEV-SNP Reference Values in CoRIM format. 
+    " name="description">
+<meta content="xml2rfc 3.23.2" name="generator">
+<meta content="RIM, RATS, attestation, verifier, supply chain" name="keyword">
+<meta content="draft-deeglaze-amd-sev-snp-corim-profile-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.23.2
+    Python 3.12.6
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.1
+    intervaltree 3.1.0
+    Jinja2 3.1.4
+    lxml 4.9.4
+    platformdirs 4.3.6
+    pycountry 22.3.5
+    PyYAML 6.0.1
+    requests 2.32.3
+    setuptools 70.3.0
+    wcwidth 0.2.13
+-->
+<link href="draft-deeglaze-amd-sev-snp-corim-profile.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 2px 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">CoRIM-SEV</td>
+<td class="right">October 2024</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Glaze</td>
+<td class="center">Expires 10 April 2025</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Remote ATtestation ProcedureS</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2024-10-07" class="published">7 October 2024</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2025-04-10">10 April 2025</time></dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">D. Glaze</div>
+<div class="org">Google LLC</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">CoRIM profile for AMD SEV-SNP attestation report</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) attestation reports comprise of reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
+This document specifies the information elements for representing SEV-SNP Reference Values in CoRIM format.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Source for this draft and an issue tracker can be found at
+    <span><a href="https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile">https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 10 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2024 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-amd-sev-snp-attestation-rep" class="internal xref">AMD SEV-SNP Attestation Reports</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-amd-sev-snp-corim-profile" class="internal xref">AMD SEV-SNP CoRIM Profile</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.1">
+                    <p id="section-toc.1-1.3.2.1.2.1.1" class="keepWithNext"><a href="#section-3.1.1" class="auto internal xref">3.1.1</a>.  <a href="#name-amd-sev-snp-target-environm" class="internal xref">AMD SEV-SNP Target Environment</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2">
+                    <p id="section-toc.1-1.3.2.1.2.2.1"><a href="#section-3.1.2" class="auto internal xref">3.1.2</a>.  <a href="#name-amd-sev-snp-attestation-repo" class="internal xref">AMD SEV-SNP Attestation Report measurements</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2.2.1">
+                        <p id="section-toc.1-1.3.2.1.2.2.2.1.1"><a href="#section-3.1.2.1" class="auto internal xref">3.1.2.1</a>.  <a href="#name-amd-sev-snp-flags-map-exten" class="internal xref">AMD SEV-SNP <code>flags-map</code> extensions</a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.2.2.2">
+                        <p id="section-toc.1-1.3.2.1.2.2.2.2.1"><a href="#section-3.1.2.2" class="auto internal xref">3.1.2.2</a>.  <a href="#name-amd-sev-snp-measurements" class="internal xref">AMD SEV-SNP measurements</a></p>
+</li>
+                    </ul>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3">
+                    <p id="section-toc.1-1.3.2.1.2.3.1"><a href="#section-3.1.3" class="auto internal xref">3.1.3</a>.  <a href="#name-amd-sev-snp-evidence-transl" class="internal xref">AMD SEV-SNP Evidence Translation</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.1">
+                        <p id="section-toc.1-1.3.2.1.2.3.2.1.1"><a href="#section-3.1.3.1" class="auto internal xref">3.1.3.1</a>.  <a href="#name-environment" class="internal xref"><code>environment</code></a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.2">
+                        <p id="section-toc.1-1.3.2.1.2.3.2.2.1"><a href="#section-3.1.3.2" class="auto internal xref">3.1.3.2</a>.  <a href="#name-element-list" class="internal xref"><code>element-list</code></a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.3">
+                        <p id="section-toc.1-1.3.2.1.2.3.2.3.1"><a href="#section-3.1.3.3" class="auto internal xref">3.1.3.3</a>.  <a href="#name-authority" class="internal xref"><code>authority</code></a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.4">
+                        <p id="section-toc.1-1.3.2.1.2.3.2.4.1"><a href="#section-3.1.3.4" class="auto internal xref">3.1.3.4</a>.  <a href="#name-cmtype" class="internal xref"><code>cmtype</code></a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.5">
+                        <p id="section-toc.1-1.3.2.1.2.3.2.5.1"><a href="#section-3.1.3.5" class="auto internal xref">3.1.3.5</a>.  <a href="#name-profile" class="internal xref"><code>profile</code></a></p>
+</li>
+                      <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.6">
+                        <p id="section-toc.1-1.3.2.1.2.3.2.6.1"><a href="#section-3.1.3.6" class="auto internal xref">3.1.3.6</a>.  <a href="#name-optional-id-block-as-refere" class="internal xref">Optional: ID block as reference value</a></p>
+</li>
+                    </ul>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-tcg-considerations" class="internal xref">TCG considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-new-cbor-tags" class="internal xref">New CBOR Tags</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-new-media-types" class="internal xref">New media types</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.1">
+                    <p id="section-toc.1-1.5.2.2.2.1.1"><a href="#section-5.2.1" class="auto internal xref">5.2.1</a>.  <a href="#name-application-vndamdsevsnpatt" class="internal xref"><code>application/vnd.amd.sev.snp.attestation-report</code></a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.2">
+                    <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-application-vndamdghcbguid-" class="internal xref"><code>application/vnd.amd.ghcb.guid-table</code></a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-corim-extensions-cddl" class="internal xref">CoRIM Extensions CDDL</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="sec-intro">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">This profile describes the extensions and restrictions placed on Reference Values, Endorsements, and Evidence that support the attestation capabilities of AMD products that provide Securet Encrypted Virtualization with Secure Nested Pages (SEV-SNP).<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">CoRIM (<span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span>) defines a baseline CDDL for Reference Values and Endorsements that this profile extends.
+Some measurement types of the baseline CDDL are not used in this profile.
+The AMD SEV-SNP attestation report byte format is specified by AMD.
+The profile defines a transformation from the AMD byte format into a CoMID representation for use in appraisal.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This profile is meant for expressing reference values and endorsements of specific environments. It is not meant to encode complex policy decisions about the acceptability of measurements. The accepted claim set construction (ACS) this profile enables does lay a foundation for policy engines that enable further evaluation over complete ACS constructions.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This profile extends the <code>flags-map</code> to represent the guest policy and host platform info that are unique to AMD SEV-SNP.
+The profile extends the <code>$crypto-key-type-choice</code> to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <span><a href="#RFC8174" class="internal xref">RFC2119</a> [<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">The reader is assumed to be familiar with the terms defined in <span>[<a href="#I-D.ietf-rats-corim" class="cite xref">I-D.ietf-rats-corim</a>]</span> and Section 4 of <span>[<a href="#RFC9334" class="cite xref">RFC9334</a>]</span>.
+The syntax of data descriptions is CDDL as specified in <span>[<a href="#RFC8610" class="cite xref">RFC8610</a>]</span>.
+Fields of the AMD SEV-SNP <code>ATTESTATION_REPORT</code> are referred to by their assigned names in <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.<a href="#section-2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="amd-sev-snp-attestation-reports">
+<section id="section-3">
+      <h2 id="name-amd-sev-snp-attestation-rep">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-amd-sev-snp-attestation-rep" class="section-name selfRef">AMD SEV-SNP Attestation Reports</a>
+      </h2>
+<p id="section-3-1">The AMD SEV-SNP attestation scheme in <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span> contains measurements of security-relevant configuration of the host environment and the launch configuration of a SEV-SNP VM.
+This draft documents the normative representation of attestation report Evidence as a CoRIM profile.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">AMD-SP:
+  AMD Secure Processor.
+  A separate core that provides the confidentiality and integrity properties of AMD SEV-SNP.
+  The function that is relevant to this document is its construction of signed virtual machine attestation reports.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3"><span>[<a href="#VCEK" class="cite xref">VCEK</a>]</span>:
+  Versioned Chip Endorsement Key.
+  A key for signing the SEV-SNP Attestation Report.
+  The key is derived from a unique device secret as well as the security patch levels of relevant host components.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4"><span>[<a href="#VLEK" class="cite xref">VLEK</a>]</span>:
+  Version Loaded Endorsement Key.
+  An alternative SEV-SNP Attestation Report signing key that is derived from a secret shared between AMD and a Cloud Service Provider.
+  The key is encrypted with a per-device per-version wrapping key that is then decrypted and stored by the AMD-SP.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">VEK:
+  Either a VCEK or VLEK.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<div id="amd-sev-snp-corim-profile">
+<section id="section-3.1">
+        <h3 id="name-amd-sev-snp-corim-profile">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-amd-sev-snp-corim-profile" class="section-name selfRef">AMD SEV-SNP CoRIM Profile</a>
+        </h3>
+<p id="section-3.1-1">AMD SEV-SNP launch endorsements are carried in one or more CoMIDs inside a CoRIM.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">The profile attribute in the CoRIM MUST be present and MUST have a single entry set to the URI http://amd.com/please-permalink-me as shown in <a href="#_figure-profile" class="auto internal xref">Figure 1</a>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<span id="name-sev-snp-attestation-profile"></span><div id="_figure-profile">
+<figure id="figure-1">
+          <div class="lang-cbor-diag sourcecode" id="section-3.1-3.1">
+<pre>
+/ corim-map / {
+  / corim.profile / 3: [
+    32("http://amd.com/please-permalink-me")
+  ]
+  / ... /
+}
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-sev-snp-attestation-profile" class="selfRef">SEV-SNP attestation profile version 1, CoRIM profile</a>
+          </figcaption></figure>
+</div>
+<div id="amd-sev-snp-target-environment">
+<section id="section-3.1.1">
+          <h4 id="name-amd-sev-snp-target-environm">
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-amd-sev-snp-target-environm" class="section-name selfRef">AMD SEV-SNP Target Environment</a>
+          </h4>
+<p id="section-3.1.1-1">The <code>ATTESTATION_REPORT</code> structure as understood in the RATS Architecture <span>[<a href="#RFC9334" class="cite xref">RFC9334</a>]</span> is a signed collection of Claims that constitute Evidence about the Target Environment.
+The Attester for the <code>ATTESTATION_REPORT</code> is specialized hardware that will only run AMD-signed firmware.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-2">The instance identifier can be argued as any of <code>REPORT_ID</code>, <code>REPORT_ID_MA</code> when non-zero, <code>CHIP_ID</code> (for VCEK), or <code>CSP_ID</code> (for VLEK).
+Given that <code>REPORT_ID</code> and <code>REPORT_ID_MA</code> are more ephemeral measured values and not the instance of the AMD-SP as the attesting environment, they are relegated to measurements.
+Any endorsement of VM instances specific to either the <code>REPORT_ID</code> or <code>REPORT_ID_MA</code> values SHOULD use a conditional endorsement triple.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-3">The different notions of identity induce different classes of attestation to identify target environments.
+The different classes of attestation are<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.1-4.1">
+              <p id="section-3.1.1-4.1.1">By chip: The <code>environment-map / instance</code> is <code>560(CHIP_ID)</code>.<a href="#section-3.1.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3.1.1-4.2">
+              <p id="section-3.1.1-4.2.1">By CSP: The <code>environment-map / instance</code> is <code>560(CSP_ID)</code>.<a href="#section-3.1.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-3.1.1-5">The <code>class-id</code> for the Target Environment measured by the AMD-SP is a tagged UUID that corresponds to the attestation class:<a href="#section-3.1.1-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.1-6.1">
+              <p id="section-3.1.1-6.1.1">By chip: d05e6d1b-9f46-4ae2-a610-ce3e6ee7e153<a href="#section-3.1.1-6.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-3.1.1-6.2">
+              <p id="section-3.1.1-6.2.1">By CSP: 89a7a1f0-e704-4faa-acbd-81c86df8a961<a href="#section-3.1.1-6.2.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
+<p id="section-3.1.1-7">TODO: AMD to assign OIDs for the above classes, e.g., <code>#6.111(1.3.6.1.4.1.3704.2.1)</code> and <code>#6.111(1.3.6.1.4.1.3704.2.2)</code>.
+The rest of the <code>class-map</code> MUST remain empty, since <code>class</code> is compared for deterministic CBOR binary encoding equality.<a href="#section-3.1.1-7" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-8">The <code>group</code> is free for a CoRIM issuer to assign.<a href="#section-3.1.1-8" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-9">If the <code>SIGNING_KEY</code> bit of the attestation report is 1 indicating VLEK use, then the <code>class-id</code> MUST NOT be by chip.<a href="#section-3.1.1-9" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.1-10">
+<pre>
+/ environment-map / {
+  / class-map / {
+    / class-id: / 0 =&gt; #6.111(1.3.6.1.4.1.3704.2.1)
+  }
+  / instance: / 1 =&gt; #6.560(REPORT_ID)
+}
+</pre><a href="#section-3.1.1-10" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="amd-sev-snp-attestation-report-measurements">
+<section id="section-3.1.2">
+          <h4 id="name-amd-sev-snp-attestation-repo">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-amd-sev-snp-attestation-repo" class="section-name selfRef">AMD SEV-SNP Attestation Report measurements</a>
+          </h4>
+<p id="section-3.1.2-1">The fields of an attestation report are named by <code>mkey</code> numbers that map to appropriate <code>measurement-values-map</code> values.
+This profile defines no new <code>measurement-values-map</code> extensions for the <code>$$measurement-values-map-extensions</code> socket.
+The only extensions are to <code>$$flags-map-extensions</code>.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-2">The VMPL field is a raw <code>0..3</code> value, so this profile extends the raw value type choice of the CoRIM base CDDL:<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2-3">
+<pre>
+$raw-value-type-choice /= uint
+</pre><a href="#section-3.1.2-3" class="pilcrow">¶</a>
+</div>
+<div id="sec-flags-ext">
+<section id="section-3.1.2.1">
+            <h5 id="name-amd-sev-snp-flags-map-exten">
+<a href="#section-3.1.2.1" class="section-number selfRef">3.1.2.1. </a><a href="#name-amd-sev-snp-flags-map-exten" class="section-name selfRef">AMD SEV-SNP <code>flags-map</code> extensions</a>
+            </h5>
+<p id="section-3.1.2.1-1">The <code>POLICY</code> field and the <code>PLATFORM_INFO</code> field of the attestation report contain flags distinguished from the base CoRIM CDDL.<a href="#section-3.1.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.1-2">The <code>POLICY</code> boolean flags are added as extensions to <code>$$flags-map-extension</code>, starting from codepoint -1.<a href="#section-3.1.2.1-2" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.1-3">
+<pre>
+$$flags-map-extension //= &amp;(
+  sevsnpvm-policy-smt-allowed: -1,
+  sevsnpvm-policy-migration-agent-allowed: -2,
+  sevsnpvm-policy-debug-allowed: -3,
+  sevsnpvm-policy-single-socket-only: -4,
+  sevsnpvm-policy-cxl-allowed: -5,
+  sevsnpvm-policy-mem-aes-256-xts-required: -6,
+  sevsnpvm-policy-rapl-must-be-disabled: -7,
+  sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+  sevsnpvm-policy-reserved: -47..-9,
+)
+</pre><a href="#section-3.1.2.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.2.1-4">The <code>sevsnpvm-policy-</code> flag extensions correspond to the ATTESTATION_REPORT <code>POLICY</code> bit positions with the following correspondence:<a href="#section-3.1.2.1-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.2.1-5.1">
+                <p id="section-3.1.2.1-5.1.1"><code>sevsnpvm-policy-smt-allowed</code> refers to bit 16 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.2">
+                <p id="section-3.1.2.1-5.2.1"><code>sevsnpvm-policy-migration-agent-allowed</code> refers to bit 18 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.3">
+                <p id="section-3.1.2.1-5.3.1"><code>sevsnpvm-policy-debug-allowed</code> refers to bit 19 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.4">
+                <p id="section-3.1.2.1-5.4.1"><code>sevsnpvm-policy-single-socket-only</code> refers to bit 20 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.5">
+                <p id="section-3.1.2.1-5.5.1"><code>sevsnpvm-policy-cxl-allowed</code> refers to bit 21 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.5.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.6">
+                <p id="section-3.1.2.1-5.6.1"><code>sevsnpvm-policy-mem-aes-256-xts-required</code> refers to bit 22 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.6.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.7">
+                <p id="section-3.1.2.1-5.7.1"><code>sevsnpvm-policy-rapl-must-be-disabled</code> refers to bit 23 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.7.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.8">
+                <p id="section-3.1.2.1-5.8.1"><code>sevsnpvm-policy-ciphertext-hiding-must-be-enabled</code> refers to bit 24 of <code>POLICY</code>.<a href="#section-3.1.2.1-5.8.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-5.9">
+                <p id="section-3.1.2.1-5.9.1">Bit position <code>b</code> greater than <code>24</code> of <code>POLICY</code> corresponds to extension <code>16-b</code>.<a href="#section-3.1.2.1-5.9.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.2.1-6">There are 47 available bits for selection when the mandatory 1 in position 17 and the ABI Major.Minor values are excluded from the 64-bit <code>POLICY</code>.
+The <code>PLATFORM_INFO</code> bits are host configuration that are added as extensions to <code>$$flags-map-extension</code> starting at <code>-49</code>.<a href="#section-3.1.2.1-6" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.1-7">
+<pre>
+$$flags-map-extension //= &amp;(
+  sevsnphost-smt-enabled: -49,
+  sevsnphost-tsme-enabled: -50,
+  sevsnphost-ecc-mem-reported-enabled:-51,
+  sevsnphost-rapl-disabled: -52,
+  sevsnphost-ciphertext-hiding-enabled: -53
+  sevsnphost-reserved: -112..-49
+)
+</pre><a href="#section-3.1.2.1-7" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.2.1-8">The <code>sevsnphost-</code> flag extensions correspond to ATTESTATION_REPORT <code>PLATFORM_INFO</code> bit positions with the following correspondence:<a href="#section-3.1.2.1-8" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.2.1-9.1">
+                <p id="section-3.1.2.1-9.1.1"><code>sevsnphost-smt-enabled</code> refers to bit 0 of <code>PLATFORM_INFO</code>.<a href="#section-3.1.2.1-9.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-9.2">
+                <p id="section-3.1.2.1-9.2.1"><code>sevsnphost-tsme-enabled</code> refers to bit 1 of <code>PLATFORM_INFO</code>.<a href="#section-3.1.2.1-9.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-9.3">
+                <p id="section-3.1.2.1-9.3.1"><code>sevsnphost-ecc-mem-reported-enabled</code> refers to bit 2 of <code>PLATFORM_INFO</code>.<a href="#section-3.1.2.1-9.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-9.4">
+                <p id="section-3.1.2.1-9.4.1"><code>sevsnphost-rapl-disabled</code> refers to bit 3 of <code>PLATFORM_INFO</code>.<a href="#section-3.1.2.1-9.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-9.5">
+                <p id="section-3.1.2.1-9.5.1"><code>sevsnphost-ciphertext-hiding-enabled</code> refers to bit 4 of <code>PLATFORM_INFO</code>.<a href="#section-3.1.2.1-9.5.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.1-9.6">
+                <p id="section-3.1.2.1-9.6.1">Bit position <code>b</code> greater than <code>4</code> of <code>PLATFORM_INFO</code> corresponds to extension <code>-49-b</code>.<a href="#section-3.1.2.1-9.6.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.2.1-10">The <code>sevsnpvm-policy-debug-allowed</code> flag is redundant with <code>flags-map / is-debug</code>, so either representation is valid.
+The entirety of the value space is reserved for AMD revisions to the SEV-SNP firmware and corresponding ATTESTATION_REPORT API.<a href="#section-3.1.2.1-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="amd-sev-snp-measurements">
+<section id="section-3.1.2.2">
+            <h5 id="name-amd-sev-snp-measurements">
+<a href="#section-3.1.2.2" class="section-number selfRef">3.1.2.2. </a><a href="#name-amd-sev-snp-measurements" class="section-name selfRef">AMD SEV-SNP measurements</a>
+            </h5>
+<p id="section-3.1.2.2-1">The measurements in an ATTESTATION_REPORT are grouped into 10 <code>mkey</code>s that can refer to one or more measured values.<a href="#section-3.1.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-2">The <code>REPORT_DATA</code> is meant for protocol use and not reference measurements.<a href="#section-3.1.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-3"><strong>mkey 0</strong>: primary guest measurements<a href="#section-3.1.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-4">The <code>mval</code> <code>measurement-values-map</code> may contain values for <code>GUEST_SVN</code>, <code>MEASUREMENT</code>, <code>POLICY</code> flags, <code>FAMILY_ID</code> and/or <code>IMAGE_ID</code>.<a href="#section-3.1.2.2-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.2.2-5.1">
+                <p id="section-3.1.2.2-5.1.1">The <code>GUEST_SVN</code> 32-bit unsigned integer may be given a reference value as an <code>svn-type</code> with a <code>tagged-svn</code> or <code>tagged-min-svn</code> encoding around a <code>uint32</code> in an <code>&amp;(svn: 1): svn-type</code> entry.<a href="#section-3.1.2.2-5.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.2-5.2">
+                <p id="section-3.1.2.2-5.2.1">The <code>MEASUREMENT</code> 384-bit digest may be referenced with a <code>&amp;(digest: 2): [[7, MEASUREMENT]]</code> entry.<a href="#section-3.1.2.2-5.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.2-5.3">
+                <p id="section-3.1.2.2-5.3.1">The <code>POLICY</code> flags may be referenced with a <code>&amp;(flags: 3): flags-map</code> entry following the correspondence defined in <a href="#sec-flags-ext" class="auto internal xref">Section 3.1.2.1</a><a href="#section-3.1.2.2-5.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.2-5.4">
+                <p id="section-3.1.2.2-5.4.1">The <code>IMAGE_ID</code> may be referenced with a<a href="#section-3.1.2.2-5.4.1" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.2.2-5.4.2">
+<pre>
+&amp;(version: 0): / version-map / {
+  &amp;(version: 0): hex(IMAGE_ID)
+}
+</pre><a href="#section-3.1.2.2-5.4.2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.2.2-5.4.3">
+where <code>hex(IMAGE_ID)</code> is the 128-bit identifier translated to a hexadecimal string.<a href="#section-3.1.2.2-5.4.3" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.2.2-5.5">
+                <p id="section-3.1.2.2-5.5.1">The <code>FAMILY_ID</code> may be referenced as <code>&amp;(raw-value: 4): 560(FAMILY_ID)</code>.<a href="#section-3.1.2.2-5.5.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.2.2-6"><strong>mkey 1</strong>: The minimum ABI guest policy<a href="#section-3.1.2.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-7">The ATTESTATION_REPORT <code>POLICY</code>'s lower 16 bits <code>MAJOR_ABI</code> and <code>MINOR_ABI</code> is expressed as version with semantic versioning scheme that has patch version <code>0</code>.<a href="#section-3.1.2.2-7" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.2.2-8">
+<pre>
+/ measurement-values-map / {
+  / version: / 0: / version-map / {
+    / version: / 0: "1.55.0"
+    / version-scheme: / 1: 16384
+  }
+}
+</pre><a href="#section-3.1.2.2-8" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.2.2-9">The <code>MAJOR_ABI</code>, <code>MINOR_ABI</code> of the <code>POLICY</code> are not entirely redundant with Verifier policy evaluation against host's (mkey 8) <code>&amp;(version: 0)</code> since the policy may relevant to key derivations.<a href="#section-3.1.2.2-9" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-10"><strong>mkey 2</strong> The VMPL of the report.<a href="#section-3.1.2.2-10" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-11">The <code>VMPL</code> is expressed as a raw value that makes use of the extended <code>$raw-value-type-choice</code> to use a <code>uint</code>.
+To refer to <code>VMPL</code> 2, say<a href="#section-3.1.2.2-11" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.2.2-12">
+<pre>
+/ measurement-values-map / {
+  / raw-value: / 4: 2
+}
+</pre><a href="#section-3.1.2.2-12" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.2.2-13"><strong>mkey 3</strong>: The REPORT_ID.<a href="#section-3.1.2.2-13" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-14">The <code>REPORT_ID</code> is expressed as a <code>&amp;(raw-value: 4): tagged-bytes</code>.<a href="#section-3.1.2.2-14" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-15"><strong>mkey 4</strong>: The REPORT_ID_MA.<a href="#section-3.1.2.2-15" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-16">The <code>REPORT_ID_MA</code> is expressed as a <code>&amp;(raw-value: 4): tagged-bytes</code>.<a href="#section-3.1.2.2-16" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-17"><strong>mkey 5</strong>: The ID_KEY_DIGEST.<a href="#section-3.1.2.2-17" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-18">The <code>ID_KEY_DIGEST</code> is expressed as a <code>&amp;(raw-value: 4): tagged-bytes</code>.<a href="#section-3.1.2.2-18" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-19"><strong>mkey 6</strong>: The AUTHOR_KEY_DIGEST.<a href="#section-3.1.2.2-19" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-20">The <code>AUTHOR_KEY_DIGEST</code> is expressed as a <code>&amp;(raw-value: 4): tagged-bytes</code>.<a href="#section-3.1.2.2-20" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-21"><strong>mkey 7</strong>: The REPORTED_TCB host measurement.<a href="#section-3.1.2.2-21" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-22">The <code>REPORTED_TCB</code> is interpreted as a little-endian 64-bit unsigned integer and expressed as an <code>&amp;(svn: 1): svn-type .and svn64-type</code>, where<a href="#section-3.1.2.2-22" class="pilcrow">¶</a></p>
+<div class="lang-cddl sourcecode" id="section-3.1.2.2-23">
+<pre>
+svn64-type = tagged-svn64 / tagged-min-svn64
+tagged-svn64 = #6.552(uint64)
+tagged-min-svn64 = #6.553(uint64)
+</pre><a href="#section-3.1.2.2-23" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.2.2-24"><strong>mkey 8</strong>: The current host measurements<a href="#section-3.1.2.2-24" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-25">The <code>CURRENT_MAJOR</code>, <code>CURRENT_MINOR</code>, and <code>CURRENT_BUILD</code> fields are expressed as a version with semantic version scheme.
+The version text is the three numbers in decimal form, separated by <code>'.'</code> (U+002E), in major, minor, build order.<a href="#section-3.1.2.2-25" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-26">The <code>HOSTDATA</code> field is expressed as a raw value. The <code>PLATFORM_INFO</code> are expressed with a <code>flags</code> measurement with the specified flag extensions. For example,<a href="#section-3.1.2.2-26" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.2.2-27">
+<pre>
+/ measurement-values-map / {
+  / version: / 0: / version-map / {
+    / version: / 0: "1.55.20"
+    / version-scheme / 1: 16384
+  }
+  / flags: / 3: / flags-map / {
+    -49: true
+    -52: true
+  }
+  / raw-value: / 4: 560(
+    h'00112233445566778899aabbccddeeff'
+    h'ffeeddccbbaa99887766554433221100'
+  )
+}
+</pre><a href="#section-3.1.2.2-27" class="pilcrow">¶</a>
+</div>
+<ul class="normal">
+<li class="normal" id="section-3.1.2.2-28.1">
+                <p id="section-3.1.2.2-28.1.1"><code>0x9</code>: The COMMITTED host measurements for <code>COMMITTED_BUILD</code>, <code>CURRENT_MAJOR</code>, <code>CURRENT_MINOR</code>, and <code>COMMITTED_TCB</code>.<a href="#section-3.1.2.2-28.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.2.2-29">The <code>COMMITTED_MAJOR</code>, <code>COMMITTED_MINOR</code>, and <code>COMMITTED_BUILD</code> fields are expressed as a version with semantic version scheme.
+The version text is the three numbers in decimal form, separated by <code>'.'</code> (U+002E), in major, minor, build order.<a href="#section-3.1.2.2-29" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.2-30">The <code>COMMITTED_TCB</code> is interpreted as a little-endian 64-bit unsigned integer and expressed as an <code>&amp;(svn: 1): svn-type .and svn64-type</code>.
+For example, suppose the committed TCB has microcode SVN 209, SNP firmware version 22, TEE version 0, and bootloader version 3<a href="#section-3.1.2.2-30" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.2.2-31">
+<pre>
+/ measurement-values-map / {
+  / version: / 0: / version-map / {
+    / version: / 0: "1.55.20"
+    / version-scheme: / 16384
+  }
+  / svn: / 1: 552(0xd116000000000003)
+}
+</pre><a href="#section-3.1.2.2-31" class="pilcrow">¶</a>
+</div>
+<ul class="normal">
+<li class="normal" id="section-3.1.2.2-32.1">
+                <p id="section-3.1.2.2-32.1.1"><code>0xa</code>: The LAUNCH_TCB host measurement.<a href="#section-3.1.2.2-32.1.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.2.2-33">The <code>LAUNCH_TCB</code> is interpreted as a little-endian 64-bit unsigned integer and expressed as an <code>&amp;(svn: 1): svn-type .and svn64-type</code>.<a href="#section-3.1.2.2-33" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="amd-sev-snp-evidence-translation">
+<section id="section-3.1.3">
+          <h4 id="name-amd-sev-snp-evidence-transl">
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-amd-sev-snp-evidence-transl" class="section-name selfRef">AMD SEV-SNP Evidence Translation</a>
+          </h4>
+<p id="section-3.1.3-1">The <code>ATTESTATION_REPORT</code> Evidence is converted into a CoRIM internal representation ECT for the <code>ae</code> relation using the rules in this section.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<div id="environment">
+<section id="section-3.1.3.1">
+            <h5 id="name-environment">
+<a href="#section-3.1.3.1" class="section-number selfRef">3.1.3.1. </a><a href="#name-environment" class="section-name selfRef"><code>environment</code></a>
+            </h5>
+<p id="section-3.1.3.1-1">If <code>SIGNING_KEY</code> is 0<a href="#section-3.1.3.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.1-2.1">
+                <p id="section-3.1.3.1-2.1.1">The <code>environment-map / class / class-id</code> field SHALL be set to <code>37(h'd05e6d1b9f464ae2a610ce3e6ee7e153')</code>.<a href="#section-3.1.3.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.1-2.2">
+                <p id="section-3.1.3.1-2.2.1">The <code>environment-map / instance </code> field<a href="#section-3.1.3.1-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.1-2.2.2.1">
+                    <p id="section-3.1.3.1-2.2.2.1.1">MAY be <code>560(CHIP_ID)</code> only if <code>MASK_CHIP_KEY</code> is 0, or<a href="#section-3.1.3.1-2.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.1-2.2.2.2">
+                    <p id="section-3.1.3.1-2.2.2.2.1">MAY be <code>560(hwid)</code> where <code>hwid</code> is from the VCEK certificate extension value of <code>1.3.6.1.4.1.3704.1.4</code>.<a href="#section-3.1.3.1-2.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+<p id="section-3.1.3.1-3">If <code>SIGNING_KEY</code> is 1<a href="#section-3.1.3.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.1-4.1">
+                <p id="section-3.1.3.1-4.1.1">The <code>environment-map / class / class-id</code> field SHALL be set to <code>37(h'89a7a1f0e7044faaacbd81c86df8a961')</code>.<a href="#section-3.1.3.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.1-4.2">
+                <p id="section-3.1.3.1-4.2.1">The <code>environment-map / instance </code> field SHALL be <code>560(CSP_ID)</code>.<a href="#section-3.1.3.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
+<div id="element-list">
+<section id="section-3.1.3.2">
+            <h5 id="name-element-list">
+<a href="#section-3.1.3.2" class="section-number selfRef">3.1.3.2. </a><a href="#name-element-list" class="section-name selfRef"><code>element-list</code></a>
+            </h5>
+<p id="section-3.1.3.2-1">Different fields of the attestation report correspond to different <code>element-id</code>s that correspond to their <code>mkey</code> value of a CoMID.<a href="#section-3.1.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-2">The translation makes use of the following metafunctions:<a href="#section-3.1.3.2-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-3.1">
+                <p id="section-3.1.3.2-3.1.1">The function <code>hex(bstr)</code> represents the hexadecimal string encoding of a byte string.<a href="#section-3.1.3.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.2-3.2">
+                <p id="section-3.1.3.2-3.2.1">The function <code>dec(b)</code> represents a byte in its decimal string rendering.<a href="#section-3.1.3.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.3.2-4">Juxtaposition of expressions with string literals is interpreted with string concatenation.<a href="#section-3.1.3.2-4" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-5">Note: A value of <code>0</code> is not treated the same as unset given the semantics for matching <code>flags-map</code>.<a href="#section-3.1.3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-6"><strong>element-id: 0</strong>, the guest data <code>element-claims</code><a href="#section-3.1.3.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-7">The <code>&amp;(version: 0)</code> codepoint MAY be unset if the report does not contain ID block data, otherwise the <code>&amp;(version: 0)</code> codepoint SHALL be set to<a href="#section-3.1.3.2-7" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-8">
+<pre>
+/ version-map / {
+  / version: / 0: hex(IMAGE_ID)
+}
+</pre><a href="#section-3.1.3.2-8" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.3.2-9">The <code>&amp;(svn: 1)</code> codepoint MAY be unset if the report does not contain ID block data, otherwise the <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(leuint(GUEST_SVN))</code>.<a href="#section-3.1.3.2-9" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-10">The <code>&amp;(digests: 2)</code> codepoint SHALL be set to <code>[[7, MEASUREMENT]]</code>.
+The algorithm assignment is from <span>[<a href="#IANA.named-information" class="cite xref">IANA.named-information</a>]</span> for SHA384.<a href="#section-3.1.3.2-10" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-11">The <code>&amp;(flags: 3)</code> codepoint SHALL be set to a <code>flags-map</code> with the following construction:<a href="#section-3.1.3.2-11" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.2-12.1">
+                <p id="section-3.1.3.2-12.1.1"><code>is-confidentiality-protected</code> MAY be set to true.<a href="#section-3.1.3.2-12.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.2-12.2">
+                <p id="section-3.1.3.2-12.2.1"><code>is-integrity-protected</code> MAY be set to true.<a href="#section-3.1.3.2-12.2.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.2-12.3">
+                <p id="section-3.1.3.2-12.3.1"><code>is-replay-protected</code> MAY be set to true.<a href="#section-3.1.3.2-12.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.2-12.4">
+                <p id="section-3.1.3.2-12.4.1"><code>is-debug</code> SHALL be set to the truth value of bit 19 of <code>POLICY</code>.<a href="#section-3.1.3.2-12.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.2-12.5">
+                <p id="section-3.1.3.2-12.5.1">The extensions for <code>POLICY</code> are assigned their truth values following the correspondence in <a href="#sec-flags-ext" class="auto internal xref">Section 3.1.2.1</a>.<a href="#section-3.1.3.2-12.5.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+<p id="section-3.1.3.2-13">The <code>$(raw-value: 4)</code> codepoint MAY be unset if the report does not contain ID block data, otherwise the <code>&amp;(raw-value: 4)</code> codepoint SHALL be set to <code>560(FAMILY_ID)</code>.<a href="#section-3.1.3.2-13" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-14"><strong>element-id: 1</strong>, guest policy minimum firmware <code>element-claims</code><a href="#section-3.1.3.2-14" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-15">The <code>&amp;(version: 0)</code> SHALL be set to<a href="#section-3.1.3.2-15" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-16">
+<pre>
+/ version-map / {
+  / version: /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0'
+  / version-scheme: / 16384
+}
+</pre><a href="#section-3.1.3.2-16" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.3.2-17"><strong>element-id: 2</strong>, the report privilege level <code>element-claims</code><a href="#section-3.1.3.2-17" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-18">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>VMPL</code> as a <code>uint</code>.<a href="#section-3.1.3.2-18" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-19"><strong>element-id: 3</strong>, the per-launch <code>REPORT_ID</code> <code>element-claims</code><a href="#section-3.1.3.2-19" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-20">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>560(REPORT_ID)</code>.<a href="#section-3.1.3.2-20" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-21"><strong>element-id: 4</strong>, the migration agent–assigned <code>REPORT_ID_MA</code> <code>element-claims</code><a href="#section-3.1.3.2-21" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-22">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>560(REPORT_ID_MA)</code> if nonzero.<a href="#section-3.1.3.2-22" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-23"><strong>element-id: 5</strong>, the ID block–signing key digest <code>ID_KEY_DIGEST</code> <code>element-claims</code><a href="#section-3.1.3.2-23" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-24">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>560(ID_KEY_DIGEST)</code> if nonzero.<a href="#section-3.1.3.2-24" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-25"><strong>element-id: 6</strong>, the ID block–signing key's certifying key digest <code>AUTHOR_KEY_DIGEST</code> <code>element-claims</code><a href="#section-3.1.3.2-25" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-26">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>560(AUTHOR_KEY_DIGEST)</code> if nonzero.<a href="#section-3.1.3.2-26" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-27"><strong>element-id: 7</strong>, the REPORTED_TCB <code>element-claims</code><a href="#section-3.1.3.2-27" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-28">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(reported_tcb)</code> where <code>reported_tcb</code> is <code>REPORTED_TCB</code> translated to <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-28" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-29"><strong>element-id: 8</strong>, the current host info <code>element-claims</code><a href="#section-3.1.3.2-29" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-30">The <code>&amp;(version: 0)</code> codepoint SHALL be set to<a href="#section-3.1.3.2-30" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-31">
+<pre>
+/ version-map / {
+  / version: 0 / vstr
+  / version-scheme: / 1: 16384
+}
+</pre><a href="#section-3.1.3.2-31" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.3.2-32">The version string <code>vstr</code> is constructed as <code>dec(CURRENT_MAJOR) '.' dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD)</code>.<a href="#section-3.1.3.2-32" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-33">The <code>&amp;(flags: 3) / flags-map</code> extensions for <code>PLATFORM_INFO</code> SHALL be assign their truth values following the correspondence is <a href="#sec-flags-ext" class="auto internal xref">Section 3.1.2.1</a>.<a href="#section-3.1.3.2-33" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-34">The <code>&amp;(raw-value: 5)</code> codepoint SHALL be set to <code>560(HOSTDATA)</code> and MAY be omitted if all zeros.<a href="#section-3.1.3.2-34" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-35"><strong>element-id: 9</strong>, the committed host info <code>element-claims</code><a href="#section-3.1.3.2-35" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-36">The <code>&amp;(version: 0)</code> codepoint SHALL be set to<a href="#section-3.1.3.2-36" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-37">
+<pre>
+/ version-map / {
+  / version: 0 / vstr
+  / version-scheme: / 1: 16384
+}
+</pre><a href="#section-3.1.3.2-37" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.3.2-38">The version string <code>vstr</code> is constructed as <code>dec(COMMITTED_MAJOR) '.' dec(COMMITTED_MINOR) '.' dec(COMMITTED_BUILD)</code>.<a href="#section-3.1.3.2-38" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-39">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(commited_tcb)</code> where <code>committed_tcb</code> is <code>COMMITTED_TCB</code> translated to a <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-39" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-40"><strong>element-id: 10</strong>, the TCB at launch <code>element-claims</code><a href="#section-3.1.3.2-40" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-41">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(launch_tcb)</code> where <code>launch_tcb</code> is <code>LAUNCH_TCB</code> translated to a <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-41" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authority">
+<section id="section-3.1.3.3">
+            <h5 id="name-authority">
+<a href="#section-3.1.3.3" class="section-number selfRef">3.1.3.3. </a><a href="#name-authority" class="section-name selfRef"><code>authority</code></a>
+            </h5>
+<p id="section-3.1.3.3-1">The <code>authority</code> SHALL be set to an array of the <code>tagged-pkix-asn1der-cert-type</code> forms of the VEK certificate for the <code>ATTESTATION_REPORT</code> signing key, the intermediate key, and the AMD root key for the product line.<a href="#section-3.1.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.3-2">The Verifier MAY add additional encodings of these keys.<a href="#section-3.1.3.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cmtype">
+<section id="section-3.1.3.4">
+            <h5 id="name-cmtype">
+<a href="#section-3.1.3.4" class="section-number selfRef">3.1.3.4. </a><a href="#name-cmtype" class="section-name selfRef"><code>cmtype</code></a>
+            </h5>
+<p id="section-3.1.3.4-1">The <code>cmtype</code> SHALL be <code>evidence: 2</code>.<a href="#section-3.1.3.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="profile">
+<section id="section-3.1.3.5">
+            <h5 id="name-profile">
+<a href="#section-3.1.3.5" class="section-number selfRef">3.1.3.5. </a><a href="#name-profile" class="section-name selfRef"><code>profile</code></a>
+            </h5>
+<p id="section-3.1.3.5-1">The <code>profile</code> SHALL be set to this profile's identifier, <code>32("http://amd.com/please-permalink-me")</code><a href="#section-3.1.3.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="optional-id-block-as-reference-value">
+<section id="section-3.1.3.6">
+            <h5 id="name-optional-id-block-as-refere">
+<a href="#section-3.1.3.6" class="section-number selfRef">3.1.3.6. </a><a href="#name-optional-id-block-as-refere" class="section-name selfRef">Optional: ID block as reference value</a>
+            </h5>
+<p id="section-3.1.3.6-1">If an ID block is provided at VM launch, it is authenticated by an ID key.
+The ID block authentication is checked by the AMD-SP firmware.
+The firmware will only launch the VM if the authenticated policy matches.
+The firmware indicates that the authentication passed by populating fields of the attestation report to bind the evidence to the authentication key(s) <code>ID_KEY_DIGEST</code> and/or <code>AUTHOR_KEY_DIGEST</code>.
+The ID block authentication as reference value SHALL NOT be retained by the Verifier to apply to another appraisal session.
+The reference value qualification is meant to be considered valid only for the duration of the appraisal session.<a href="#section-3.1.3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.6-2">The Verifier MAY allocate an <code>rv</code> for an addition ECT to represent the authentication at <code>SNP_LAUNCH_FINISH</code>.<a href="#section-3.1.3.6-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.6-3.1">
+                <p id="section-3.1.3.6-3.1.1">The <code>environment</code> SHALL be equal to the <code>environment</code> of the evidence ECT.<a href="#section-3.1.3.6-3.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.6-3.2">
+                <p id="section-3.1.3.6-3.2.1">The <code>element-list</code> SHALL contain two <code>element-map</code> entries<a href="#section-3.1.3.6-3.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1.3.6-3.2.2.1">
+                    <p id="section-3.1.3.6-3.2.2.1.1">The first <code>element-map</code> SHALL set <code>element-id</code> to 0 and the <code>element-claims</code> to a copy of the evidence claims for <code>element-id: 0</code>.<a href="#section-3.1.3.6-3.2.2.1.1" class="pilcrow">¶</a></p>
+</li>
+                  <li class="normal" id="section-3.1.3.6-3.2.2.2">
+                    <p id="section-3.1.3.6-3.2.2.2.1">The second <code>element-map</code> SHALL set <code>element-id</code> to 1 and the <code>element-claims</code> to a copy of the evidence claims for <code>element-id: 1</code>.<a href="#section-3.1.3.6-3.2.2.2.1" class="pilcrow">¶</a></p>
+</li>
+                </ul>
+</li>
+              <li class="normal" id="section-3.1.3.6-3.3">
+                <p id="section-3.1.3.6-3.3.1">The <code>authority</code> SHALL be an array containing <code>32780(ID_KEY_DIGEST)</code> and <code>32780(AUTHOR_KEY_DIGEST)</code> if nonzero. The Verifier MAY add more encodings of the same keys.<a href="#section-3.1.3.6-3.3.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.6-3.4">
+                <p id="section-3.1.3.6-3.4.1">The <code>cmtype</code> SHALL be set to <code>reference-values: 0</code><a href="#section-3.1.3.6-3.4.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.6-3.5">
+                <p id="section-3.1.3.6-3.5.1">The <code>profile</code> SHALL be set to this profile's identifier, <code>32("http://amd.com/please-permalink-me")</code>.<a href="#section-3.1.3.6-3.5.1" class="pilcrow">¶</a></p>
+</li>
+            </ul>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="tcg-considerations">
+<section id="section-4">
+      <h2 id="name-tcg-considerations">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-tcg-considerations" class="section-name selfRef">TCG considerations</a>
+      </h2>
+<p id="section-4-1">The Trusted Computing Group has standardized the PCClient Platform Firmware Profile to specify expected TPM event log processing.
+Since AMD SEV-SNP launch measurements are of virtual firmware, they can supplement the <code>EV_POST_CODE2</code> event measured into PCR0 for the <code>EV_EFI_PLATFORM_FIRMWARE_BLOB2</code> since the bits of the firmware are more specific than embedded firmware version strings.<a href="#section-4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-5">
+      <h2 id="name-iana-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="new-cbor-tags">
+<section id="section-5.1">
+        <h3 id="name-new-cbor-tags">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-new-cbor-tags" class="section-name selfRef">New CBOR Tags</a>
+        </h3>
+<p id="section-5.1-1">IANA is requested to allocate the following tags in the "CBOR Tags" registry <span>[<a href="#IANA.cbor-tags" class="cite xref">IANA.cbor-tags</a>]</span>.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<span id="name-added-cbor-tags"></span><div id="cbor-tags">
+<table class="center" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-added-cbor-tags" class="selfRef">Added CBOR tags</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Tag</th>
+              <th class="text-left" rowspan="1" colspan="1">Data Item</th>
+              <th class="text-left" rowspan="1" colspan="1">Semantics</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">32780</td>
+              <td class="text-left" rowspan="1" colspan="1">
+                <code>bytes</code>
+</td>
+              <td class="text-left" rowspan="1" colspan="1">A digest of an AMD public key format.</td>
+              <td class="text-left" rowspan="1" colspan="1">RFCthis</td>
+            </tr>
+          </tbody>
+        </table>
+</div>
+</section>
+</div>
+<div id="new-media-types">
+<section id="section-5.2">
+        <h3 id="name-new-media-types">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-new-media-types" class="section-name selfRef">New media types</a>
+        </h3>
+<div id="applicationvndamdsevsnpattestation-report">
+<section id="section-5.2.1">
+          <h4 id="name-application-vndamdsevsnpatt">
+<a href="#section-5.2.1" class="section-number selfRef">5.2.1. </a><a href="#name-application-vndamdsevsnpatt" class="section-name selfRef"><code>application/vnd.amd.sev.snp.attestation-report</code></a>
+          </h4>
+<p id="section-5.2.1-1">An octet-stream that is expected to be interpreted as an AMD SEV-SNP ATTESTATION_REPORT.<a href="#section-5.2.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="applicationvndamdghcbguid-table">
+<section id="section-5.2.2">
+          <h4 id="name-application-vndamdghcbguid-">
+<a href="#section-5.2.2" class="section-number selfRef">5.2.2. </a><a href="#name-application-vndamdghcbguid-" class="section-name selfRef"><code>application/vnd.amd.ghcb.guid-table</code></a>
+          </h4>
+<p id="section-5.2.2-1">An octet-stream that follows the <span>[<a href="#GHCB" class="cite xref">GHCB</a>]</span>'s GUID table ABI, which is the same as the <span>[<a href="#SVSM" class="cite xref">SVSM</a>]</span> service manifest ABI, recounted here.
+A GUID table is a header followed by an octet-stream body.
+The header is a sequence of entries described in <a href="#guid_table_entry" class="auto internal xref">Table 2</a> terminated by an all zero entry.
+After the all zero entry are the bytes that the header entries index into.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
+<span id="name-guid_table_entry-type-descr"></span><div id="guid_table_entry">
+<table class="center" id="table-2">
+            <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-guid_table_entry-type-descr" class="selfRef">guid_table_entry type description</a>
+            </caption>
+<thead>
+              <tr>
+                <th class="text-left" rowspan="1" colspan="1">Type</th>
+                <th class="text-left" rowspan="1" colspan="1">Name</th>
+                <th class="text-left" rowspan="1" colspan="1">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>UUID</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">GUID</td>
+                <td class="text-left" rowspan="1" colspan="1">An <span>[<a href="#RFC4122" class="cite xref">RFC4122</a>]</span> byte format UUID</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>LE_UINT32</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">Offset</td>
+                <td class="text-left" rowspan="1" colspan="1">An offset into the the GUID table</td>
+              </tr>
+              <tr>
+                <td class="text-left" rowspan="1" colspan="1">
+                  <code>LE_UINT32</code>
+</td>
+                <td class="text-left" rowspan="1" colspan="1">Length</td>
+                <td class="text-left" rowspan="1" colspan="1">A byte length of the span</td>
+              </tr>
+            </tbody>
+          </table>
+</div>
+<p id="section-5.2.2-3">An <code>LE_UINT32</code> is a 4 byte octet-stream that represents a nonnegative integer in little-endian order.<a href="#section-5.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.2-4">Note that an offset is from the start of the octet-stream, and not from the start of the octets following the zero entry of the header.
+A header entry is valid if its Offset+Length is less than or equal to the size of the entire GUID table.<a href="#section-5.2.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-combined-references">
+<section id="section-6">
+      <h2 id="name-references">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-6.1">
+        <h3 id="name-normative-references">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.ietf-rats-corim">[I-D.ietf-rats-corim]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-05</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-05">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.cbor-tags">[IANA.cbor-tags]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Concise Binary Object Representation (CBOR) Tags"</span>, <span>&lt;<a href="https://www.iana.org/assignments/cbor-tags">https://www.iana.org/assignments/cbor-tags</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.named-information">[IANA.named-information]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Named Information"</span>, <span>&lt;<a href="https://www.iana.org/assignments/named-information">https://www.iana.org/assignments/named-information</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4122">[RFC4122]</dt>
+        <dd>
+<span class="refAuthor">Leach, P.</span>, <span class="refAuthor">Mealling, M.</span>, and <span class="refAuthor">R. Salz</span>, <span class="refTitle">"A Universally Unique IDentifier (UUID) URN Namespace"</span>, <span class="seriesInfo">RFC 4122</span>, <span class="seriesInfo">DOI 10.17487/RFC4122</span>, <time datetime="2005-07" class="refDate">July 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4122">https://www.rfc-editor.org/rfc/rfc4122</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8610">[RFC8610]</dt>
+        <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Vigano, C.</span>, and <span class="refAuthor">C. Bormann</span>, <span class="refTitle">"Concise Data Definition Language (CDDL): A Notational Convention to Express Concise Binary Object Representation (CBOR) and JSON Data Structures"</span>, <span class="seriesInfo">RFC 8610</span>, <span class="seriesInfo">DOI 10.17487/RFC8610</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8610">https://www.rfc-editor.org/rfc/rfc8610</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9334">[RFC9334]</dt>
+      <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Thaler, D.</span>, <span class="refAuthor">Richardson, M.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Remote ATtestation procedureS (RATS) Architecture"</span>, <span class="seriesInfo">RFC 9334</span>, <span class="seriesInfo">DOI 10.17487/RFC9334</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9334">https://www.rfc-editor.org/rfc/rfc9334</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-6.2">
+        <h3 id="name-informative-references">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="GHCB">[GHCB]</dt>
+        <dd>
+<span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"SEV-ES Guest-Hypervisor Communication Block Standardization"</span>, <span class="seriesInfo">Revision 2.03 </span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56421.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56421.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SEV-SNP.API">[SEV-SNP.API]</dt>
+        <dd>
+<span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"SEV Secure Nested Paging Firmware ABI Specification"</span>, <span class="seriesInfo">Revision 1.55 </span>, <time datetime="2023-09" class="refDate">September 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SVSM">[SVSM]</dt>
+        <dd>
+<span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"Secure VM Services Module"</span>, <span class="seriesInfo">Revision 1.00 </span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/58019.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="VCEK">[VCEK]</dt>
+        <dd>
+<span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"Versioned Chip Endorsement Key (VCEK) Certificate and KDS Interface Specification"</span>, <span class="seriesInfo">Revision 0.51 </span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/57230.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="VLEK">[VLEK]</dt>
+      <dd>
+<span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"Versioned Loaded Endorsement Key (VLEK) Certificate Definition"</span>, <span class="seriesInfo">Revision 0.10 </span>, <time datetime="2023-10" class="refDate">October 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/user-guides/58369-010-versioned-loaded-endorsement-key-certificate-definition.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/user-guides/58369-010-versioned-loaded-endorsement-key-certificate-definition.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-corim-cddl">
+<section id="appendix-A">
+      <h2 id="name-corim-extensions-cddl">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-corim-extensions-cddl" class="section-name selfRef">CoRIM Extensions CDDL</a>
+      </h2>
+<div class="breakable lang-cddl sourcecode" id="appendix-A-1">
+<pre>
+$crypto-key-type-choice /= #6.32780(bytes .size 48)
+
+digest = [
+  alg: (int / text),
+  val: bytes
+]
+
+non-empty&lt;M&gt; = (M) .and ({ + any =&gt; any })
+
+$$flags-map-extension //= &amp;(
+  sevsnpvm-policy-smt-allowed: -1,
+  sevsnpvm-policy-migration-agent-allowed: -2,
+  sevsnpvm-policy-debug-allowed: -3,
+  sevsnpvm-policy-single-socket-only: -4,
+  sevsnpvm-policy-cxl-allowed: -5,
+  sevsnpvm-policy-mem-aes-256-xts-required: -6,
+  sevsnpvm-policy-rapl-must-be-disabled: -7,
+  sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
+  sevsnpvm-policy-reserved: -47..-9,
+)
+
+$version-scheme /= &amp;(sevsnpvm-familyimageid-hex: -1)
+
+$raw-value-type-choice /= uint
+
+$$flags-map-extension //= &amp;(
+  sevsnphost-smt-enabled: -49,
+  sevsnphost-tsme-enabled: -50,
+  sevsnphost-ecc-mem-reported-enabled:-51,
+  sevsnphost-rapl-disabled: -52,
+  sevsnphost-ciphertext-hiding-enabled: -53
+  sevsnphost-reserved: -112..-49
+)
+
+svn-type = uint
+svn = svn-type
+min-svn = svn-type
+tagged-svn = #6.552(svn)
+tagged-min-svn = #6.553(min-svn)
+svn-type-choice = tagged-svn / tagged-min-svn
+
+svn64-type = tagged-svn64 / tagged-min-svn64
+tagged-svn64 = #6.552(uint64)
+tagged-min-svn64 = #6.553(uint64)
+
+uint16 = 0..65535
+
+uint32 = 0..4294967295
+
+uint64 = 0..18446744073709551615
+
+</pre><a href="#appendix-A-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="contributors">
+<section id="appendix-B">
+      <h2 id="name-contributors">
+<a href="#name-contributors" class="section-name selfRef">Contributors</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Yogesh Deshpande</span></div>
+<div dir="auto" class="left"><span class="org">arm</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:yogesh.deshpande@arm.com" class="email">yogesh.deshpande@arm.com</a>
+</div>
+</address>
+<p id="appendix-B-1">Yogesh Deshpande contributed to the data model by providing advice about CoRIM founding principles.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Dionna Glaze</span></div>
+<div dir="auto" class="left"><span class="org">Google LLC</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:dionnaglaze@google.com" class="email">dionnaglaze@google.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
