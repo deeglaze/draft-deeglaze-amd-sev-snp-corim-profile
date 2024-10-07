@@ -1,5 +1,6 @@
 / measurement-values-map / {
   / version: / 0: / version-map / {
     / version: / 0: "1.55.0"
+    / version-scheme: / 1: 16384
   }
 }

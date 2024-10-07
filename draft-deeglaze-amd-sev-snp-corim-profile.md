@@ -347,40 +347,99 @@ Juxtaposition of expressions with string literals is interpreted with string con
 
 Note: A value of `0` is not treated the same as unset given the semantics for matching `flags-map`.
 
-* `/ element-id: / 0`, the guest data `element-claims`
-  +  The `&(version: 0)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: hex(IMAGE_ID) }`
-  +  The `&(svn: 1)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(svn: 1)` codepoint SHALL be set to `552(leuint(GUEST_SVN))`.
-  +  The `&(digests: 2)` codepoint SHALL be set to `[ / digest / [ / alg: / 7, / val: / MEASUREMENT ] ]`. The algorithm assignment is from {{-named-info}} for SHA384.
-  +  The `&(flags: 3) / flags-map / is-confidentiality-protected` codepoint MAY be set to true.
-  +  The `&(flags: 3) / flags-map / is-integrity-protected` codepoint MAY be set to true.
-  +  The `&(flags: 3) / flags-map / is-replay-protected` codepoint MAY be set to true.
-  +  The `&(flags: 3) / flags-map / is-debug` codepoint SHALL be set to the truth value of bit 19 of `POLICY`.
-  +  The `flags-map` extensions for `POLICY` are assigned their truth values following the correspondence in {{sec-flags-ext}}.
-  +  The `$(raw-value: 4)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(raw-value: 4)` codepoint SHALL be set to `560(FAMILY_ID)`.
-* `/ element-id: / 1`, guest policy minimum firmware `element-claims`
-  + The `&(version: 0)` SHALL be set to `/ version-map / { / version: /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0' , / version-scheme: / 16384 }`.
-* `/ element-id: 2 /` the report privilege level `element-claims`
-  + The `&(raw-value: 5)` codepoint SHALL be set to `VMPL` as a `uint`.
-* `/ element-id: 3 /` the per-launch `REPORT_ID` `element-claims`
-  + The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID)`.
-* `/ element-id: 4 /` the migration agent–assigned `REPORT_ID_MA` `element-claims`
-  + The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID_MA)` if nonzero.
-* `/ element-id: 5 /` the ID block–signing key digest `ID_KEY_DIGEST` `element-claims`
-  + The `&(raw-value: 5)` codepoint SHALL be set to `560(ID_KEY_DIGEST)` if nonzero.
-* `/ element-id: 6 /` the ID block–signing key's certifying key digest `AUTHOR_KEY_DIGEST` `element-claims`
-  + The `&(raw-value: 5)` codepoint SHALL be set to `560(AUTHOR_KEY_DIGEST)` if nonzero.
-* `/ element-id: 7 /` the REPORTED_TCB `element-claims`
-  + The `&(svn: 1)` codepoint SHALL be set to `552(leuint(REPORTED_TCB))`.
-* `/ element-id: 8 /` the current host info `element-claims`
-  + The `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: 0 / vstr / version-scheme: / 1: 16384 }` with version string `vstr` constructed as `dec(CURRENT_MAJOR) '.' dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD)`.
-  + The `&(flags: 3) / flags-map` extensions for `PLATFORM_INFO` SHALL be assign their truth values following the correspondence is {{sec-flags-ext}}.
-  + The `&(raw-value: 5)` codepoint SHALL be set to `560(HOSTDATA)` and MAY be omitted if all zeros.
-* `/ element-id: 9 /` the committed host info `element-claims`
-  + The `&(svn: 1)` codepoint SHALL be set to `552(leuint(COMMITTED_TCB))`.
-* `/ element-id: 4 /` the TCB at launch `element-claims`
-  + The `&(svn: 1)` codepoint SHALL be set to `552(leuint(LAUNCH_TCB))`.
-* `/ element-id: 10 /` the guest policy's minimum SEV-SNP ABI version that launch compares against `CURRENT_MAJOR` and `CURRENT_MINOR`.
-  + The `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: vstr / version-scheme: / 1: 16384 }` with version string `vstr` constructed as `dec(MAJOR_ABI) '.' dec(MINOR_ABI) '.0'`.
+**element-id: 0**, the guest data `element-claims`
+
+The `&(version: 0)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(version: 0)` codepoint SHALL be set to
+
+~~~ cbor-diag
+/ version-map / {
+  / version: / 0: hex(IMAGE_ID)
+}
+~~~
+
+The `&(svn: 1)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(svn: 1)` codepoint SHALL be set to `552(leuint(GUEST_SVN))`.
+
+The `&(digests: 2)` codepoint SHALL be set to `[[7, MEASUREMENT]]`.
+The algorithm assignment is from {{-named-info}} for SHA384.
+
+The `&(flags: 3)` codepoint SHALL be set to a `flags-map` with the following construction:
+
+*  `is-confidentiality-protected` MAY be set to true.
+*  `is-integrity-protected` MAY be set to true.
+*  `is-replay-protected` MAY be set to true.
+*  `is-debug` SHALL be set to the truth value of bit 19 of `POLICY`.
+*  The extensions for `POLICY` are assigned their truth values following the correspondence in {{sec-flags-ext}}.
+
+The `$(raw-value: 4)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(raw-value: 4)` codepoint SHALL be set to `560(FAMILY_ID)`.
+
+**element-id: 1**, guest policy minimum firmware `element-claims`
+
+The `&(version: 0)` SHALL be set to
+
+~~~ cbor-diag
+/ version-map / {
+  / version: /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0'
+  / version-scheme: / 16384
+}
+~~~
+
+**element-id: 2**, the report privilege level `element-claims`
+
+The `&(raw-value: 5)` codepoint SHALL be set to `VMPL` as a `uint`.
+
+**element-id: 3**, the per-launch `REPORT_ID` `element-claims`
+
+The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID)`.
+
+**element-id: 4**, the migration agent–assigned `REPORT_ID_MA` `element-claims`
+
+The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID_MA)` if nonzero.
+
+**element-id: 5**, the ID block–signing key digest `ID_KEY_DIGEST` `element-claims`
+
+The `&(raw-value: 5)` codepoint SHALL be set to `560(ID_KEY_DIGEST)` if nonzero.
+
+**element-id: 6**, the ID block–signing key's certifying key digest `AUTHOR_KEY_DIGEST` `element-claims`
+
+The `&(raw-value: 5)` codepoint SHALL be set to `560(AUTHOR_KEY_DIGEST)` if nonzero.
+
+**element-id: 7**, the REPORTED_TCB `element-claims`
+
+The `&(svn: 1)` codepoint SHALL be set to `552(leuint(REPORTED_TCB))`.
+
+**element-id: 8**, the current host info `element-claims`
+
+The `&(version: 0)` codepoint SHALL be set to
+
+~~~ cbor-diag
+/ version-map / {
+  / version: 0 / vstr
+  / version-scheme: / 1: 16384
+}
+~~~
+The version string `vstr` is constructed as `dec(CURRENT_MAJOR) '.' dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD)`.
+
+The `&(flags: 3) / flags-map` extensions for `PLATFORM_INFO` SHALL be assign their truth values following the correspondence is {{sec-flags-ext}}.
+
+The `&(raw-value: 5)` codepoint SHALL be set to `560(HOSTDATA)` and MAY be omitted if all zeros.
+
+**element-id: 9**, the committed host info `element-claims`
+
+The `&(version: 0)` codepoint SHALL be set to
+
+~~~ cbor-diag
+/ version-map / {
+  / version: 0 / vstr
+  / version-scheme: / 1: 16384
+}
+~~~
+The version string `vstr` is constructed as `dec(COMMITTED_MAJOR) '.' dec(COMMITTED_MINOR) '.' dec(COMMITTED_BUILD)`.
+
+The `&(svn: 1)` codepoint SHALL be set to `552(leuint(COMMITTED_TCB))`.
+
+**element-id: 10**,, the TCB at launch `element-claims`
+
+The `&(svn: 1)` codepoint SHALL be set to `552(leuint(LAUNCH_TCB))`.
 
 #### `authority`
 
