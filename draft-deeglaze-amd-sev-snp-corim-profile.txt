@@ -356,6 +356,7 @@ Table of Contents
    / measurement-values-map / {
      / version: / 0: / version-map / {
        / version: / 0: "1.55.0"
+       / version-scheme: / 1: 16384
      }
    }
 
@@ -500,108 +501,116 @@ Table of Contents
    Note: A value of 0 is not treated the same as unset given the
    semantics for matching flags-map.
 
-   *  / element-id: / 0, the guest data element-claims
+   *element-id: 0*, the guest data element-claims
 
-      -  The &(version: 0) codepoint MAY be unset if the report does not
-         contain ID block data, otherwise the &(version: 0) codepoint
-         SHALL be set to / version-map / { / version: / 0: hex(IMAGE_ID)
-         }
+   The &(version: 0) codepoint MAY be unset if the report does not
+   contain ID block data, otherwise the &(version: 0) codepoint SHALL be
+   set to
 
-      -  The &(svn: 1) codepoint MAY be unset if the report does not
-         contain ID block data, otherwise the &(svn: 1) codepoint SHALL
-         be set to 552(leuint(GUEST_SVN)).
+   / version-map / {
+     / version: / 0: hex(IMAGE_ID)
+   }
 
-      -  The &(digests: 2) codepoint SHALL be set to [ / digest / [ /
-         alg: / 7, / val: / MEASUREMENT ] ].  The algorithm assignment
-         is from [IANA.named-information] for SHA384.
+   The &(svn: 1) codepoint MAY be unset if the report does not contain
+   ID block data, otherwise the &(svn: 1) codepoint SHALL be set to
+   552(leuint(GUEST_SVN)).
 
-      -  The &(flags: 3) / flags-map / is-confidentiality-protected
-         codepoint MAY be set to true.
+   The &(digests: 2) codepoint SHALL be set to [[7, MEASUREMENT]].  The
+   algorithm assignment is from [IANA.named-information] for SHA384.
 
-      -  The &(flags: 3) / flags-map / is-integrity-protected codepoint
-         MAY be set to true.
+   The &(flags: 3) codepoint SHALL be set to a flags-map with the
+   following construction:
 
-      -  The &(flags: 3) / flags-map / is-replay-protected codepoint MAY
-         be set to true.
+   *  is-confidentiality-protected MAY be set to true.
 
-      -  The &(flags: 3) / flags-map / is-debug codepoint SHALL be set
-         to the truth value of bit 19 of POLICY.
+   *  is-integrity-protected MAY be set to true.
 
-      -  The flags-map extensions for POLICY are assigned their truth
-         values following the correspondence in Section 3.1.2.1.
+   *  is-replay-protected MAY be set to true.
 
-      -  The $(raw-value: 4) codepoint MAY be unset if the report does
-         not contain ID block data, otherwise the &(raw-value: 4)
-         codepoint SHALL be set to 560(FAMILY_ID).
+   *  is-debug SHALL be set to the truth value of bit 19 of POLICY.
 
-   *  / element-id: / 1, guest policy minimum firmware element-claims
+   *  The extensions for POLICY are assigned their truth values
+      following the correspondence in Section 3.1.2.1.
 
-      -  The &(version: 0) SHALL be set to / version-map / { / version:
-         /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0' , / version-
-         scheme: / 16384 }.
+   The $(raw-value: 4) codepoint MAY be unset if the report does not
+   contain ID block data, otherwise the &(raw-value: 4) codepoint SHALL
+   be set to 560(FAMILY_ID).
 
-   *  / element-id: 2 / the report privilege level element-claims
+   *element-id: 1*, guest policy minimum firmware element-claims
 
-      -  The &(raw-value: 5) codepoint SHALL be set to VMPL as a uint.
+   The &(version: 0) SHALL be set to
 
-   *  / element-id: 3 / the per-launch REPORT_ID element-claims
+   / version-map / {
+     / version: /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0'
+     / version-scheme: / 16384
+   }
 
-      -  The &(raw-value: 5) codepoint SHALL be set to 560(REPORT_ID).
+   *element-id: 2*, the report privilege level element-claims
 
-   *  / element-id: 4 / the migration agent–assigned REPORT_ID_MA
-      element-claims
+   The &(raw-value: 5) codepoint SHALL be set to VMPL as a uint.
 
-      -  The &(raw-value: 5) codepoint SHALL be set to 560(REPORT_ID_MA)
-         if nonzero.
+   *element-id: 3*, the per-launch REPORT_ID element-claims
 
-   *  / element-id: 5 / the ID block–signing key digest ID_KEY_DIGEST
-      element-claims
+   The &(raw-value: 5) codepoint SHALL be set to 560(REPORT_ID).
 
-      -  The &(raw-value: 5) codepoint SHALL be set to
-         560(ID_KEY_DIGEST) if nonzero.
+   *element-id: 4*, the migration agent–assigned REPORT_ID_MA element-
+   claims
 
-   *  / element-id: 6 / the ID block–signing key's certifying key digest
-      AUTHOR_KEY_DIGEST element-claims
+   The &(raw-value: 5) codepoint SHALL be set to 560(REPORT_ID_MA) if
+   nonzero.
 
-      -  The &(raw-value: 5) codepoint SHALL be set to
-         560(AUTHOR_KEY_DIGEST) if nonzero.
+   *element-id: 5*, the ID block–signing key digest ID_KEY_DIGEST
+   element-claims
 
-   *  / element-id: 7 / the REPORTED_TCB element-claims
+   The &(raw-value: 5) codepoint SHALL be set to 560(ID_KEY_DIGEST) if
+   nonzero.
 
-      -  The &(svn: 1) codepoint SHALL be set to
-         552(leuint(REPORTED_TCB)).
+   *element-id: 6*, the ID block–signing key's certifying key digest
+   AUTHOR_KEY_DIGEST element-claims
 
-   *  / element-id: 8 / the current host info element-claims
+   The &(raw-value: 5) codepoint SHALL be set to 560(AUTHOR_KEY_DIGEST)
+   if nonzero.
 
-      -  The &(version: 0) codepoint SHALL be set to / version-map / { /
-         version: 0 / vstr / version-scheme: / 1: 16384 } with version
-         string vstr constructed as dec(CURRENT_MAJOR) '.'
-         dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD).
+   *element-id: 7*, the REPORTED_TCB element-claims
 
-      -  The &(flags: 3) / flags-map extensions for PLATFORM_INFO SHALL
-         be assign their truth values following the correspondence is
-         Section 3.1.2.1.
+   The &(svn: 1) codepoint SHALL be set to 552(leuint(REPORTED_TCB)).
 
-      -  The &(raw-value: 5) codepoint SHALL be set to 560(HOSTDATA) and
-         MAY be omitted if all zeros.
+   *element-id: 8*, the current host info element-claims
 
-   *  / element-id: 9 / the committed host info element-claims
+   The &(version: 0) codepoint SHALL be set to
 
-      -  The &(svn: 1) codepoint SHALL be set to
-         552(leuint(COMMITTED_TCB)).
+   / version-map / {
+     / version: 0 / vstr
+     / version-scheme: / 1: 16384
+   }
 
-   *  / element-id: 4 / the TCB at launch element-claims
+   The version string vstr is constructed as dec(CURRENT_MAJOR) '.'
+   dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD).
 
-      -  The &(svn: 1) codepoint SHALL be set to
-         552(leuint(LAUNCH_TCB)).
+   The &(flags: 3) / flags-map extensions for PLATFORM_INFO SHALL be
+   assign their truth values following the correspondence is
+   Section 3.1.2.1.
 
-   *  / element-id: 10 / the guest policy's minimum SEV-SNP ABI version
-      that launch compares against CURRENT_MAJOR and CURRENT_MINOR.
+   The &(raw-value: 5) codepoint SHALL be set to 560(HOSTDATA) and MAY
+   be omitted if all zeros.
 
-      -  The &(version: 0) codepoint SHALL be set to / version-map / { /
-         version: / 0: vstr / version-scheme: / 1: 16384 } with version
-         string vstr constructed as dec(MAJOR_ABI) '.' dec(MINOR_ABI)
-         '.0'.
+   *element-id: 9*, the committed host info element-claims
+
+   The &(version: 0) codepoint SHALL be set to
+
+   / version-map / {
+     / version: 0 / vstr
+     / version-scheme: / 1: 16384
+   }
+
+   The version string vstr is constructed as dec(COMMITTED_MAJOR) '.'
+   dec(COMMITTED_MINOR) '.' dec(COMMITTED_BUILD).
+
+   The &(svn: 1) codepoint SHALL be set to 552(leuint(COMMITTED_TCB)).
+
+   *element-id: 10*,, the TCB at launch element-claims
+
+   The &(svn: 1) codepoint SHALL be set to 552(leuint(LAUNCH_TCB)).
 
 3.1.3.3.  authority
 
