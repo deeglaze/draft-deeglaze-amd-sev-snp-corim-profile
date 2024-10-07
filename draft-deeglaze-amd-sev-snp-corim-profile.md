@@ -341,7 +341,6 @@ The translation makes use of the following metafunctions:
 
 *  The function `hex(bstr)` represents the hexadecimal string encoding of a byte string.
 *  The function `dec(b)` represents a byte in its decimal string rendering.
-*  The function `leuint(bstr)` represents the translation of a byte string into a CBOR `uint` using a little-endian interpretation.
 
 Juxtaposition of expressions with string literals is interpreted with string concatenation.
 
@@ -405,7 +404,7 @@ The `&(raw-value: 5)` codepoint SHALL be set to `560(AUTHOR_KEY_DIGEST)` if nonz
 
 **element-id: 7**, the REPORTED_TCB `element-claims`
 
-The `&(svn: 1)` codepoint SHALL be set to `552(leuint(REPORTED_TCB))`.
+The `&(svn: 1)` codepoint SHALL be set to `552(reported_tcb)` where `reported_tcb` is `REPORTED_TCB` translated to `uint` from its little-endian representation.
 
 **element-id: 8**, the current host info `element-claims`
 
@@ -435,11 +434,11 @@ The `&(version: 0)` codepoint SHALL be set to
 ~~~
 The version string `vstr` is constructed as `dec(COMMITTED_MAJOR) '.' dec(COMMITTED_MINOR) '.' dec(COMMITTED_BUILD)`.
 
-The `&(svn: 1)` codepoint SHALL be set to `552(leuint(COMMITTED_TCB))`.
+The `&(svn: 1)` codepoint SHALL be set to `552(commited_tcb)` where `committed_tcb` is `COMMITTED_TCB` translated to a `uint` from its little-endian representation.
 
-**element-id: 10**,, the TCB at launch `element-claims`
+**element-id: 10**, the TCB at launch `element-claims`
 
-The `&(svn: 1)` codepoint SHALL be set to `552(leuint(LAUNCH_TCB))`.
+The `&(svn: 1)` codepoint SHALL be set to `552(launch_tcb)` where `launch_tcb` is `LAUNCH_TCB` translated to a `uint` from its little-endian representation.
 
 #### `authority`
 
@@ -506,9 +505,11 @@ After the all zero entry are the bytes that the header entries index into.
 | Type | Name | Description |
 | ---- | ---- |
 | `UUID` | GUID | An [RFC4122] byte format UUID |
-| `LE_UINT32` | Offset | A little-endian offset into the the GUID table |
-| `LE_UINT32` | Length | A little-endian byte length of the span |
+| `LE_UINT32` | Offset | An offset into the the GUID table |
+| `LE_UINT32` | Length | A byte length of the span |
 {: #guid_table_entry title="guid_table_entry type description"}
+
+An `LE_UINT32` is a 4 byte octet-stream that represents a nonnegative integer in little-endian order.
 
 Note that an offset is from the start of the octet-stream, and not from the start of the octets following the zero entry of the header.
 A header entry is valid if its Offset+Length is less than or equal to the size of the entire GUID table.
