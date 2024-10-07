@@ -242,7 +242,13 @@ The `mval` `measurement-values-map` may contain values for `GUEST_SVN`, `MEASURE
 *  The `GUEST_SVN` 32-bit unsigned integer may be given a reference value as an `svn-type` with a `tagged-svn` or `tagged-min-svn` encoding around a `uint32` in an `&(svn: 1): svn-type` entry.
 *  The `MEASUREMENT` 384-bit digest may be referenced with a `&(digest: 2): [[7, MEASUREMENT]]` entry.
 *  The `POLICY` flags may be referenced with a `&(flags: 3): flags-map` entry following the correspondence defined in {{sec-flags-ext}}
-*  The `IMAGE_ID` may be referenced with a `&(version: 0): / version-map / { &(version: 0): hex(IMAGE_ID) }`, where `hex(IMAGE_ID)` is the 128-bit identifier translated to a hexadecimal string.
+*  The `IMAGE_ID` may be referenced with a
+~~~ cbor-diag
+&(version: 0): / version-map / {
+  &(version: 0): hex(IMAGE_ID)
+}
+~~~
+where `hex(IMAGE_ID)` is the 128-bit identifier translated to a hexadecimal string.
 *  The `FAMILY_ID` may be referenced as `&(raw-value: 4): 560(FAMILY_ID)`.
 
 **mkey 1**: The minimum ABI guest policy
