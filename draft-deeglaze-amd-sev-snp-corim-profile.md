@@ -101,7 +101,6 @@ The profile defines a transformation from the AMD byte format into a CoMID repre
 This profile is meant for expressing reference values and endorsements of specific environments. It is not meant to encode complex policy decisions about the acceptability of measurements. The accepted claim set construction (ACS) this profile enables does lay a foundation for policy engines that enable further evaluation over complete ACS constructions.
 
 This profile extends the `flags-map` to represent the guest policy and host platform info that are unique to AMD SEV-SNP.
-This profile extends the `$version-scheme` enumeration to account for the `FAMILY_ID` and `IMAGE_ID` fields of the ID block.
 The profile extends the `$crypto-key-type-choice` to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of {{SEV-SNP.API}}.
 
 #  Conventions and Definitions
@@ -230,38 +229,6 @@ The `sevsnphost-` flag extensions correspond to ATTESTATION_REPORT `PLATFORM_INF
 The `sevsnpvm-policy-debug-allowed` flag is redundant with `flags-map / is-debug`, so either representation is valid.
 The entirety of the value space is reserved for AMD revisions to the SEV-SNP firmware and corresponding ATTESTATION_REPORT API.
 
-#### Version scheme extension* {#sec-version-scheme}
-
-Extend the `$version-scheme` type as follows
-
-~~~ cddl
-{::include cddl/sevsnpvm-version-scheme-ext.cddl}
-~~~
-
-The `-1` scheme is a string representation of the two 128-bit identifiers in hexadecimal encoding as separated by `/`.
-The scheme allows for fuzzy comparison with `_` as a wildcard on either side of the `/`.
-
-An endorsement provider MAY use a different version scheme for the `&(version: 0)` codepoint.
-
-For an example of a specific identifier pair, take `h'0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'` and `h'0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'`.
-They may be referenced as
-
-~~~ cbor-diag
-{::include cddl/examples/familyimage.diag}
-~~~
-
-The first identifier with any permissible second identifier may be referenced with
-
-~~~ cbor-diag
-{::include cddl/examples/family.diag}
-~~~
-
-The second identifier with any permissible first identifier may be referenced with
-
-~~~ cbor-diag
-{::include cddl/examples/image.diag}
-~~~
-
 #### AMD SEV-SNP measurements
 
 The measurements in an ATTESTATION_REPORT are grouped into 10 `mkey`s that can refer to one or more measured values.
@@ -275,7 +242,8 @@ The `mval` `measurement-values-map` may contain values for `GUEST_SVN`, `MEASURE
 *  The `GUEST_SVN` 32-bit unsigned integer may be given a reference value as an `svn-type` with a `tagged-svn` or `tagged-min-svn` encoding around a `uint32` in an `&(svn: 1): svn-type` entry.
 *  The `MEASUREMENT` 384-bit digest may be referenced with a `&(digest: 2): [[7, MEASUREMENT]]` entry.
 *  The `POLICY` flags may be referenced with a `&(flags: 3): flags-map` entry following the correspondence defined in {{sec-flags-ext}}
-*  The `FAMILY_ID` and `IMAGE_ID` may be referenced with a `&(version: 0): version-map` with the `-1` as version scheme extension option as described in {{sec-version-scheme}}
+*  The `IMAGE_ID` may be referenced with a `&(version: 0): / version-map / { &(version: 0): hex(IMAGE_ID) }`, where `hex(IMAGE_ID)` is the 128-bit identifier translated to a hexadecimal string.
+*  The `FAMILY_ID` may be referenced as `&(raw-value: 4): 560(FAMILY_ID)`.
 
 **mkey 1**: The minimum ABI guest policy
 
@@ -380,7 +348,7 @@ Juxtaposition of expressions with string literals is interpreted with string con
 Note: A value of `0` is not treated the same as unset given the semantics for matching `flags-map`.
 
 * `/ element-id: / 0`, the guest data `element-claims`
-  +  The `&(version: 0)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: vstr / version-scheme: / 1: -1 }` with version string `vstr` constructed as `hex(FAMILY_ID) '/' hex(IMAGE_ID)`.
+  +  The `&(version: 0)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(version: 0)` codepoint SHALL be set to `/ version-map / { / version: / 0: hex(IMAGE_ID) }`
   +  The `&(svn: 1)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(svn: 1)` codepoint SHALL be set to `552(leuint(GUEST_SVN))`.
   +  The `&(digests: 2)` codepoint SHALL be set to `[ / digest / [ / alg: / 7, / val: / MEASUREMENT ] ]`. The algorithm assignment is from {{-named-info}} for SHA384.
   +  The `&(flags: 3) / flags-map / is-confidentiality-protected` codepoint MAY be set to true.
@@ -388,6 +356,7 @@ Note: A value of `0` is not treated the same as unset given the semantics for ma
   +  The `&(flags: 3) / flags-map / is-replay-protected` codepoint MAY be set to true.
   +  The `&(flags: 3) / flags-map / is-debug` codepoint SHALL be set to the truth value of bit 19 of `POLICY`.
   +  The `flags-map` extensions for `POLICY` are assigned their truth values following the correspondence in {{sec-flags-ext}}.
+  +  The `$(raw-value: 4)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(raw-value: 4)` codepoint SHALL be set to `560(FAMILY_ID)`.
 * `/ element-id: / 1`, guest policy minimum firmware `element-claims`
   + The `&(version: 0)` SHALL be set to `/ version-map / { / version: /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0' , / version-scheme: / 16384 }`.
 * `/ element-id: 2 /` the report privilege level `element-claims`
@@ -422,7 +391,6 @@ The Verifier MAY add additional encodings of these keys.
 #### `cmtype`
 
 The `cmtype` SHALL be `evidence: 2`.
-
 
 #### `profile`
 
