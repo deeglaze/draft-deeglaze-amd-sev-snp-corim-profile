@@ -340,9 +340,10 @@ Table of Contents
    *  The POLICY flags may be referenced with a &(flags: 3): flags-map
       entry following the correspondence defined in Section 3.1.2.1
 
-   *  The IMAGE_ID may be referenced with a &(version: 0): / version-map
-      / { &(version: 0): hex(IMAGE_ID) }, where hex(IMAGE_ID) is the
-      128-bit identifier translated to a hexadecimal string.
+   *  The IMAGE_ID may be referenced with a ~~~ cbor-diag &(version: 0):
+      / version-map / { &(version: 0): hex(IMAGE_ID) } ~~~ where
+      hex(IMAGE_ID) is the 128-bit identifier translated to a
+      hexadecimal string.
 
    *  The FAMILY_ID may be referenced as &(raw-value: 4):
       560(FAMILY_ID).
