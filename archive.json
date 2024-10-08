@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-07T02:35:09.172801+00:00",
+  "timestamp": "2024-10-08T01:39:38.503241+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -224,6 +224,54 @@
       "createdAt": "2024-08-08T05:43:26Z",
       "updatedAt": "2024-10-04T04:13:20Z",
       "closedAt": "2024-10-04T04:13:20Z",
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOMdG_Uc6ZLZeJ",
+      "title": "Use `tag` for the profile URI",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/9",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I suggest using the `tag` scheme for the profile identifier. We started with `http` too, but then moved to `tag` to avoid the URL being de-referenced. E.g.: `tag:amd.com,2024:please-permalink-me`\r\n\r\nAn alternative is to use `urn` which, in case you plan to move the document to RFC, would (one day) give you the fancy and compact `urn:ietf:rfc:rfcXYZ`. The problem with this is that until the document gets ratified you can't know what the value is ;-)\r\n\r\nSo, in general, `tag` looks safer and more usable than the alternatives.",
+      "createdAt": "2024-10-07T09:41:46Z",
+      "updatedAt": "2024-10-07T09:41:46Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOMdG_Uc6ZLjOc",
+      "title": "Raw value type is extended too",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/10",
+      "state": "OPEN",
+      "author": "thomas-fossati",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "S3.1.2:\r\n\r\n> _\"The only extensions are to $$flags-map-extensions.\"_\r\n\r\nbut `$raw-value-type-choice` is also extended.",
+      "createdAt": "2024-10-07T09:57:19Z",
+      "updatedAt": "2024-10-07T09:57:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOMdG_Uc6ZNoKx",
+      "title": "Need better explanation and CDDL semantics for each measured elements",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/11",
+      "state": "OPEN",
+      "author": "yogeshbdeshpande",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The existing format of tagging just mkey with the individual measurement seems to lot less clear.\r\n\r\nI would re-structure the sections in the following format:\r\n\r\n* Primary Guest Measurement\r\nDescribe the mkey as uint with value as 0\r\n\r\nDescribe the measurements associated with this key\r\nexample:\r\nGUEST_SVN  as Bla bla\r\n\r\n\r\nThen a full DIAG of the measurement-map expressing the {\r\nmkey: 0\r\nMval: {}\r\n\r\n* Guest Policy\r\n*\r\n\r\nFinally Also indicate which all from the above, is expected to be conveyed in a single CoMID..?\r\n\r\nExpress the CoMID in the example in the same document.",
+      "createdAt": "2024-10-07T13:42:47Z",
+      "updatedAt": "2024-10-07T13:43:34Z",
+      "closedAt": null,
       "comments": []
     }
   ],
