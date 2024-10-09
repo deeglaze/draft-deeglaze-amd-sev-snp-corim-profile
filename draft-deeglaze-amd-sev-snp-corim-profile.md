@@ -448,11 +448,12 @@ The `&(svn: 1)` codepoint SHALL be set to `552(commited_tcb)` where `committed_t
 
 The `&(svn: 1)` codepoint SHALL be set to `552(launch_tcb)` where `launch_tcb` is `LAUNCH_TCB` translated to a `uint` from its little-endian representation.
 
-#### `authority`
+<!--#### `authority`
 
 The `authority` SHALL be set to an array of the `tagged-pkix-asn1der-cert-type` forms of the VEK certificate for the `ATTESTATION_REPORT` signing key, the intermediate key, and the AMD root key for the product line.
 
 The Verifier MAY add additional encodings of these keys.
+-->
 
 #### `cmtype`
 
@@ -480,6 +481,27 @@ The Verifier MAY allocate an `rv` for an addition ECT to represent the authentic
 * The `authority` SHALL be an array containing `32780(ID_KEY_DIGEST)` and `32780(AUTHOR_KEY_DIGEST)` if nonzero. The Verifier MAY add more encodings of the same keys.
 * The `cmtype` SHALL be set to `reference-values: 0`
 * The `profile` SHALL be set to this profile's identifier, `32("http://amd.com/please-permalink-me")`.
+
+#### VEK Certificate `attest-key-triple-record`
+
+Each VEK Certificate from AMD's Key Distribution Service contains extensions that bind the key to its target environment.
+There is no condition on `REPORTED_TCB` to form this binding, since the keys will only ever verify evidence that corresponds the the `REPORTED_TCB` they were derived from.
+
+To allow for certificates to be reissued, the keys bound to an environment use only the `SubjectPublicKeyInfo` either through a #6.554 tagged PEM encoding from [Section 13 of RFC7468] through a #6.557 tagged digest of the ASN.1 encoding as defined in [RFC7250].
+
+Let `vcek_pk`, `ask_pk`, and `ark_pk` be the encoded keys in the certificate path.
+A [VCEK] certificate may be interpreted with `hwid` as the octet-string value from X.509 extension 1.3.6.1.4.1.3704.1.4 as
+
+~~~ cbor-diag
+{::include cddl/examples/vcek-triple.diag}
+~~~
+
+Let `vlek_pk`, `asvk_pk`, and `ark_pk` be the encoded keys in the certificate path.
+A [VLEK] certificate may be interpreted with `csp_id` as either the IA5String value encoding or UTF-8 encoding of the value from X.509 extension 1.3.6.1.4.1.3704.1.5 as
+
+~~~ cbor-diag
+{::include cddl/examples/vlek-triple.diag}
+~~~
 
 # TCG considerations
 
