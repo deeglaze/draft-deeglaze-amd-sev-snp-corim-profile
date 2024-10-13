@@ -1030,7 +1030,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Glaze</td>
-<td class="center">Expires 10 April 2025</td>
+<td class="center">Expires 16 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1043,12 +1043,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-07" class="published">7 October 2024</time>
+<time datetime="2024-10-13" class="published">13 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-04-10">10 April 2025</time></dd>
+<dd class="expires"><time datetime="2025-04-16">16 April 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1091,7 +1091,7 @@ This document specifies the information elements for representing SEV-SNP Refere
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1156,16 +1156,16 @@ This document specifies the information elements for representing SEV-SNP Refere
                         <p id="section-toc.1-1.3.2.1.2.3.2.2.1"><a href="#section-3.1.3.2" class="auto internal xref">3.1.3.2</a>.  <a href="#name-element-list" class="internal xref"><code>element-list</code></a></p>
 </li>
                       <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.3">
-                        <p id="section-toc.1-1.3.2.1.2.3.2.3.1"><a href="#section-3.1.3.3" class="auto internal xref">3.1.3.3</a>.  <a href="#name-authority" class="internal xref"><code>authority</code></a></p>
+                        <p id="section-toc.1-1.3.2.1.2.3.2.3.1"><a href="#section-3.1.3.3" class="auto internal xref">3.1.3.3</a>.  <a href="#name-cmtype" class="internal xref"><code>cmtype</code></a></p>
 </li>
                       <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.4">
-                        <p id="section-toc.1-1.3.2.1.2.3.2.4.1"><a href="#section-3.1.3.4" class="auto internal xref">3.1.3.4</a>.  <a href="#name-cmtype" class="internal xref"><code>cmtype</code></a></p>
+                        <p id="section-toc.1-1.3.2.1.2.3.2.4.1"><a href="#section-3.1.3.4" class="auto internal xref">3.1.3.4</a>.  <a href="#name-profile" class="internal xref"><code>profile</code></a></p>
 </li>
                       <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.5">
-                        <p id="section-toc.1-1.3.2.1.2.3.2.5.1"><a href="#section-3.1.3.5" class="auto internal xref">3.1.3.5</a>.  <a href="#name-profile" class="internal xref"><code>profile</code></a></p>
+                        <p id="section-toc.1-1.3.2.1.2.3.2.5.1"><a href="#section-3.1.3.5" class="auto internal xref">3.1.3.5</a>.  <a href="#name-optional-id-block-as-refere" class="internal xref">Optional: ID block as reference value</a></p>
 </li>
                       <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1.2.3.2.6">
-                        <p id="section-toc.1-1.3.2.1.2.3.2.6.1"><a href="#section-3.1.3.6" class="auto internal xref">3.1.3.6</a>.  <a href="#name-optional-id-block-as-refere" class="internal xref">Optional: ID block as reference value</a></p>
+                        <p id="section-toc.1-1.3.2.1.2.3.2.6.1"><a href="#section-3.1.3.6" class="auto internal xref">3.1.3.6</a>.  <a href="#name-vek-certificate-attest-key-" class="internal xref">VEK Certificate <code>attest-key-triple-record</code></a></p>
 </li>
                     </ul>
 </li>
@@ -1309,20 +1309,24 @@ The different classes of attestation are<a href="#section-3.1.1-3" class="pilcro
               <p id="section-3.1.1-4.2.1">By CSP: The <code>environment-map / instance</code> is <code>560(CSP_ID)</code>.<a href="#section-3.1.1-4.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.1.1-5">The <code>class-id</code> for the Target Environment measured by the AMD-SP is a tagged UUID that corresponds to the attestation class:<a href="#section-3.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-5">The <code>CSP_ID</code> is only evident from the <code>VLEK</code> certificate, which uses the ASN.1 IA5String encoding.
+For the <code>tagged-bytes</code> representation, however, the <code>CSP_ID</code> SHALL be the UTF-8 encoding of the text string.<a href="#section-3.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-6">The <code>class-id</code> for the Target Environment measured by the AMD-SP is a tagged UUID that corresponds to the attestation class:<a href="#section-3.1.1-6" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1.1-6.1">
-              <p id="section-3.1.1-6.1.1">By chip: d05e6d1b-9f46-4ae2-a610-ce3e6ee7e153<a href="#section-3.1.1-6.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1.1-7.1">
+              <p id="section-3.1.1-7.1.1">By chip: d05e6d1b-9f46-4ae2-a610-ce3e6ee7e153<a href="#section-3.1.1-7.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-3.1.1-6.2">
-              <p id="section-3.1.1-6.2.1">By CSP: 89a7a1f0-e704-4faa-acbd-81c86df8a961<a href="#section-3.1.1-6.2.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-3.1.1-7.2">
+              <p id="section-3.1.1-7.2.1">By CSP: 89a7a1f0-e704-4faa-acbd-81c86df8a961<a href="#section-3.1.1-7.2.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-3.1.1-7">TODO: AMD to assign OIDs for the above classes, e.g., <code>#6.111(1.3.6.1.4.1.3704.2.1)</code> and <code>#6.111(1.3.6.1.4.1.3704.2.2)</code>.
-The rest of the <code>class-map</code> MUST remain empty, since <code>class</code> is compared for deterministic CBOR binary encoding equality.<a href="#section-3.1.1-7" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-8">The <code>group</code> is free for a CoRIM issuer to assign.<a href="#section-3.1.1-8" class="pilcrow">¶</a></p>
-<p id="section-3.1.1-9">If the <code>SIGNING_KEY</code> bit of the attestation report is 1 indicating VLEK use, then the <code>class-id</code> MUST NOT be by chip.<a href="#section-3.1.1-9" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-3.1.1-10">
+<p id="section-3.1.1-8">TODO: AMD to assign OIDs for the above classes, e.g., <code>#6.111(1.3.6.1.4.1.3704.2.1)</code> and <code>#6.111(1.3.6.1.4.1.3704.2.2)</code>.<a href="#section-3.1.1-8" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-9">The <code>&amp;(model: 2)</code> field of the <code>class-map</code> is specific to the product name of the chip as determined by the family/model (not stepping) value.
+The text for <code>model</code> MUST be the <code>product_name</code> specified in the <span>[<a href="#VCEK" class="cite xref">VCEK</a>]</span> specification, e.g., "Milan" or "Genoa".<a href="#section-3.1.1-9" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-10">The rest of the <code>class-map</code> MUST remain empty, since <code>class</code> is compared for deterministic CBOR binary encoding equality.<a href="#section-3.1.1-10" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-11">The <code>group</code> is free for a CoRIM issuer to assign.<a href="#section-3.1.1-11" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-12">If the <code>SIGNING_KEY</code> bit of the attestation report is 1 indicating VLEK use, then the <code>class-id</code> MUST NOT be by chip.<a href="#section-3.1.1-12" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.1-13">
 <pre>
 / environment-map / {
   / class-map / {
@@ -1330,7 +1334,7 @@ The rest of the <code>class-map</code> MUST remain empty, since <code>class</cod
   }
   / instance: / 1 =&gt; #6.560(REPORT_ID)
 }
-</pre><a href="#section-3.1.1-10" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.1-13" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1704,68 +1708,104 @@ The algorithm assignment is from <span>[<a href="#IANA.named-information" class=
 <p id="section-3.1.3.2-41">The <code>&amp;(svn: 1)</code> codepoint SHALL be set to <code>552(launch_tcb)</code> where <code>launch_tcb</code> is <code>LAUNCH_TCB</code> translated to a <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-41" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="authority">
-<section id="section-3.1.3.3">
-            <h5 id="name-authority">
-<a href="#section-3.1.3.3" class="section-number selfRef">3.1.3.3. </a><a href="#name-authority" class="section-name selfRef"><code>authority</code></a>
-            </h5>
-<p id="section-3.1.3.3-1">The <code>authority</code> SHALL be set to an array of the <code>tagged-pkix-asn1der-cert-type</code> forms of the VEK certificate for the <code>ATTESTATION_REPORT</code> signing key, the intermediate key, and the AMD root key for the product line.<a href="#section-3.1.3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.3-2">The Verifier MAY add additional encodings of these keys.<a href="#section-3.1.3.3-2" class="pilcrow">¶</a></p>
-</section>
-</div>
 <div id="cmtype">
-<section id="section-3.1.3.4">
+<section id="section-3.1.3.3">
             <h5 id="name-cmtype">
-<a href="#section-3.1.3.4" class="section-number selfRef">3.1.3.4. </a><a href="#name-cmtype" class="section-name selfRef"><code>cmtype</code></a>
+<a href="#section-3.1.3.3" class="section-number selfRef">3.1.3.3. </a><a href="#name-cmtype" class="section-name selfRef"><code>cmtype</code></a>
             </h5>
-<p id="section-3.1.3.4-1">The <code>cmtype</code> SHALL be <code>evidence: 2</code>.<a href="#section-3.1.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.3-1">The <code>cmtype</code> SHALL be <code>evidence: 2</code>.<a href="#section-3.1.3.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="profile">
-<section id="section-3.1.3.5">
+<section id="section-3.1.3.4">
             <h5 id="name-profile">
-<a href="#section-3.1.3.5" class="section-number selfRef">3.1.3.5. </a><a href="#name-profile" class="section-name selfRef"><code>profile</code></a>
+<a href="#section-3.1.3.4" class="section-number selfRef">3.1.3.4. </a><a href="#name-profile" class="section-name selfRef"><code>profile</code></a>
             </h5>
-<p id="section-3.1.3.5-1">The <code>profile</code> SHALL be set to this profile's identifier, <code>32("http://amd.com/please-permalink-me")</code><a href="#section-3.1.3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.4-1">The <code>profile</code> SHALL be set to this profile's identifier, <code>32("http://amd.com/please-permalink-me")</code><a href="#section-3.1.3.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="optional-id-block-as-reference-value">
-<section id="section-3.1.3.6">
+<section id="section-3.1.3.5">
             <h5 id="name-optional-id-block-as-refere">
-<a href="#section-3.1.3.6" class="section-number selfRef">3.1.3.6. </a><a href="#name-optional-id-block-as-refere" class="section-name selfRef">Optional: ID block as reference value</a>
+<a href="#section-3.1.3.5" class="section-number selfRef">3.1.3.5. </a><a href="#name-optional-id-block-as-refere" class="section-name selfRef">Optional: ID block as reference value</a>
             </h5>
-<p id="section-3.1.3.6-1">If an ID block is provided at VM launch, it is authenticated by an ID key.
+<p id="section-3.1.3.5-1">If an ID block is provided at VM launch, it is authenticated by an ID key.
 The ID block authentication is checked by the AMD-SP firmware.
 The firmware will only launch the VM if the authenticated policy matches.
 The firmware indicates that the authentication passed by populating fields of the attestation report to bind the evidence to the authentication key(s) <code>ID_KEY_DIGEST</code> and/or <code>AUTHOR_KEY_DIGEST</code>.
 The ID block authentication as reference value SHALL NOT be retained by the Verifier to apply to another appraisal session.
-The reference value qualification is meant to be considered valid only for the duration of the appraisal session.<a href="#section-3.1.3.6-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.6-2">The Verifier MAY allocate an <code>rv</code> for an addition ECT to represent the authentication at <code>SNP_LAUNCH_FINISH</code>.<a href="#section-3.1.3.6-2" class="pilcrow">¶</a></p>
+The reference value qualification is meant to be considered valid only for the duration of the appraisal session.<a href="#section-3.1.3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.5-2">The Verifier MAY allocate an <code>rv</code> for an addition ECT to represent the authentication at <code>SNP_LAUNCH_FINISH</code>.<a href="#section-3.1.3.5-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1.3.6-3.1">
-                <p id="section-3.1.3.6-3.1.1">The <code>environment</code> SHALL be equal to the <code>environment</code> of the evidence ECT.<a href="#section-3.1.3.6-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1.3.5-3.1">
+                <p id="section-3.1.3.5-3.1.1">The <code>environment</code> SHALL be equal to the <code>environment</code> of the evidence ECT.<a href="#section-3.1.3.5-3.1.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.6-3.2">
-                <p id="section-3.1.3.6-3.2.1">The <code>element-list</code> SHALL contain two <code>element-map</code> entries<a href="#section-3.1.3.6-3.2.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.5-3.2">
+                <p id="section-3.1.3.5-3.2.1">The <code>element-list</code> SHALL contain two <code>element-map</code> entries<a href="#section-3.1.3.5-3.2.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.1.3.6-3.2.2.1">
-                    <p id="section-3.1.3.6-3.2.2.1.1">The first <code>element-map</code> SHALL set <code>element-id</code> to 0 and the <code>element-claims</code> to a copy of the evidence claims for <code>element-id: 0</code>.<a href="#section-3.1.3.6-3.2.2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.1.3.5-3.2.2.1">
+                    <p id="section-3.1.3.5-3.2.2.1.1">The first <code>element-map</code> SHALL set <code>element-id</code> to 0 and the <code>element-claims</code> to a copy of the evidence claims for <code>element-id: 0</code>.<a href="#section-3.1.3.5-3.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-                  <li class="normal" id="section-3.1.3.6-3.2.2.2">
-                    <p id="section-3.1.3.6-3.2.2.2.1">The second <code>element-map</code> SHALL set <code>element-id</code> to 1 and the <code>element-claims</code> to a copy of the evidence claims for <code>element-id: 1</code>.<a href="#section-3.1.3.6-3.2.2.2.1" class="pilcrow">¶</a></p>
+                  <li class="normal" id="section-3.1.3.5-3.2.2.2">
+                    <p id="section-3.1.3.5-3.2.2.2.1">The second <code>element-map</code> SHALL set <code>element-id</code> to 1 and the <code>element-claims</code> to a copy of the evidence claims for <code>element-id: 1</code>.<a href="#section-3.1.3.5-3.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
                 </ul>
 </li>
-              <li class="normal" id="section-3.1.3.6-3.3">
-                <p id="section-3.1.3.6-3.3.1">The <code>authority</code> SHALL be an array containing <code>32780(ID_KEY_DIGEST)</code> and <code>32780(AUTHOR_KEY_DIGEST)</code> if nonzero. The Verifier MAY add more encodings of the same keys.<a href="#section-3.1.3.6-3.3.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.5-3.3">
+                <p id="section-3.1.3.5-3.3.1">The <code>authority</code> SHALL be an array containing <code>32780(ID_KEY_DIGEST)</code> and <code>32780(AUTHOR_KEY_DIGEST)</code> if nonzero. The Verifier MAY add more encodings of the same keys.<a href="#section-3.1.3.5-3.3.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.6-3.4">
-                <p id="section-3.1.3.6-3.4.1">The <code>cmtype</code> SHALL be set to <code>reference-values: 0</code><a href="#section-3.1.3.6-3.4.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.5-3.4">
+                <p id="section-3.1.3.5-3.4.1">The <code>cmtype</code> SHALL be set to <code>reference-values: 0</code><a href="#section-3.1.3.5-3.4.1" class="pilcrow">¶</a></p>
 </li>
-              <li class="normal" id="section-3.1.3.6-3.5">
-                <p id="section-3.1.3.6-3.5.1">The <code>profile</code> SHALL be set to this profile's identifier, <code>32("http://amd.com/please-permalink-me")</code>.<a href="#section-3.1.3.6-3.5.1" class="pilcrow">¶</a></p>
+              <li class="normal" id="section-3.1.3.5-3.5">
+                <p id="section-3.1.3.5-3.5.1">The <code>profile</code> SHALL be set to this profile's identifier, <code>32("http://amd.com/please-permalink-me")</code>.<a href="#section-3.1.3.5-3.5.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
+</section>
+</div>
+<div id="vek-certificate-attest-key-triple-record">
+<section id="section-3.1.3.6">
+            <h5 id="name-vek-certificate-attest-key-">
+<a href="#section-3.1.3.6" class="section-number selfRef">3.1.3.6. </a><a href="#name-vek-certificate-attest-key-" class="section-name selfRef">VEK Certificate <code>attest-key-triple-record</code></a>
+            </h5>
+<p id="section-3.1.3.6-1">Each VEK Certificate from AMD's Key Distribution Service (KDS) contains extensions that associate the key to its target environment.
+There is no condition on <code>REPORTED_TCB</code> to form this association, since the keys will only ever verify evidence that corresponds the the <code>REPORTED_TCB</code> they were derived from.<a href="#section-3.1.3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.6-2">To allow for certificates to be reissued, the keys associated to an environment use only the <code>SubjectPublicKeyInfo</code>.
+For consistent comparison, the <code>$crypto-key-type-choice</code> encoding is a #6.557-tagged SHA256 digest (<code>alg: 1</code>) of the ASN.1 encoding as defined in [RFC5280].
+Let <code>vcek_pk</code> represent the tagged key identifier of the <code>VCEK</code> public key.<a href="#section-3.1.3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.6-3">A <span>[<a href="#VCEK" class="cite xref">VCEK</a>]</span> certificate may be interpreted with <code>hwid</code> as the octet-string value from X.509 extension 1.3.6.1.4.1.3704.1.4 as<a href="#section-3.1.3.6-3" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.6-4">
+<pre>
+[ / environment-map / {
+    &amp;(class: 0): / class-map / {
+      &amp;(class-id: 0): 37(h'd05e6d1b9f464ae2a610ce3e6ee7e153'),
+      &amp;(model: 2): "Genoa"
+    },
+    &amp;(instance: 2): 560(hwid)
+  },
+  [ vcek_pk ]
+]
+</pre><a href="#section-3.1.3.6-4" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.3.6-5">Note: KDS may not encode the <code>hwid</code> with the octet string type tag <code>0x04</code> and length information (definite, short, 64) <code>0x40</code> of the x.509 extension value.
+If the length is 64 bytes, then that is the exact <code>hwid</code>.<a href="#section-3.1.3.6-5" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.6-6">Let <code>vlek_pk</code> be the encoded VLEK public key.
+A <span>[<a href="#VLEK" class="cite xref">VLEK</a>]</span> certificate SHALL be associated with an environment with a "by CSP" <code>class-id</code> and instance value as a <code>tagged-bytes</code> of the UTF-8 encoded <code>csp_id</code> string from X.509 extension 1.3.6.1.4.1.3704.1.5 as<a href="#section-3.1.3.6-6" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.6-7">
+<pre>
+[ / environment-map / {
+    &amp;(class: 0): / class-map / {
+      &amp;(class-id: 0): 37(h'89a7a1f0e7044faaacbd81c86df8a961'),
+      &amp;(model: 2): "Milan"
+    },
+    &amp;(instance: 2): 560(csp_id)
+  },
+  [ vlek_pk ]
+]
+</pre><a href="#section-3.1.3.6-7" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1.3.6-8">It is expected that the Verifier will require or admit a trust anchor that associates the AMD root key and AMD SEV key certificates for a <code>product_name</code> (from KDS endpoint <code>vcek/v1/{product_name}/cert_chain</code> or <code>vlek/v1/{product_name}/cert_chain</code>) with the appropriate environment class in order to validate the attestation key certificates.
+If using a CoTS <span>[<a href="#I-D.ietf-rats-concise-ta-stores" class="cite xref">I-D.ietf-rats-concise-ta-stores</a>]</span> tag for trust anchor specification, an appropriate <code>purpose</code> for verifying a VEK cerificate is <code>"eat"</code>.<a href="#section-3.1.3.6-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1941,6 +1981,10 @@ A header entry is valid if its Offset+Length is less than or equal to the size o
 <dt id="GHCB">[GHCB]</dt>
         <dd>
 <span class="refAuthor">Advanced Micro Devices Inc.</span>, <span class="refTitle">"SEV-ES Guest-Hypervisor Communication Block Standardization"</span>, <span class="seriesInfo">Revision 2.03 </span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56421.pdf">https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56421.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-rats-concise-ta-stores">[I-D.ietf-rats-concise-ta-stores]</dt>
+        <dd>
+<span class="refAuthor">Wallace, C.</span>, <span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Fossati, T.</span>, and <span class="refAuthor">Y. Deshpande</span>, <span class="refTitle">"Concise TA Stores (CoTS)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-concise-ta-stores-02</span>, <time datetime="2023-12-05" class="refDate">5 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-concise-ta-stores-02">https://datatracker.ietf.org/doc/html/draft-ietf-rats-concise-ta-stores-02</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SEV-SNP.API">[SEV-SNP.API]</dt>
         <dd>
