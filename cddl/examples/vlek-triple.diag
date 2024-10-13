@@ -1,0 +1,9 @@
+[ / environment-map / {
+    &(class: 0): / class-map / {
+      &(class-id: 0): 37(h'89a7a1f0e7044faaacbd81c86df8a961'),
+      &(model: 2): "Milan"
+    },
+    &(instance: 2): 560(csp_id)
+  },
+  [ vlek_pk ]
+]

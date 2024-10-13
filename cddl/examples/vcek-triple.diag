@@ -1,0 +1,9 @@
+[ / environment-map / {
+    &(class: 0): / class-map / {
+      &(class-id: 0): 37(h'd05e6d1b9f464ae2a610ce3e6ee7e153'),
+      &(model: 2): "Genoa"
+    },
+    &(instance: 2): 560(hwid)
+  },
+  [ vcek_pk ]
+]
