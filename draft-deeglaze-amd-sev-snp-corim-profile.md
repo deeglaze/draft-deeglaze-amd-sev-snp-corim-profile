@@ -78,6 +78,7 @@ informative:
     seriesinfo: Revision 0.10
     date: October 2023
     target: https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/user-guides/58369-010-versioned-loaded-endorsement-key-certificate-definition.pdf
+  I-D.ietf-rats-concise-ta-stores: ta-store
 
 entity:
   SELF: "RFCthis"
@@ -160,12 +161,19 @@ The different classes of attestation are
 *  By chip: The `environment-map / instance` is `560(CHIP_ID)`.
 *  By CSP: The `environment-map / instance` is `560(CSP_ID)`.
 
+The `CSP_ID` is only evident from the `VLEK` certificate, which uses the ASN.1 IA5String encoding.
+For the `tagged-bytes` representation, however, the `CSP_ID` SHALL be the UTF-8 encoding of the text string.
+
 The `class-id` for the Target Environment measured by the AMD-SP is a tagged UUID that corresponds to the attestation class:
 
 *  By chip: d05e6d1b-9f46-4ae2-a610-ce3e6ee7e153
 *  By CSP: 89a7a1f0-e704-4faa-acbd-81c86df8a961
 
 TODO: AMD to assign OIDs for the above classes, e.g., `#6.111(1.3.6.1.4.1.3704.2.1)` and `#6.111(1.3.6.1.4.1.3704.2.2)`.
+
+The `&(model: 2)` field of the `class-map` is specific to the product name of the chip as determined by the family/model (not stepping) value.
+The text for `model` MUST be the `product_name` specified in the [VCEK] specification, e.g., "Milan" or "Genoa".
+
 The rest of the `class-map` MUST remain empty, since `class` is compared for deterministic CBOR binary encoding equality.
 
 The `group` is free for a CoRIM issuer to assign.
@@ -448,13 +456,6 @@ The `&(svn: 1)` codepoint SHALL be set to `552(commited_tcb)` where `committed_t
 
 The `&(svn: 1)` codepoint SHALL be set to `552(launch_tcb)` where `launch_tcb` is `LAUNCH_TCB` translated to a `uint` from its little-endian representation.
 
-<!--#### `authority`
-
-The `authority` SHALL be set to an array of the `tagged-pkix-asn1der-cert-type` forms of the VEK certificate for the `ATTESTATION_REPORT` signing key, the intermediate key, and the AMD root key for the product line.
-
-The Verifier MAY add additional encodings of these keys.
--->
-
 #### `cmtype`
 
 The `cmtype` SHALL be `evidence: 2`.
@@ -484,24 +485,31 @@ The Verifier MAY allocate an `rv` for an addition ECT to represent the authentic
 
 #### VEK Certificate `attest-key-triple-record`
 
-Each VEK Certificate from AMD's Key Distribution Service contains extensions that bind the key to its target environment.
-There is no condition on `REPORTED_TCB` to form this binding, since the keys will only ever verify evidence that corresponds the the `REPORTED_TCB` they were derived from.
+Each VEK Certificate from AMD's Key Distribution Service (KDS) contains extensions that associate the key to its target environment.
+There is no condition on `REPORTED_TCB` to form this association, since the keys will only ever verify evidence that corresponds the the `REPORTED_TCB` they were derived from.
 
-To allow for certificates to be reissued, the keys bound to an environment use only the `SubjectPublicKeyInfo` either through a #6.554 tagged PEM encoding from [Section 13 of RFC7468] through a #6.557 tagged digest of the ASN.1 encoding as defined in [RFC7250].
+To allow for certificates to be reissued, the keys associated to an environment use only the `SubjectPublicKeyInfo`.
+For consistent comparison, the `$crypto-key-type-choice` encoding is a #6.557-tagged SHA256 digest (`alg: 1`) of the ASN.1 encoding as defined in [RFC5280].
+Let `vcek_pk` represent the tagged key identifier of the `VCEK` public key.
 
-Let `vcek_pk`, `ask_pk`, and `ark_pk` be the encoded keys in the certificate path.
 A [VCEK] certificate may be interpreted with `hwid` as the octet-string value from X.509 extension 1.3.6.1.4.1.3704.1.4 as
 
 ~~~ cbor-diag
 {::include cddl/examples/vcek-triple.diag}
 ~~~
 
-Let `vlek_pk`, `asvk_pk`, and `ark_pk` be the encoded keys in the certificate path.
-A [VLEK] certificate may be interpreted with `csp_id` as either the IA5String value encoding or UTF-8 encoding of the value from X.509 extension 1.3.6.1.4.1.3704.1.5 as
+Note: KDS may not encode the `hwid` with the octet string type tag `0x04` and length information (definite, short, 64) `0x40` of the x.509 extension value.
+If the length is 64 bytes, then that is the exact `hwid`.
+
+Let `vlek_pk` be the encoded VLEK public key.
+A [VLEK] certificate SHALL be associated with an environment with a "by CSP" `class-id` and instance value as a `tagged-bytes` of the UTF-8 encoded `csp_id` string from X.509 extension 1.3.6.1.4.1.3704.1.5 as
 
 ~~~ cbor-diag
 {::include cddl/examples/vlek-triple.diag}
 ~~~
+
+It is expected that the Verifier will require or admit a trust anchor that associates the AMD root key and AMD SEV key certificates for a `product_name` (from KDS endpoint `vcek/v1/{product_name}/cert_chain` or `vlek/v1/{product_name}/cert_chain`) with the appropriate environment class in order to validate the attestation key certificates.
+If using a CoTS {{-ta-store}} tag for trust anchor specification, an appropriate `purpose` for verifying a VEK cerificate is `"eat"`.
 
 # TCG considerations
 
