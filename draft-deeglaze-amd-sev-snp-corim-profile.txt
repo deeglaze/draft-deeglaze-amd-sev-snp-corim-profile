@@ -4,8 +4,8 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                         13 October 2024
-Expires: 16 April 2025
+Intended status: Standards Track                        12 November 2024
+Expires: 16 May 2025
 
 
             CoRIM profile for AMD SEV-SNP attestation report
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2025.
+   This Internet-Draft will expire on 16 May 2025.
 
 Copyright Notice
 
@@ -228,7 +228,7 @@ Table of Contents
      / class-map / {
        / class-id: / 0 => #6.111(1.3.6.1.4.1.3704.2.1)
      }
-     / instance: / 1 => #6.560(REPORT_ID)
+     / instance: / 1 => #6.560(CHIP_ID)
    }
 
 3.1.2.  AMD SEV-SNP Attestation Report measurements
@@ -802,9 +802,9 @@ Table of Contents
    [I-D.ietf-rats-corim]
               Birkholz, H., Fossati, T., Deshpande, Y., Smith, N., and
               W. Pan, "Concise Reference Integrity Manifest", Work in
-              Progress, Internet-Draft, draft-ietf-rats-corim-05, 8 July
-              2024, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              rats-corim-05>.
+              Progress, Internet-Draft, draft-ietf-rats-corim-06, 18
+              October 2024, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-rats-corim-06>.
 
    [IANA.cbor-tags]
               IANA, "Concise Binary Object Representation (CBOR) Tags",
