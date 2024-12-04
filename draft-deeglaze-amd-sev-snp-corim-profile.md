@@ -188,152 +188,97 @@ If the `SIGNING_KEY` bit of the attestation report is 1 indicating VLEK use, the
 
 The fields of an attestation report are named by `mkey` numbers that map to appropriate `measurement-values-map` values.
 This profile defines no new `measurement-values-map` extensions for the `$$measurement-values-map-extensions` socket.
-The only extensions are to `$$flags-map-extensions`.
-
-The VMPL field is a raw `0..3` value, so this profile extends the raw value type choice of the CoRIM base CDDL:
-
-~~~ cddl
-{::include cddl/sevsnpvm-vmpl-raw-value-ext.cddl}
-~~~
-
-#### AMD SEV-SNP `flags-map` extensions {#sec-flags-ext}
-
-The `POLICY` field and the `PLATFORM_INFO` field of the attestation report contain flags distinguished from the base CoRIM CDDL.
-
-The `POLICY` boolean flags are added as extensions to `$$flags-map-extension`, starting from codepoint -1.
-
-~~~ cddl
-{::include cddl/sevsnpvm-guest-policy-flags-ext.cddl}
-~~~
-
-The `sevsnpvm-policy-` flag extensions correspond to the ATTESTATION_REPORT `POLICY` bit positions with the following correspondence:
-
-*  `sevsnpvm-policy-smt-allowed` refers to bit 16 of `POLICY`.
-*  `sevsnpvm-policy-migration-agent-allowed` refers to bit 18 of `POLICY`.
-*  `sevsnpvm-policy-debug-allowed` refers to bit 19 of `POLICY`.
-*  `sevsnpvm-policy-single-socket-only` refers to bit 20 of `POLICY`.
-*  `sevsnpvm-policy-cxl-allowed` refers to bit 21 of `POLICY`.
-*  `sevsnpvm-policy-mem-aes-256-xts-required` refers to bit 22 of `POLICY`.
-*  `sevsnpvm-policy-rapl-must-be-disabled` refers to bit 23 of `POLICY`.
-*  `sevsnpvm-policy-ciphertext-hiding-must-be-enabled` refers to bit 24 of `POLICY`.
-*  Bit position `b` greater than `24` of `POLICY` corresponds to extension `16-b`.
-
-There are 47 available bits for selection when the mandatory 1 in position 17 and the ABI Major.Minor values are excluded from the 64-bit `POLICY`.
-The `PLATFORM_INFO` bits are host configuration that are added as extensions to `$$flags-map-extension` starting at `-49`.
-
-~~~ cddl
-{::include cddl/sevsnphost-platform-info-flags-ext.cddl}
-~~~
-
-The `sevsnphost-` flag extensions correspond to ATTESTATION_REPORT `PLATFORM_INFO` bit positions with the following correspondence:
-
-*  `sevsnphost-smt-enabled` refers to bit 0 of `PLATFORM_INFO`.
-*  `sevsnphost-tsme-enabled` refers to bit 1 of `PLATFORM_INFO`.
-*  `sevsnphost-ecc-mem-reported-enabled` refers to bit 2 of `PLATFORM_INFO`.
-*  `sevsnphost-rapl-disabled` refers to bit 3 of `PLATFORM_INFO`.
-*  `sevsnphost-ciphertext-hiding-enabled` refers to bit 4 of `PLATFORM_INFO`.
-*  Bit position `b` greater than `4` of `PLATFORM_INFO` corresponds to extension `-49-b`.
-
-The `sevsnpvm-policy-debug-allowed` flag is redundant with `flags-map / is-debug`, so either representation is valid.
-The entirety of the value space is reserved for AMD revisions to the SEV-SNP firmware and corresponding ATTESTATION_REPORT API.
+Flag-like values are delegated to the `raw-value` and `raw-value-mask` measurement values.
 
 #### AMD SEV-SNP measurements
 
-The measurements in an ATTESTATION_REPORT are grouped into 10 `mkey`s that can refer to one or more measured values.
+The measurements in an ATTESTATION_REPORT are each assigned an `mkey` value and the field value is translated to an appropriate `measurement-values-map` entry.
+The convention for `mkey` value assignment is to sequential ordering when there are no reserved bits.
+The `mkey` following a reserved bit is the bit position in the report of the start of the value.
+The `R[lo:hi]` notation will reference the attestation report byte slice from offset `lo` inclusive to `hi` exclusive.
+The `leuint(slice)` function translates a byte string in little endian to its `uint` representation.
 
-The `REPORT_DATA` is meant for protocol use and not reference measurements.
+**mkey 0**: VERSION.
+Expressed as `&(raw-value: 4): tagged-leuint32`.
 
-**mkey 0**: primary guest measurements
+**mkey 1**: GUEST_SVN.
+Expressed as `&(raw-value: 4): tagged-bytes4`.
 
-The `mval` `measurement-values-map` may contain values for `GUEST_SVN`, `MEASUREMENT`, `POLICY` flags, `FAMILY_ID` and/or `IMAGE_ID`.
+**mkey 2**: POLICY.
+Expressed as `&(raw-value: 4): tagged-bytes8` with optional `&(raw-value-mask: 5): tagged-bytes8` to restrict the reference value to the masked bits.
 
-*  The `GUEST_SVN` 32-bit unsigned integer may be given a reference value as an `svn-type` with a `tagged-svn` or `tagged-min-svn` encoding around a `uint32` in an `&(svn: 1): svn-type` entry.
-*  The `MEASUREMENT` 384-bit digest may be referenced with a `&(digest: 2): [[7, MEASUREMENT]]` entry.
-*  The `POLICY` flags may be referenced with a `&(flags: 3): flags-map` entry following the correspondence defined in {{sec-flags-ext}}
-*  The `IMAGE_ID` may be referenced with a
+**mkey 3**: FAMILY_ID.
+Expressed as `&(raw-value: 4): tagged-bytes16`.
 
-   ~~~ cbor-diag
-   &(version: 0): / version-map / {
-     &(version: 0): hex(IMAGE_ID)
-   }
-   ~~~
+**mkey 4**: IMAGE_ID.
+Expressed as `&(raw-value: 4): tagged-bytes16`.
 
-   where `hex(IMAGE_ID)` is the 128-bit identifier translated to a hexadecimal string.
-*  The `FAMILY_ID` may be referenced as `&(raw-value: 4): 560(FAMILY_ID)`.
+**mkey 5**: VMPL.
+Expressed as `&(raw-value: 4): tagged-leuint32`.
 
-**mkey 1**: The minimum ABI guest policy
+**SIGNATURE_ALGO skipped**: `R[0x034:0x38]` only needed for signature verification.
 
-The ATTESTATION_REPORT `POLICY`'s lower 16 bits `MAJOR_ABI` and `MINOR_ABI` is expressed as version with semantic versioning scheme that has patch version `0`.
+**mkey 6**: CURRENT_TCB.
+Expressed as `&(svn: 1): svn-type .and svn64-type`
 
-~~~ cbor-diag
-{::include cddl/examples/minabi.diag}
-~~~
+**mkey 7**: PLATFORM_INFO.
+Expressed as `&(raw-value: 4): tagged-bytes8` with optional `&(raw-value-mask: 5): tagged-bytes8` to restrict the reference value to the masked bits.
 
-The `MAJOR_ABI`, `MINOR_ABI` of the `POLICY` are not entirely redundant with Verifier policy evaluation against host's (mkey 8) `&(version: 0)` since the policy may relevant to key derivations.
+**AUTHOR_KEY_EN skipped**: AUTHOR_KEY_DIGEST will be present in evidence if and only if this bit is 1.
+**MASK_CHIP_KEY skipped**: CHIP_ID will be present in evidence if and only if this bit is 0.
+**SIGNING_KEY skipped**: The environment's class is determined by the attestation key kind.
 
-**mkey 2** The VMPL of the report.
+**mkey 640**: REPORT_DATA.
+Expressed as `&(raw-value: 4): tagged-bytes64`.
 
-The `VMPL` is expressed as a raw value that makes use of the extended `$raw-value-type-choice` to use a `uint`.
-To refer to `VMPL` 2, say
+**mkey 641**: MEASUREMENT.
+Expressed as `&(digests: 2): [[7, bytes48]]`.
 
-~~~ cbor-diag
-{::include cddl/examples/vmpl.diag}
-~~~
+**mkey 642: HOST_DATA.
+Expressed as `&(digests: 2): [[7, bytes48]]`.
 
-**mkey 3**: The REPORT_ID.
+**mkey 643**: ID_KEY_DIGEST.
+Expressed as `&(digests: 2): [[7, bytes48]]`.
 
-The `REPORT_ID` is expressed as a `&(raw-value: 4): tagged-bytes`.
+**mkey 644**: AUTHOR_KEY_DIGEST.
+Expressed as `&(digests: 2): [[7, bytes48]]`.
 
-**mkey 4**: The REPORT_ID_MA.
+**mkey 645**: REPORT_ID.
+Expressed as `&(raw-value: 4): tagged-bytes32`
 
-The `REPORT_ID_MA` is expressed as a `&(raw-value: 4): tagged-bytes`.
+**mkey 646**: REPORT_ID_MA.
+Expressed as `&(raw-value: 4): tagged-bytes32`
 
-**mkey 5**: The ID_KEY_DIGEST.
+**mkey 647**: REPORTED_TCB
+Expressed as `&(svn: 1): svn64-type`.
 
-The `ID_KEY_DIGEST` is expressed as a `&(raw-value: 4): tagged-bytes`.
+**mkey 648**: CPUID_FAM_ID.
+Expressed as `&(raw-value: 4): tagged-byte`.
 
-**mkey 6**: The AUTHOR_KEY_DIGEST.
+**mkey 649**: CPUID_MOD_ID.
+Expressed as `&(raw-value: 4): tagged-byte`.
 
-The `AUTHOR_KEY_DIGEST` is expressed as a `&(raw-value: 4): tagged-bytes`.
+**mkey 650**: CPUID_STEP.
+Expressed as `&(raw-value: 4): tagged-byte`.
 
-**mkey 7**: The REPORTED_TCB host measurement.
+**mkey 3328**: CHIP_ID.
+Expressed as `&(raw-value: 4): tagged-bytes64`.
 
-The `REPORTED_TCB` is interpreted as a little-endian 64-bit unsigned integer and expressed as an `&(svn: 1): svn-type .and svn64-type`, where
+**mkey 3329**: COMMITTED_TCB:
+Expressed as `&(svn: 1): svn64-type`.
 
-~~~ cddl
-{::include cddl/svn64-type.cddl}
-~~~
+**mkey 3330**: CurrentVersion.
+Expressed as `&(version: 0): semver-version-map`
 
-**mkey 8**: The current host measurements
+**mkey 3936**: CommittedVersion.
+Expressed as `&(version: 0): semver-version-map`
 
-The `CURRENT_MAJOR`, `CURRENT_MINOR`, and `CURRENT_BUILD` fields are expressed as a version with semantic version scheme.
-The version text is the three numbers in decimal form, separated by `'.'` (U+002E), in major, minor, build order.
+**mkey 3968**: LAUNCH_TCB.
+Expressed as `&(svn: 1): svn64-type`.
 
-The `HOSTDATA` field is expressed as a raw value. The `PLATFORM_INFO` are expressed with a `flags` measurement with the specified flag extensions. For example,
+### AMD SEV-SNP Evidence Translation to `reference-triple-record`
 
-~~~ cbor-diag
-{::include cddl/examples/host.diag}
-~~~
-
-* `0x9`: The COMMITTED host measurements for `COMMITTED_BUILD`, `CURRENT_MAJOR`, `CURRENT_MINOR`, and `COMMITTED_TCB`.
-
-The `COMMITTED_MAJOR`, `COMMITTED_MINOR`, and `COMMITTED_BUILD` fields are expressed as a version with semantic version scheme.
-The version text is the three numbers in decimal form, separated by `'.'` (U+002E), in major, minor, build order.
-
-The `COMMITTED_TCB` is interpreted as a little-endian 64-bit unsigned integer and expressed as an `&(svn: 1): svn-type .and svn64-type`.
-For example, suppose the committed TCB has microcode SVN 209, SNP firmware version 22, TEE version 0, and bootloader version 3
-
-~~~ cbor-diag
-{::include cddl/examples/committed.diag}
-~~~
-
-* `0xa`: The LAUNCH_TCB host measurement.
-
-The `LAUNCH_TCB` is interpreted as a little-endian 64-bit unsigned integer and expressed as an `&(svn: 1): svn-type .and svn64-type`.
-
-### AMD SEV-SNP Evidence Translation
-
-The `ATTESTATION_REPORT` Evidence is converted into a CoRIM internal representation ECT for the `ae` relation using the rules in this section.
+The `ATTESTATION_REPORT` Evidence is converted into a CoRIM internal representation given the canonical translation from a `reference-triple-record` as evidence conceptual message.
 
 #### `environment`
 
@@ -349,33 +294,16 @@ If `SIGNING_KEY` is 1
 *  The `environment-map / class / class-id` field SHALL be set to `37(h'89a7a1f0e7044faaacbd81c86df8a961')`.
 *  The `environment-map / instance ` field SHALL be `560(CSP_ID)`.
 
-#### `element-list`
-
-Different fields of the attestation report correspond to different `element-id`s that correspond to their `mkey` value of a CoMID.
-
+#### `measurement-map`
 The translation makes use of the following metafunctions:
 
-*  The function `hex(bstr)` represents the hexadecimal string encoding of a byte string.
 *  The function `dec(b)` represents a byte in its decimal string rendering.
 
 Juxtaposition of expressions with string literals is interpreted with string concatenation.
 
 Note: A value of `0` is not treated the same as unset given the semantics for matching `flags-map`.
 
-**element-id: 0**, the guest data `element-claims`
-
-The `&(version: 0)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(version: 0)` codepoint SHALL be set to
-
-~~~ cbor-diag
-/ version-map / {
-  / version: / 0: hex(IMAGE_ID)
-}
-~~~
-
-The `&(svn: 1)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(svn: 1)` codepoint SHALL be set to `552(leuint(GUEST_SVN))`.
-
-The `&(digests: 2)` codepoint SHALL be set to `[[7, MEASUREMENT]]`.
-The algorithm assignment is from {{-named-info}} for SHA384.
+**no mkey**:
 
 The `&(flags: 3)` codepoint SHALL be set to a `flags-map` with the following construction:
 
@@ -383,47 +311,82 @@ The `&(flags: 3)` codepoint SHALL be set to a `flags-map` with the following con
 *  `is-integrity-protected` MAY be set to true.
 *  `is-replay-protected` MAY be set to true.
 *  `is-debug` SHALL be set to the truth value of bit 19 of `POLICY`.
-*  The extensions for `POLICY` are assigned their truth values following the correspondence in {{sec-flags-ext}}.
 
-The `$(raw-value: 4)` codepoint MAY be unset if the report does not contain ID block data, otherwise the `&(raw-value: 4)` codepoint SHALL be set to `560(FAMILY_ID)`.
+**mkey 0**: VERSION.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x000:0x004])`.
 
-**element-id: 1**, guest policy minimum firmware `element-claims`
+**mkey 1**: GUEST_SVN.
+4 bytes.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x004:0x008])`.
 
-The `&(version: 0)` SHALL be set to
+**mkey 2**: POLICY.
+8 bytes.
+The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x008:0x010])` with optional `&(raw-value-mask: 5): tagged-bytes` to restrict the reference value to the masked bits.
 
-~~~ cbor-diag
-/ version-map / {
-  / version: /: dec(POLICY[15:8]) '.' dec(POLICY[7:0]) '.0'
-  / version-scheme: / 16384
-}
-~~~
+**mkey 3**: FAMILY_ID.
+16 bytes.
+The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x010:0x020])`.
 
-**element-id: 2**, the report privilege level `element-claims`
+**mkey 4**: IMAGE_ID.
+16 bytes.
+The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x020:0x030])`.
 
-The `&(raw-value: 5)` codepoint SHALL be set to `VMPL` as a `uint`.
+**mkey 5**: VMPL.
+4 bytes.
+The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x030:0x034])`.
 
-**element-id: 3**, the per-launch `REPORT_ID` `element-claims`
+**SIGNATURE_ALGO skipped**: `R[0x034:0x38]` only needed for signature verification.
 
-The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID)`.
+**mkey 6**: CURRENT_TCB.
+The codepoint `&(svn: 1)` SHALL be set to `552(current_tcb)` where `current_tcb` is `R[0x038:0x40]` translated to `uint` from its little-endian representation.
 
-**element-id: 4**, the migration agent–assigned `REPORT_ID_MA` `element-claims`
+**mkey 7**: PLATFORM_INFO.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x040:0x048])`.
 
-The `&(raw-value: 5)` codepoint SHALL be set to `560(REPORT_ID_MA)` if nonzero.
+**AUTHOR_KEY_EN skipped**: AUTHOR_KEY_DIGEST will be present in evidence if and only if this bit is 1.
+**MASK_CHIP_KEY skipped**: CHIP_ID will be present in evidence if and only if this bit is 0.
+**SIGNING_KEY skipped**: The environment's class is determined by the attestation key kind.
 
-**element-id: 5**, the ID block–signing key digest `ID_KEY_DIGEST` `element-claims`
+**mkey 640**: REPORT_DATA.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x050:0x090])`.
 
-The `&(raw-value: 5)` codepoint SHALL be set to `560(ID_KEY_DIGEST)` if nonzero.
+**mkey 641**: MEASUREMENT.
+The codepoint `&(digests: 2)` SHALL be set to `[[7, R[0x090:0x0C0]]]`.
 
-**element-id: 6**, the ID block–signing key's certifying key digest `AUTHOR_KEY_DIGEST` `element-claims`
+**mkey 642: HOST_DATA.
+The codepoint `&(digests: 2)` SHALL be set to `[[7, R[0x0C0:0x0E0]]]`.
 
-The `&(raw-value: 5)` codepoint SHALL be set to `560(AUTHOR_KEY_DIGEST)` if nonzero.
+**mkey 643**: ID_KEY_DIGEST.
+The codepoint `&(digests: 2): [[7, R[0x0E0:0x110]]]` SHALL be set.
 
-**element-id: 7**, the REPORTED_TCB `element-claims`
+**mkey 644**: AUTHOR_KEY_DIGEST.
+The codepoint `&(digests: 2)` SHALL be set to `[[7, R[0x110:0x140]]]` only if AUTHOR_KEY_EN (`R[0x048] & 1`) is 1.
 
-The `&(svn: 1)` codepoint SHALL be set to `552(reported_tcb)` where `reported_tcb` is `REPORTED_TCB` translated to `uint` from its little-endian representation.
+**mkey 645**: REPORT_ID.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x140:0x160])`
 
-**element-id: 8**, the current host info `element-claims`
+**mkey 646**: REPORT_ID_MA.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x160:0x180])` only if non-zero.
 
+**mkey 647**: REPORTED_TCB
+The codepoint `&(svn: 1)` SHALL be set to `552(reported_tcb)` where `reported_tcb` is `REPORTED_TCB` (`R[0x180:0x188]`) translated to `uint` from its little-endian representation.
+
+**mkey 648**: CPUID_FAM_ID.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x188:0x189])` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
+
+**mkey 649**: CPUID_MOD_ID.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x189:0x18A])` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
+
+**mkey 650**: CPUID_STEP.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x18A:0x18B])` only if VERSION (little endian `R[0x000:0x004]`)is at least 3.
+
+**mkey 3328**: CHIP_ID.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x1A0:0x1E0])` only if MASK_CHIP_KEY (`R[0x048] & 2`) is 0.
+
+**mkey 3329**: COMMITTED_TCB.
+The codepoint `&(svn: 1)` SHALL be set to `552(committed_tcb)` where `committed_tcb` is `REPORTED_TCB` (`R[0x1E0:0x1E8]`) translated to `uint` from its little-endian representation.
+
+**mkey 3330**: CurrentVersion.
 The `&(version: 0)` codepoint SHALL be set to
 
 ~~~ cbor-diag
@@ -432,14 +395,9 @@ The `&(version: 0)` codepoint SHALL be set to
   / version-scheme: / 1: 16384
 }
 ~~~
-The version string `vstr` is constructed as `dec(CURRENT_MAJOR) '.' dec(CURRENT_MINOR) '.' dec(CURRENT_BUILD)`.
+The version string `vstr` is constructed as `dec(R[0x1EA]) '.' dec(R[0x1E9]) '.' dec(R[0x1E8])`.
 
-The `&(flags: 3) / flags-map` extensions for `PLATFORM_INFO` SHALL be assign their truth values following the correspondence is {{sec-flags-ext}}.
-
-The `&(raw-value: 5)` codepoint SHALL be set to `560(HOSTDATA)` and MAY be omitted if all zeros.
-
-**element-id: 9**, the committed host info `element-claims`
-
+**mkey 3936**: CommittedVersion.
 The `&(version: 0)` codepoint SHALL be set to
 
 ~~~ cbor-diag
@@ -448,21 +406,15 @@ The `&(version: 0)` codepoint SHALL be set to
   / version-scheme: / 1: 16384
 }
 ~~~
-The version string `vstr` is constructed as `dec(COMMITTED_MAJOR) '.' dec(COMMITTED_MINOR) '.' dec(COMMITTED_BUILD)`.
+The version string `vstr` is constructed as `dec(R[0x1EE]) '.' dec(R[0x1ED]) '.' dec(R[0x1EC])`.
 
-The `&(svn: 1)` codepoint SHALL be set to `552(commited_tcb)` where `committed_tcb` is `COMMITTED_TCB` translated to a `uint` from its little-endian representation.
-
-**element-id: 10**, the TCB at launch `element-claims`
-
-The `&(svn: 1)` codepoint SHALL be set to `552(launch_tcb)` where `launch_tcb` is `LAUNCH_TCB` translated to a `uint` from its little-endian representation.
+**mkey 3968**: LAUNCH_TCB.
+The codepoint `&(svn: 1)` SHALL be set to `552(launch_tcb)` where `launch_tcb` is `LAUNCH_TCB` (`R[0x1F0:0x1F8]`) translated to `uint` from its little-endian representation.
 
 #### `cmtype`
 
 The `cmtype` SHALL be `evidence: 2`.
 
-#### `profile`
-
-The `profile` SHALL be set to this profile's identifier, `32("http://amd.com/please-permalink-me")`
 
 #### Optional: ID block as reference value
 
@@ -481,7 +433,6 @@ The Verifier MAY allocate an `rv` for an addition ECT to represent the authentic
   + The second `element-map` SHALL set `element-id` to 1 and the `element-claims` to a copy of the evidence claims for `element-id: 1`.
 * The `authority` SHALL be an array containing `32780(ID_KEY_DIGEST)` and `32780(AUTHOR_KEY_DIGEST)` if nonzero. The Verifier MAY add more encodings of the same keys.
 * The `cmtype` SHALL be set to `reference-values: 0`
-* The `profile` SHALL be set to this profile's identifier, `32("http://amd.com/please-permalink-me")`.
 
 #### VEK Certificate `attest-key-triple-record`
 
@@ -529,14 +480,14 @@ IANA is requested to allocate the following tags in the "CBOR Tags" registry {{!
 
 ## New media types
 
-### `application/vnd.amd.sev.snp.attestation-report`
+### `application/vnd.amd.sev-snp.attestation-report`
 
-An octet-stream that is expected to be interpreted as an AMD SEV-SNP ATTESTATION_REPORT.
+A byte string that is expected to be interpreted as an AMD SEV-SNP ATTESTATION_REPORT.
 
 ### `application/vnd.amd.ghcb.guid-table`
 
-An octet-stream that follows the {{GHCB}}'s GUID table ABI, which is the same as the [SVSM] service manifest ABI, recounted here.
-A GUID table is a header followed by an octet-stream body.
+An byte string that follows the {{GHCB}}'s GUID table ABI, which is the same as the [SVSM] service manifest ABI, recounted here.
+A GUID table is a header followed by an byte string body.
 The header is a sequence of entries described in {{guid_table_entry}} terminated by an all zero entry.
 After the all zero entry are the bytes that the header entries index into.
 
@@ -547,10 +498,15 @@ After the all zero entry are the bytes that the header entries index into.
 | `LE_UINT32` | Length | A byte length of the span |
 {: #guid_table_entry title="guid_table_entry type description"}
 
-An `LE_UINT32` is a 4 byte octet-stream that represents a nonnegative integer in little-endian order.
+An `LE_UINT32` is a 4 byte byte string that represents a nonnegative integer in little-endian order.
 
-Note that an offset is from the start of the octet-stream, and not from the start of the octets following the zero entry of the header.
+Note that an offset is from the start of the byte string, and not from the start of the octets following the zero entry of the header.
 A header entry is valid if its Offset+Length is less than or equal to the size of the entire GUID table.
+
+## New CoAP Content-Formats entries
+
+The content types application/vnd.amd.sev-snp.attestation-report` and `application/vnd.amd.ghcb.guid-table` need Content-Formats IDs to be used in the EAT `measurements` claim.
+Requesting 10572 and 10573 respectively.
 
 --- back
 
