@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-03T01:48:45.151841+00:00",
+  "timestamp": "2024-12-05T01:49:06.252421+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -275,5 +275,40 @@
       "comments": []
     }
   ],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 12,
+      "id": "PR_kwDOMdG_Uc6EFWBo",
+      "title": "Ungroup measurements in mkeys",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/pull/12",
+      "state": "OPEN",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This also changes the mkey numbering convention to be more future-proof to allow for any bit-specific fields to have their own mkey.\r\n\r\nWhat still could be better is to request standard extensions to the flags-map to individually name GUEST_POLICY and PLATFORM_INFO flags, but I leave that to a later PR.",
+      "createdAt": "2024-12-04T18:49:57Z",
+      "updatedAt": "2024-12-04T21:38:59Z",
+      "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "baseRefName": "main",
+      "baseRefOid": "fbd8766c2dbfa6229f9dcc4e9ba828d9077d9972",
+      "headRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "headRefName": "ungroup",
+      "headRefOid": "4ed9fa44f9bae527ce4c18b33366ea4ac221226f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "cc @amd-isaac for today's discussion",
+          "createdAt": "2024-12-04T21:38:58Z",
+          "updatedAt": "2024-12-04T21:38:58Z"
+        }
+      ],
+      "reviews": []
+    }
+  ]
 }
