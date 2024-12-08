@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-05T01:49:06.252421+00:00",
+  "timestamp": "2024-12-08T01:55:37.503322+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -73,7 +73,7 @@
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/2",
       "state": "CLOSED",
       "author": "jraman567",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "> If page2m is set and content is present, it must not exceed size 0x100000B\r\n\r\nDid you mean 0x200000B? CMDBUF_SNP_LAUNCH_UPDATE.PAGE_SIZE says PAGE_SIZE can be 4 KB or 2 MB.",
@@ -97,7 +97,7 @@
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/3",
       "state": "CLOSED",
       "author": "jraman567",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "> The content is appended with zeros to reach the expected size.\r\n\r\nFrom your description, \"contents\" would be the un-digested contents. Is there a reason for this?\r\n\r\nWe can use the SHA-384 digest of the contents here unless you see a problem.",
@@ -121,7 +121,7 @@
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/4",
       "state": "CLOSED",
       "author": "jraman567",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "> Since the VMM only has to provide the page type and digest of the contents, the rest of the fields of a sevsnp-launch-update-data-map have default values when translated to a PAGE_INFO without the DIGEST_CUR field.\r\n\r\nWe must also know the page's GPA to compute the measurement.",
@@ -145,7 +145,7 @@
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/5",
       "state": "CLOSED",
       "author": "jraman567",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "> $$measurement-values-map-extension //= (\r\n>   &(sevsnphost-launch-tcb: -8) => svn-type-choice\r\n> )\r\n\r\nIt should be &(sevsnphost-reported-tcb: -9) => svn-type-choice",
@@ -288,7 +288,7 @@
       "labels": [],
       "body": "This also changes the mkey numbering convention to be more future-proof to allow for any bit-specific fields to have their own mkey.\r\n\r\nWhat still could be better is to request standard extensions to the flags-map to individually name GUEST_POLICY and PLATFORM_INFO flags, but I leave that to a later PR.",
       "createdAt": "2024-12-04T18:49:57Z",
-      "updatedAt": "2024-12-04T21:38:59Z",
+      "updatedAt": "2024-12-06T04:28:04Z",
       "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
       "baseRefName": "main",
       "baseRefOid": "fbd8766c2dbfa6229f9dcc4e9ba828d9077d9972",
@@ -306,6 +306,20 @@
           "body": "cc @amd-isaac for today's discussion",
           "createdAt": "2024-12-04T21:38:58Z",
           "updatedAt": "2024-12-04T21:38:58Z"
+        },
+        {
+          "author": "jraman567",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi @deeglaze , I'll take a look at this today and get back to you.",
+          "createdAt": "2024-12-05T14:57:22Z",
+          "updatedAt": "2024-12-05T14:57:22Z"
+        },
+        {
+          "author": "jraman567",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@deeglaze Thanks for updating the spec! \ud83d\udc4d \r\n\r\nI did a first pass of the review today. I'll take a look at it tomorrow and finish the review. Cheers. ",
+          "createdAt": "2024-12-06T04:28:03Z",
+          "updatedAt": "2024-12-06T04:28:03Z"
         }
       ],
       "reviews": []
