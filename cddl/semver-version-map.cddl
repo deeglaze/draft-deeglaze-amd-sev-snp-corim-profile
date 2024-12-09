@@ -1,0 +1,5 @@
+semver-version-map = {
+  &(version: 0): version-core-text,
+  &(version-scheme: 1): &(semver: 16384)
+}
+version-core-text = tstr .regexp "[0-9]+\\.[0-9]+\\.[0-9]+"
