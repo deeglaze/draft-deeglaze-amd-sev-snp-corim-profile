@@ -7,6 +7,12 @@ digest = [
 
 non-empty<M> = (M) .and ({ + any => any })
 
+semver-version-map = {
+  &(version: 0): version-core-text,
+  &(version-scheme: 1): &(semver: 16384)
+}
+version-core-text = tstr .regexp "[0-9]+\\.[0-9]+\\.[0-9]+"
+
 $$flags-map-extension //= &(
   sevsnpvm-policy-smt-allowed: -1,
   sevsnpvm-policy-migration-agent-allowed: -2,
@@ -32,12 +38,33 @@ $$flags-map-extension //= &(
   sevsnphost-reserved: -112..-49
 )
 
+tagged-byte = #6.560(bytes1)
+tagged-leuint32 = #6.560(bytes4)
+tagged-leuint64 = #6.560(bytes8)
+tagged-bytes4   = #6.560(bytes4)
+tagged-bytes8   = #6.560(bytes8)
+tagged-bytes32  = #6.560(bytes16)
+tagged-bytes32  = #6.560(bytes32)
+tagged-bytes64  = #6.560(bytes64)
+bytes1  = bytes .size 1
+bytes2  = bytes .size 2
+bytes4  = bytes .size 4
+bytes8  = bytes .size 8
+bytes16 = bytes .size 16
+bytes32 = bytes .size 32
+bytes48 = bytes .size 48
+bytes64 = bytes .size 64
+
 svn-type = uint
 svn = svn-type
 min-svn = svn-type
 tagged-svn = #6.552(svn)
 tagged-min-svn = #6.553(min-svn)
 svn-type-choice = tagged-svn / tagged-min-svn
+
+svn64-type = tagged-svn64 / tagged-min-svn64
+tagged-svn64 = #6.552(uint64)
+tagged-min-svn64 = #6.553(uint64)
 
 uint16 = 0..65535
 

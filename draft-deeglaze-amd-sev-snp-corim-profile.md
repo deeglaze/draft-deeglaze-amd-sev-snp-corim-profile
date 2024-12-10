@@ -164,12 +164,10 @@ The different classes of attestation are
 The `CSP_ID` is only evident from the `VLEK` certificate, which uses the ASN.1 IA5String encoding.
 For the `tagged-bytes` representation, however, the `CSP_ID` SHALL be the UTF-8 encoding of the text string.
 
-The `class-id` for the Target Environment measured by the AMD-SP is a tagged UUID that corresponds to the attestation class:
+The `class-id` for the Target Environment measured by the AMD-SP is a tagged OID that corresponds to the attestation class:
 
-*  By chip: d05e6d1b-9f46-4ae2-a610-ce3e6ee7e153
-*  By CSP: 89a7a1f0-e704-4faa-acbd-81c86df8a961
-
-TODO: AMD to assign OIDs for the above classes, e.g., `#6.111(1.3.6.1.4.1.3704.2.1)` and `#6.111(1.3.6.1.4.1.3704.2.2)`.
+*  By chip: 1.3.6.1.4.1.3704.3.1 (`111(h'06092b060104019c780301')`)
+*  By CSP: 1.3.6.1.4.1.3704.3.2 (`111(h'06092b060104019c780302')`)
 
 The `&(model: 2)` field of the `class-map` is specific to the product name of the chip as determined by the family/model (not stepping) value.
 The text for `model` MUST be the `product_name` specified in the [VCEK] specification, e.g., "Milan" or "Genoa".
