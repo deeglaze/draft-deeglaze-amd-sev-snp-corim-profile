@@ -33,6 +33,11 @@ contributor:
   email: yogesh.deshpande@arm.com
   contribution: >
       Yogesh Deshpande contributed to the data model by providing advice about CoRIM founding principles.
+- ins: B. Jacobs
+  name: Bill Jacobs
+  organization: Advanced Micro Devices
+  contribution: >
+      Bill contributed a review and the OID assignments on behalf of AMD.
 
 normative:
   RFC4122:
@@ -459,11 +464,6 @@ A [VLEK] certificate SHALL be associated with an environment with a "by CSP" `cl
 
 It is expected that the Verifier will require or admit a trust anchor that associates the AMD root key and AMD SEV key certificates for a `product_name` (from KDS endpoint `vcek/v1/{product_name}/cert_chain` or `vlek/v1/{product_name}/cert_chain`) with the appropriate environment class in order to validate the attestation key certificates.
 If using a CoTS {{-ta-store}} tag for trust anchor specification, an appropriate `purpose` for verifying a VEK cerificate is `"eat"`.
-
-# TCG considerations
-
-The Trusted Computing Group has standardized the PCClient Platform Firmware Profile to specify expected TPM event log processing.
-Since AMD SEV-SNP launch measurements are of virtual firmware, they can supplement the `EV_POST_CODE2` event measured into PCR0 for the `EV_EFI_PLATFORM_FIRMWARE_BLOB2` since the bits of the firmware are more specific than embedded firmware version strings.
 
 # IANA Considerations
 
