@@ -436,7 +436,7 @@ The Verifier MAY allocate an `rv` for an addition ECT to represent the authentic
 * The `element-list` SHALL contain two `element-map` entries
   + The first `element-map` SHALL set `element-id` to 0 and the `element-claims` to a copy of the evidence claims for `element-id: 0`.
   + The second `element-map` SHALL set `element-id` to 1 and the `element-claims` to a copy of the evidence claims for `element-id: 1`.
-* The `authority` SHALL be an array containing `32780(ID_KEY_DIGEST)` and `32780(AUTHOR_KEY_DIGEST)` if nonzero. The Verifier MAY add more encodings of the same keys.
+* The `authority` SHALL be an array containing `#6.TBD(ID_KEY_DIGEST)` and `#6.TBD(AUTHOR_KEY_DIGEST)` if nonzero. The Verifier MAY add more encodings of the same keys.
 * The `cmtype` SHALL be set to `reference-values: 0`
 
 #### VEK Certificate `attest-key-triple-record`
