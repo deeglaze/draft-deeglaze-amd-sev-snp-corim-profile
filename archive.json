@@ -1,0 +1,83 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-12-10T23:12:12.672866+00:00",
+  "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDONbyav86ExMgk",
+      "title": "Fix class-id in transformation.",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/pull/1",
+      "state": "MERGED",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-12-10T21:55:44Z",
+      "updatedAt": "2024-12-10T21:55:52Z",
+      "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "baseRefName": "main",
+      "baseRefOid": "3572238b1d4f1d0a69df47854350cad46cfbe03e",
+      "headRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "headRefName": "rmmodel",
+      "headRefOid": "facf7cd403e1ae01961fba7e7250e843ab7fee5c",
+      "closedAt": "2024-12-10T21:55:50Z",
+      "mergedAt": "2024-12-10T21:55:50Z",
+      "mergedBy": "deeglaze",
+      "mergeCommit": {
+        "oid": "4ab3f4451341b1491675756ae113e3d2c27935a0"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
