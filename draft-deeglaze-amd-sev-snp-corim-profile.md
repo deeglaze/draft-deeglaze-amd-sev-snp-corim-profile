@@ -287,14 +287,14 @@ The `ATTESTATION_REPORT` Evidence is converted into a CoRIM internal representat
 
 If `SIGNING_KEY` is 0
 
-*  The `environment-map / class / class-id` field SHALL be set to `37(h'd05e6d1b9f464ae2a610ce3e6ee7e153')`.
+*  The `environment-map / class / class-id` field SHALL be set to `111(h'06092b060104019c780301')`.
 *  The `environment-map / instance ` field
    - MAY be `560(CHIP_ID)` only if `MASK_CHIP_KEY` is 0, or
    - MAY be `560(hwid)` where `hwid` is from the VCEK certificate extension value of `1.3.6.1.4.1.3704.1.4`.
 
 If `SIGNING_KEY` is 1
 
-*  The `environment-map / class / class-id` field SHALL be set to `37(h'89a7a1f0e7044faaacbd81c86df8a961')`.
+*  The `environment-map / class / class-id` field SHALL be set to `111(h'06092b060104019c780302')`.
 *  The `environment-map / instance ` field SHALL be `560(CSP_ID)`.
 
 The Verifier is free add a `group` according to vendor-defined rules.
