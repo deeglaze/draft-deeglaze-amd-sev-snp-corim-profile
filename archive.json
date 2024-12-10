@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-08T01:55:37.503322+00:00",
+  "timestamp": "2024-12-10T01:50:28.151269+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -231,32 +231,48 @@
       "id": "I_kwDOMdG_Uc6ZLZeJ",
       "title": "Use `tag` for the profile URI",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thomas-fossati",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I suggest using the `tag` scheme for the profile identifier. We started with `http` too, but then moved to `tag` to avoid the URL being de-referenced. E.g.: `tag:amd.com,2024:please-permalink-me`\r\n\r\nAn alternative is to use `urn` which, in case you plan to move the document to RFC, would (one day) give you the fancy and compact `urn:ietf:rfc:rfcXYZ`. The problem with this is that until the document gets ratified you can't know what the value is ;-)\r\n\r\nSo, in general, `tag` looks safer and more usable than the alternatives.",
       "createdAt": "2024-10-07T09:41:46Z",
-      "updatedAt": "2024-10-07T09:41:46Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-09T20:17:14Z",
+      "closedAt": "2024-12-09T20:17:14Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Removed the profile entirely since there are no extensions.",
+          "createdAt": "2024-12-09T20:17:14Z",
+          "updatedAt": "2024-12-09T20:17:14Z"
+        }
+      ]
     },
     {
       "number": 10,
       "id": "I_kwDOMdG_Uc6ZLjOc",
       "title": "Raw value type is extended too",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "thomas-fossati",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "S3.1.2:\r\n\r\n> _\"The only extensions are to $$flags-map-extensions.\"_\r\n\r\nbut `$raw-value-type-choice` is also extended.",
       "createdAt": "2024-10-07T09:57:19Z",
-      "updatedAt": "2024-10-07T09:57:19Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-09T20:16:48Z",
+      "closedAt": "2024-12-09T20:16:48Z",
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "I've removed the extensions. I'd like this environment and measurement labeling to not need a profile. If we assign some flags-map-extensions ranges to AMD to assign for their technologies, then I might consider using flags again. But we don't have an IANA registry yet. ",
+          "createdAt": "2024-12-09T20:16:46Z",
+          "updatedAt": "2024-12-09T20:16:46Z"
+        }
+      ]
     },
     {
       "number": 11,
@@ -281,24 +297,26 @@
       "id": "PR_kwDOMdG_Uc6EFWBo",
       "title": "Ungroup measurements in mkeys",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/pull/12",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "deeglaze",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "This also changes the mkey numbering convention to be more future-proof to allow for any bit-specific fields to have their own mkey.\r\n\r\nWhat still could be better is to request standard extensions to the flags-map to individually name GUEST_POLICY and PLATFORM_INFO flags, but I leave that to a later PR.",
       "createdAt": "2024-12-04T18:49:57Z",
-      "updatedAt": "2024-12-06T04:28:04Z",
+      "updatedAt": "2024-12-09T20:14:06Z",
       "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
       "baseRefName": "main",
       "baseRefOid": "fbd8766c2dbfa6229f9dcc4e9ba828d9077d9972",
       "headRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
       "headRefName": "ungroup",
       "headRefOid": "4ed9fa44f9bae527ce4c18b33366ea4ac221226f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-12-09T20:14:03Z",
+      "mergedAt": "2024-12-09T20:14:03Z",
+      "mergedBy": "deeglaze",
+      "mergeCommit": {
+        "oid": "4c97bb1773fed8c1c4456987e54d49ddadf8283e"
+      },
       "comments": [
         {
           "author": "deeglaze",
@@ -320,6 +338,20 @@
           "body": "@deeglaze Thanks for updating the spec! \ud83d\udc4d \r\n\r\nI did a first pass of the review today. I'll take a look at it tomorrow and finish the review. Cheers. ",
           "createdAt": "2024-12-06T04:28:03Z",
           "updatedAt": "2024-12-06T04:28:03Z"
+        },
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "@jraman567 good to merge?",
+          "createdAt": "2024-12-09T19:46:05Z",
+          "updatedAt": "2024-12-09T19:46:05Z"
+        },
+        {
+          "author": "jraman567",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@deeglaze It looks good to me. Thank you so much!",
+          "createdAt": "2024-12-09T19:57:14Z",
+          "updatedAt": "2024-12-09T19:57:14Z"
         }
       ],
       "reviews": []
