@@ -1,6 +1,6 @@
 / corim-map / {
   / corim.profile / 3: [
-    32("http://amd.com/please-permalink-me")
+    32("tag:amd.com,2024/snp-corim-profile")
   ]
   / ... /
 }

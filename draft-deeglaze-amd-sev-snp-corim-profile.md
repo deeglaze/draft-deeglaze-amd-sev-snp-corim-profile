@@ -144,7 +144,8 @@ VEK:
 
 AMD SEV-SNP launch endorsements are carried in one or more CoMIDs inside a CoRIM.
 
-The profile attribute in the CoRIM MUST be present and MUST have a single entry set to the URI http://amd.com/please-permalink-me as shown in {{figure-profile}}.
+The profile attribute in the CoRIM MAY be present to specify a further restriction on this profile.
+The base requirements of this profile MAY be specified by `tag:amd.com,2024:snp-corim-profile` {{figure-profile}}.
 
 ~~~ cbor-diag
 {::include cddl/examples/profile.diag}
@@ -174,8 +175,7 @@ The `class-id` for the Target Environment measured by the AMD-SP is a tagged OID
 *  By chip: 1.3.6.1.4.1.3704.3.1 (`111(h'06092b060104019c780301')`)
 *  By CSP: 1.3.6.1.4.1.3704.3.2 (`111(h'06092b060104019c780302')`)
 
-The `&(model: 2)` field of the `class-map` is specific to the product name of the chip as determined by the family/model (not stepping) value.
-The text for `model` MUST be the `product_name` specified in the [VCEK] specification, e.g., "Milan" or "Genoa".
+The `model` field MUST NOT be present in the `environment-map`, as it is error-prone to determine for VERSION 2, and redundant with fields added in VERSION 3.
 
 The rest of the `class-map` MUST remain empty, since `class` is compared for deterministic CBOR binary encoding equality.
 
@@ -199,7 +199,7 @@ The measurements in an ATTESTATION_REPORT are each assigned an `mkey` value and 
 The convention for `mkey` value assignment is to sequential ordering when there are no reserved bits.
 The `mkey` following a reserved bit is the bit position in the report of the start of the value.
 The `R[lo:hi]` notation will reference the attestation report byte slice from offset `lo` inclusive to `hi` exclusive.
-The `leuint(slice)` function translates a byte string in little endian to its `uint` representation.
+The `leuintN` type is another name for a byte string, but with the interpretation that it represents an unsigned integer with `N` bit width.
 
 **mkey 0**: VERSION.
 Expressed as `&(raw-value: 4): tagged-leuint32`.
@@ -237,7 +237,7 @@ Expressed as `&(raw-value: 4): tagged-bytes64`.
 **mkey 641**: MEASUREMENT.
 Expressed as `&(digests: 2): [[7, bytes48]]`.
 
-**mkey 642: HOST_DATA.
+**mkey 642**: HOST_DATA.
 Expressed as `&(digests: 2): [[7, bytes48]]`.
 
 **mkey 643**: ID_KEY_DIGEST.
@@ -296,6 +296,8 @@ If `SIGNING_KEY` is 1
 
 *  The `environment-map / class / class-id` field SHALL be set to `37(h'89a7a1f0e7044faaacbd81c86df8a961')`.
 *  The `environment-map / instance ` field SHALL be `560(CSP_ID)`.
+
+The Verifier is free add a `group` according to vendor-defined rules.
 
 #### `measurement-map`
 The translation makes use of the following metafunctions:
@@ -381,7 +383,7 @@ The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x188:0x189])` only if VE
 The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x189:0x18A])` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
 **mkey 650**: CPUID_STEP.
-The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x18A:0x18B])` only if VERSION (little endian `R[0x000:0x004]`)is at least 3.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x18A:0x18B])` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
 **mkey 3328**: CHIP_ID.
 The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x1A0:0x1E0])` only if MASK_CHIP_KEY (`R[0x048] & 2`) is 0.
