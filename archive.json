@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-20T01:03:43.384990+00:00",
+  "timestamp": "2024-12-20T23:16:33.299457+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -111,6 +111,146 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDONbyav86F27s3",
+      "title": "Add some richer types to prior raw-values",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/pull/4",
+      "state": "OPEN",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "There was some pushback in the working group about these types. The VMPL is still a raw value because there's no linear privilege level measurement type.",
+      "createdAt": "2024-12-20T01:05:16Z",
+      "updatedAt": "2024-12-20T23:15:54Z",
+      "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "baseRefName": "main",
+      "baseRefOid": "a253817e2ae50f3641cb64656ced1382e0792db8",
+      "headRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "headRefName": "types",
+      "headRefOid": "f9783756ad1e32e0a30174ec81bf88e0c4f3278f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "@jraman567",
+          "createdAt": "2024-12-20T01:06:23Z",
+          "updatedAt": "2024-12-20T01:06:23Z"
+        },
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Closes Issue #3",
+          "createdAt": "2024-12-20T01:07:44Z",
+          "updatedAt": "2024-12-20T01:07:44Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDONbyav86WFyfv",
+          "commit": {
+            "abbreviatedOid": "6a1bdb1"
+          },
+          "author": "jraman567",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "Thank you for the PR, @deeglaze ! I added some comments and suggestions to this PR>",
+          "createdAt": "2024-12-20T18:19:26Z",
+          "updatedAt": "2024-12-20T18:43:16Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Hi @deeglaze, the CoRIM spec says (and like you mentioned in the meeting also) that the version codepoint details the versioning of a measured environment. Is it also suitable for mkey 0, which defines the ATTESTATION_REPORT structure version?",
+              "createdAt": "2024-12-20T18:19:26Z",
+              "updatedAt": "2024-12-20T18:43:16Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\nExpressed as `&(svn: 1): svn32-type`.\r\n```",
+              "createdAt": "2024-12-20T18:20:09Z",
+              "updatedAt": "2024-12-20T18:43:16Z"
+            },
+            {
+              "originalPosition": 3,
+              "body": "```suggestion\r\n  &(version-scheme: 1): &(decimal: 4)\r\n```",
+              "createdAt": "2024-12-20T18:38:36Z",
+              "updatedAt": "2024-12-20T18:43:16Z"
+            },
+            {
+              "originalPosition": 3,
+              "body": "I believe decimal fits better for SEV-SNP version, as it doesn't have multiple parts. [RFC 9393](https://www.rfc-editor.org/rfc/rfc9393.html#name-version-scheme) also mentions about multipartnumeric overlapping with decimal, which would be the case for SEV-SNP.",
+              "createdAt": "2024-12-20T18:40:53Z",
+              "updatedAt": "2024-12-20T18:43:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDONbyav86WHSc1",
+          "commit": {
+            "abbreviatedOid": "6a1bdb1"
+          },
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-20T23:13:06Z",
+          "updatedAt": "2024-12-20T23:13:06Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "The mkey indexing I'd like to keep derivable from the structure itself, as new ABI versions are published. I don't want to assign any strange ordering based on what I deem more important.",
+              "createdAt": "2024-12-20T23:13:06Z",
+              "updatedAt": "2024-12-20T23:13:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDONbyav86WHSdu",
+          "commit": {
+            "abbreviatedOid": "6a1bdb1"
+          },
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-20T23:13:13Z",
+          "updatedAt": "2024-12-20T23:13:13Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "Good catch.",
+              "createdAt": "2024-12-20T23:13:13Z",
+              "updatedAt": "2024-12-20T23:13:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDONbyav86WHSjk",
+          "commit": {
+            "abbreviatedOid": "6a1bdb1"
+          },
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-12-20T23:13:58Z",
+          "updatedAt": "2024-12-20T23:13:59Z",
+          "comments": [
+            {
+              "originalPosition": 3,
+              "body": "The \"floating point number\" bothered me, but if it works fine for integers, sure.",
+              "createdAt": "2024-12-20T23:13:58Z",
+              "updatedAt": "2024-12-20T23:13:59Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
