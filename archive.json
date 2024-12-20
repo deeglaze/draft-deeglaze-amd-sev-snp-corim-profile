@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-10T23:12:12.672866+00:00",
+  "timestamp": "2024-12-20T01:03:43.384990+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -49,7 +49,40 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDONbyav86izkOY",
+      "title": "make gh-pages failing to push",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/2",
+      "state": "OPEN",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "I resolved Thomas's issue of detaching the repo from the template, but that required deleting and recreating the repository from scratch. Now the editor's copy html has somehow gone backwards and won't update, despite the txt version updating.\r\n\r\n",
+      "createdAt": "2024-12-10T23:15:37Z",
+      "updatedAt": "2024-12-10T23:15:37Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDONbyav86jzgFM",
+      "title": "Change GUEST_SVN to svn-type",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/3",
+      "state": "OPEN",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This makes more sense given the ordering to use in policy.",
+      "createdAt": "2024-12-18T15:54:02Z",
+      "updatedAt": "2024-12-18T15:54:02Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
