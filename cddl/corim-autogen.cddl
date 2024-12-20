@@ -5,6 +5,12 @@ digest = [
   val: bytes
 ]
 
+int-version-map = {
+  &(version: 0): version-int-text,
+  &(version-scheme: 1): &(multipartnumeric: 1)
+}
+version-int-text = tstr .regexp "[0-9]+"
+
 non-empty<M> = (M) .and ({ + any => any })
 
 semver-version-map = {
@@ -61,6 +67,10 @@ min-svn = svn-type
 tagged-svn = #6.552(svn)
 tagged-min-svn = #6.553(min-svn)
 svn-type-choice = tagged-svn / tagged-min-svn
+
+svn32-type = tagged-svn32 / tagged-min-svn32
+tagged-svn32 = #6.552(uint32)
+tagged-min-svn32 = #6.553(uint32)
 
 svn64-type = tagged-svn64 / tagged-min-svn64
 tagged-svn64 = #6.552(uint64)
