@@ -1,0 +1,5 @@
+int-version-map = {
+  &(version: 0): version-int-text,
+  &(version-scheme: 1): &(multipartnumeric: 1)
+}
+version-int-text = tstr .regexp "[0-9]+"

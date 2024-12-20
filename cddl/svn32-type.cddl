@@ -1,0 +1,3 @@
+svn32-type = tagged-svn32 / tagged-min-svn32
+tagged-svn32 = #6.552(uint32)
+tagged-min-svn32 = #6.553(uint32)

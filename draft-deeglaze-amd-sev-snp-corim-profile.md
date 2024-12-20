@@ -201,11 +201,11 @@ The `mkey` following a reserved bit is the bit position in the report of the sta
 The `R[lo:hi]` notation will reference the attestation report byte slice from offset `lo` inclusive to `hi` exclusive.
 The `leuintN` type is another name for a byte string, but with the interpretation that it represents an unsigned integer with `N` bit width.
 
-**mkey 0**: VERSION.
-Expressed as `&(raw-value: 4): tagged-leuint32`.
+**mkey 0**: VERSION. This is the ATTESTATION_REPORT ABI version, not to be confused with CurrentVersion or CommittedVersion that describe the SEV-SNP firmware version.
+Expressed as `&(version: 0): int-version-map`.
 
 **mkey 1**: GUEST_SVN.
-Expressed as `&(raw-value: 4): tagged-bytes4`.
+Expressed as `&(svn: 1): svn32-type`.
 
 **mkey 2**: POLICY.
 Expressed as `&(raw-value: 4): tagged-bytes8` with optional `&(raw-value-mask: 5): tagged-bytes8` to restrict the reference value to the masked bits.
@@ -218,11 +218,12 @@ Expressed as `&(raw-value: 4): tagged-bytes16`.
 
 **mkey 5**: VMPL.
 Expressed as `&(raw-value: 4): tagged-leuint32`.
+_Would prefer a [privilege level measurement type](https://github.com/ietf-rats-wg/draft-ietf-rats-corim/pull/354)_
 
 **SIGNATURE_ALGO skipped**: `R[0x034:0x38]` only needed for signature verification.
 
 **mkey 6**: CURRENT_TCB.
-Expressed as `&(svn: 1): svn-type .and svn64-type`
+Expressed as `&(svn: 1): svn64-type`
 
 **mkey 7**: PLATFORM_INFO.
 Expressed as `&(raw-value: 4): tagged-bytes8` with optional `&(raw-value-mask: 5): tagged-bytes8` to restrict the reference value to the masked bits.
@@ -302,7 +303,8 @@ The Verifier is free add a `group` according to vendor-defined rules.
 #### `measurement-map`
 The translation makes use of the following metafunctions:
 
-*  The function `dec(b)` represents a byte in its decimal string rendering.
+*  The function `dec(b)` represents a number in its decimal string rendering.
+*  The functions `leuintN(bstr)` translates a byte string representing `N` bits in little-endian into a CBOR integer.
 
 Juxtaposition of expressions with string literals is interpreted with string concatenation.
 
@@ -318,11 +320,11 @@ The `&(flags: 3)` codepoint SHALL be set to a `flags-map` with the following con
 *  `is-debug` SHALL be set to the truth value of bit 19 of `POLICY`.
 
 **mkey 0**: VERSION.
-The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x000:0x004])`.
+The codepoint `&(version: 0)` SHALL be set to `{ / version: / 0: vstr, / version-scheme: / 1: / decimal / 4}` where `vstr` is constructed as `dec(leuint32(R[0x000:0x004]))`.
 
 **mkey 1**: GUEST_SVN.
 4 bytes.
-The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x004:0x008])`.
+The codepoint `&(svn: 1)` SHALL be set to `leuint32(R[0x004:0x008])`.
 
 **mkey 2**: POLICY.
 8 bytes.
