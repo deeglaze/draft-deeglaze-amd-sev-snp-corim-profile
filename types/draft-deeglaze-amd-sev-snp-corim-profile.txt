@@ -248,9 +248,12 @@ Table of Contents
    with the interpretation that it represents an unsigned integer with N
    bit width.
 
-   *mkey 0*: VERSION.  Expressed as &(version: 0): int-version-map.
+   *mkey 0*: VERSION.  This is the ATTESTATION_REPORT ABI version, not
+   to be confused with CurrentVersion or CommittedVersion that describe
+   the SEV-SNP firmware version.  Expressed as &(version: 0): int-
+   version-map.
 
-   *mkey 1*: GUEST_SVN.  Expressed as &(svn: 4): svn32-type.
+   *mkey 1*: GUEST_SVN.  Expressed as &(svn: 1): svn32-type.
 
    *mkey 2*: POLICY.  Expressed as &(raw-value: 4): tagged-bytes8 with
    optional &(raw-value-mask: 5): tagged-bytes8 to restrict the
@@ -375,9 +378,9 @@ Table of Contents
 
    *  is-debug SHALL be set to the truth value of bit 19 of POLICY.
 
-   *mkey 0*: VERSION.  The codepoint &(version: 0) SHALL be set to {0:
-   vstr, 1: 1} where vstr is constructed as
-   dec(leuint32(R[0x000:0x004])).
+   *mkey 0*: VERSION.  The codepoint &(version: 0) SHALL be set to { /
+   version: / 0: vstr, / version-scheme: / 1: / decimal / 4} where vstr
+   is constructed as dec(leuint32(R[0x000:0x004])).
 
    *mkey 1*: GUEST_SVN. 4 bytes.  The codepoint &(svn: 1) SHALL be set
    to leuint32(R[0x004:0x008]).

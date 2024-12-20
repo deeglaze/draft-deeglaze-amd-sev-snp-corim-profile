@@ -1348,10 +1348,10 @@ The convention for <code>mkey</code> value assignment is to sequential ordering 
 The <code>mkey</code> following a reserved bit is the bit position in the report of the start of the value.
 The <code>R[lo:hi]</code> notation will reference the attestation report byte slice from offset <code>lo</code> inclusive to <code>hi</code> exclusive.
 The <code>leuintN</code> type is another name for a byte string, but with the interpretation that it represents an unsigned integer with <code>N</code> bit width.<a href="#section-3.1.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.2.1-2"><strong>mkey 0</strong>: VERSION.
+<p id="section-3.1.2.1-2"><strong>mkey 0</strong>: VERSION. This is the ATTESTATION_REPORT ABI version, not to be confused with CurrentVersion or CommittedVersion that describe the SEV-SNP firmware version.
 Expressed as <code>&amp;(version: 0): int-version-map</code>.<a href="#section-3.1.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-3"><strong>mkey 1</strong>: GUEST_SVN.
-Expressed as <code>&amp;(svn: 4): svn32-type</code>.<a href="#section-3.1.2.1-3" class="pilcrow">¶</a></p>
+Expressed as <code>&amp;(svn: 1): svn32-type</code>.<a href="#section-3.1.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-4"><strong>mkey 2</strong>: POLICY.
 Expressed as <code>&amp;(raw-value: 4): tagged-bytes8</code> with optional <code>&amp;(raw-value-mask: 5): tagged-bytes8</code> to restrict the reference value to the masked bits.<a href="#section-3.1.2.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-5"><strong>mkey 3</strong>: FAMILY_ID.
@@ -1478,7 +1478,7 @@ Expressed as <code>&amp;(svn: 1): svn64-type</code>.<a href="#section-3.1.2.1-27
 </li>
             </ul>
 <p id="section-3.1.3.2-8"><strong>mkey 0</strong>: VERSION.
-The codepoint <code>&amp;(version: 0)</code> SHALL be set to <code>{0: vstr, 1: 1}</code> where <code>vstr</code> is constructed as <code>dec(leuint32(R[0x000:0x004]))</code>.<a href="#section-3.1.3.2-8" class="pilcrow">¶</a></p>
+The codepoint <code>&amp;(version: 0)</code> SHALL be set to <code>{ / version: / 0: vstr, / version-scheme: / 1: / decimal / 4}</code> where <code>vstr</code> is constructed as <code>dec(leuint32(R[0x000:0x004]))</code>.<a href="#section-3.1.3.2-8" class="pilcrow">¶</a></p>
 <p id="section-3.1.3.2-9"><strong>mkey 1</strong>: GUEST_SVN.
 4 bytes.
 The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>leuint32(R[0x004:0x008])</code>.<a href="#section-3.1.3.2-9" class="pilcrow">¶</a></p>
