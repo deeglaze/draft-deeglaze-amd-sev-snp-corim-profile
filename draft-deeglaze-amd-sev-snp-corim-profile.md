@@ -1,7 +1,7 @@
 ---
 v: 3
 
-title: CoRIM profile for AMD SEV-SNP attestation report
+title: CoRIM profile for AMD SEV-SNP ATTESTATION_REPORT
 abbrev: CoRIM-SEV
 docname: draft-deeglaze-amd-sev-snp-corim-profile-latest
 category: std
@@ -90,7 +90,8 @@ entity:
 
 --- abstract
 
-AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) attestation reports comprise of reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
+AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-SNP) provides signed evidence of a VM's state in an ATTESTATION_REPORT.
+A CoRIM for SEV-SNP ATTESTATION_REPORT comprises reference values and cryptographic key material that a Verifier needs in order to appraise Attestation Evidence produced by an AMD SEV-SNP virtual machine.
 This document specifies the information elements for representing SEV-SNP Reference Values in CoRIM format.
 
 --- middle
@@ -256,13 +257,13 @@ Expressed as `&(raw-value: 4): tagged-bytes32`
 Expressed as `&(svn: 1): svn64-type`.
 
 **mkey 648**: CPUID_FAM_ID.
-Expressed as `&(raw-value: 4): tagged-byte`.
+Expressed as `&(raw-value: 4): tagged-uint8`.
 
 **mkey 649**: CPUID_MOD_ID.
-Expressed as `&(raw-value: 4): tagged-byte`.
+Expressed as `&(raw-value: 4): tagged-uint8`.
 
 **mkey 650**: CPUID_STEP.
-Expressed as `&(raw-value: 4): tagged-byte`.
+Expressed as `&(raw-value: 4): tagged-uint8`.
 
 **mkey 3328**: CHIP_ID.
 Expressed as `&(raw-value: 4): tagged-bytes64`.
