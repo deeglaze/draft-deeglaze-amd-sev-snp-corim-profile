@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-08T16:02:19.625513+00:00",
+  "timestamp": "2025-01-10T17:45:27.365403+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -249,6 +249,56 @@
               "updatedAt": "2024-12-20T23:13:59Z"
             }
           ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDONbyav86HGI6-",
+      "title": "Use CBOR tags for little endian.",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/pull/5",
+      "state": "MERGED",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "I wasn't aware of existing tags for this representation. The raw-value-type-choice allows for non-560-tagged byte strings.",
+      "createdAt": "2025-01-08T16:03:24Z",
+      "updatedAt": "2025-01-10T17:45:08Z",
+      "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "baseRefName": "main",
+      "baseRefOid": "a253817e2ae50f3641cb64656ced1382e0792db8",
+      "headRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "headRefName": "raw-value-tag",
+      "headRefOid": "205e651181fde6fd7f85aa3d597873f06373e3c7",
+      "closedAt": "2025-01-10T17:45:04Z",
+      "mergedAt": "2025-01-10T17:45:04Z",
+      "mergedBy": "deeglaze",
+      "mergeCommit": {
+        "oid": "247e158c87c799c902ef1bd8c160e3eed9fcd788"
+      },
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "/cc @jraman567",
+          "createdAt": "2025-01-08T16:03:43Z",
+          "updatedAt": "2025-01-08T16:03:43Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDONbyav86XbN-y",
+          "commit": {
+            "abbreviatedOid": "205e651"
+          },
+          "author": "jraman567",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "Thanks for the PR, Dionna! I'm a little rusty on CBOR tags, but it looks good to me. :)",
+          "createdAt": "2025-01-09T17:12:01Z",
+          "updatedAt": "2025-01-09T17:12:01Z",
+          "comments": []
         }
       ]
     }
