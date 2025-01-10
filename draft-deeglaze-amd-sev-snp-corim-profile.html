@@ -1225,8 +1225,7 @@ Some measurement types of the baseline CDDL are not used in this profile.
 The AMD SEV-SNP attestation report byte format is specified by AMD.
 The profile defines a transformation from the AMD byte format into a CoMID representation for use in appraisal.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">This profile is meant for expressing reference values and endorsements of specific environments. It is not meant to encode complex policy decisions about the acceptability of measurements. The accepted claim set construction (ACS) this profile enables does lay a foundation for policy engines that enable further evaluation over complete ACS constructions.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This profile extends the <code>flags-map</code> to represent the guest policy and host platform info that are unique to AMD SEV-SNP.
-The profile extends the <code>$crypto-key-type-choice</code> to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-4">The profile extends the <code>$crypto-key-type-choice</code> to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1871,30 +1870,9 @@ semver-version-map = {
 }
 version-core-text = tstr .regexp "[0-9]+\\.[0-9]+\\.[0-9]+"
 
-$$flags-map-extension //= &amp;(
-  sevsnpvm-policy-smt-allowed: -1,
-  sevsnpvm-policy-migration-agent-allowed: -2,
-  sevsnpvm-policy-debug-allowed: -3,
-  sevsnpvm-policy-single-socket-only: -4,
-  sevsnpvm-policy-cxl-allowed: -5,
-  sevsnpvm-policy-mem-aes-256-xts-required: -6,
-  sevsnpvm-policy-rapl-must-be-disabled: -7,
-  sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
-  sevsnpvm-policy-reserved: -47..-9,
-)
-
 $version-scheme /= &amp;(sevsnpvm-familyimageid-hex: -1)
 
 $raw-value-type-choice /= uint
-
-$$flags-map-extension //= &amp;(
-  sevsnphost-smt-enabled: -49,
-  sevsnphost-tsme-enabled: -50,
-  sevsnphost-ecc-mem-reported-enabled:-51,
-  sevsnphost-rapl-disabled: -52,
-  sevsnphost-ciphertext-hiding-enabled: -53
-  sevsnphost-reserved: -112..-49
-)
 
 tagged-uint8 = #6.64(bytes1)
 tagged-leuint32 = #6.70(bytes4)

@@ -109,11 +109,9 @@ Table of Contents
    lay a foundation for policy engines that enable further evaluation
    over complete ACS constructions.
 
-   This profile extends the flags-map to represent the guest policy and
-   host platform info that are unique to AMD SEV-SNP.  The profile
-   extends the $crypto-key-type-choice to represent the SHA-384 digest
-   of a key in AMD format from Appendix: Digital Signatures of
-   [SEV-SNP.API].
+   The profile extends the $crypto-key-type-choice to represent the
+   SHA-384 digest of a key in AMD format from Appendix: Digital
+   Signatures of [SEV-SNP.API].
 
 2.  Conventions and Definitions
 
@@ -742,30 +740,9 @@ Appendix A.  CoRIM Extensions CDDL
    }
    version-core-text = tstr .regexp "[0-9]+\\.[0-9]+\\.[0-9]+"
 
-   $$flags-map-extension //= &(
-     sevsnpvm-policy-smt-allowed: -1,
-     sevsnpvm-policy-migration-agent-allowed: -2,
-     sevsnpvm-policy-debug-allowed: -3,
-     sevsnpvm-policy-single-socket-only: -4,
-     sevsnpvm-policy-cxl-allowed: -5,
-     sevsnpvm-policy-mem-aes-256-xts-required: -6,
-     sevsnpvm-policy-rapl-must-be-disabled: -7,
-     sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
-     sevsnpvm-policy-reserved: -47..-9,
-   )
-
    $version-scheme /= &(sevsnpvm-familyimageid-hex: -1)
 
    $raw-value-type-choice /= uint
-
-   $$flags-map-extension //= &(
-     sevsnphost-smt-enabled: -49,
-     sevsnphost-tsme-enabled: -50,
-     sevsnphost-ecc-mem-reported-enabled:-51,
-     sevsnphost-rapl-disabled: -52,
-     sevsnphost-ciphertext-hiding-enabled: -53
-     sevsnphost-reserved: -112..-49
-   )
 
    tagged-uint8 = #6.64(bytes1)
    tagged-leuint32 = #6.70(bytes4)
