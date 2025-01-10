@@ -38,9 +38,9 @@ $$flags-map-extension //= &(
   sevsnphost-reserved: -112..-49
 )
 
-tagged-byte = #6.560(bytes1)
-tagged-leuint32 = #6.560(bytes4)
-tagged-leuint64 = #6.560(bytes8)
+tagged-uint8 = #6.64(bytes1)
+tagged-leuint32 = #6.70(bytes4)
+tagged-leuint64 = #6.71(bytes8)
 tagged-bytes4   = #6.560(bytes4)
 tagged-bytes8   = #6.560(bytes8)
 tagged-bytes32  = #6.560(bytes16)
