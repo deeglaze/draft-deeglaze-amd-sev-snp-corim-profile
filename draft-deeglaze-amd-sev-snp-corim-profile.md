@@ -107,7 +107,6 @@ The profile defines a transformation from the AMD byte format into a CoMID repre
 
 This profile is meant for expressing reference values and endorsements of specific environments. It is not meant to encode complex policy decisions about the acceptability of measurements. The accepted claim set construction (ACS) this profile enables does lay a foundation for policy engines that enable further evaluation over complete ACS constructions.
 
-This profile extends the `flags-map` to represent the guest policy and host platform info that are unique to AMD SEV-SNP.
 The profile extends the `$crypto-key-type-choice` to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of {{SEV-SNP.API}}.
 
 #  Conventions and Definitions
