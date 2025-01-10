@@ -4,21 +4,22 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                          8 January 2025
-Expires: 12 July 2025
+Intended status: Standards Track                         10 January 2025
+Expires: 14 July 2025
 
 
-            CoRIM profile for AMD SEV-SNP attestation report
+            CoRIM profile for AMD SEV-SNP ATTESTATION_REPORT
             draft-deeglaze-amd-sev-snp-corim-profile-latest
 
 Abstract
 
    AMD Secure Encrypted Virtualization with Secure Nested Pages (SEV-
-   SNP) attestation reports comprise of reference values and
-   cryptographic key material that a Verifier needs in order to appraise
-   Attestation Evidence produced by an AMD SEV-SNP virtual machine.
-   This document specifies the information elements for representing
-   SEV-SNP Reference Values in CoRIM format.
+   SNP) provides signed evidence of a VM's state in an
+   ATTESTATION_REPORT.  A CoRIM for SEV-SNP ATTESTATION_REPORT comprises
+   reference values and cryptographic key material that a Verifier needs
+   in order to appraise Attestation Evidence produced by an AMD SEV-SNP
+   virtual machine.  This document specifies the information elements
+   for representing SEV-SNP Reference Values in CoRIM format.
 
 Discussion Venues
 
@@ -42,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 July 2025.
+   This Internet-Draft will expire on 14 July 2025.
 
 Copyright Notice
 
@@ -298,11 +299,13 @@ Table of Contents
 
    *mkey 647*: REPORTED_TCB Expressed as &(svn: 1): svn64-type.
 
-   *mkey 648*: CPUID_FAM_ID.  Expressed as &(raw-value: 4): tagged-byte.
+   *mkey 648*: CPUID_FAM_ID.  Expressed as &(raw-value: 4): tagged-
+   uint8.
 
-   *mkey 649*: CPUID_MOD_ID.  Expressed as &(raw-value: 4): tagged-byte.
+   *mkey 649*: CPUID_MOD_ID.  Expressed as &(raw-value: 4): tagged-
+   uint8.
 
-   *mkey 650*: CPUID_STEP.  Expressed as &(raw-value: 4): tagged-byte.
+   *mkey 650*: CPUID_STEP.  Expressed as &(raw-value: 4): tagged-uint8.
 
    *mkey 3328*: CHIP_ID.  Expressed as &(raw-value: 4): tagged-bytes64.
 
@@ -750,9 +753,9 @@ Appendix A.  CoRIM Extensions CDDL
      sevsnphost-reserved: -112..-49
    )
 
-   tagged-byte = #6.560(bytes1)
-   tagged-leuint32 = #6.560(bytes4)
-   tagged-leuint64 = #6.560(bytes8)
+   tagged-uint8 = #6.64(bytes1)
+   tagged-leuint32 = #6.70(bytes4)
+   tagged-leuint64 = #6.71(bytes8)
    tagged-bytes4   = #6.560(bytes4)
    tagged-bytes8   = #6.560(bytes8)
    tagged-bytes32  = #6.560(bytes16)
