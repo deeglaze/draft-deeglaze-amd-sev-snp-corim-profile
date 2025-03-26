@@ -1,6 +1,6 @@
 / corim-map / {
   / corim.profile / 3: [
-    32("tag:amd.com,2024/snp-corim-profile")
+    32("tag:amd.com,2025:snp-corim-profile")
   ]
   / ... /
 }

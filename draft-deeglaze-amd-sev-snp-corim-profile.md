@@ -145,7 +145,7 @@ VEK:
 AMD SEV-SNP launch endorsements are carried in one or more CoMIDs inside a CoRIM.
 
 The profile attribute in the CoRIM MAY be present to specify a further restriction on this profile.
-The base requirements of this profile MAY be specified by `tag:amd.com,2024:snp-corim-profile` {{figure-profile}}.
+The base requirements of this profile MAY be specified by `tag:amd.com,2025:snp-corim-profile` {{figure-profile}}.
 
 ~~~ cbor-diag
 {::include cddl/examples/profile.diag}
@@ -217,8 +217,7 @@ Expressed as `&(raw-value: 4): tagged-bytes16`.
 Expressed as `&(raw-value: 4): tagged-bytes16`.
 
 **mkey 5**: VMPL.
-Expressed as `&(raw-value: 4): tagged-leuint32`.
-_Would prefer a [privilege level measurement type](https://github.com/ietf-rats-wg/draft-ietf-rats-corim/pull/354)_
+Expressed as `&(raw-int: 15): int`.
 
 **SIGNATURE_ALGO skipped**: `R[0x034:0x38]` only needed for signature verification.
 
@@ -257,13 +256,13 @@ Expressed as `&(raw-value: 4): tagged-bytes32`
 Expressed as `&(svn: 1): svn64-type`.
 
 **mkey 648**: CPUID_FAM_ID.
-Expressed as `&(raw-value: 4): tagged-uint8`.
+Expressed as `&(raw-int: 15): int`.
 
 **mkey 649**: CPUID_MOD_ID.
-Expressed as `&(raw-value: 4): tagged-uint8`.
+Expressed as `&(raw-int: 15): int`.
 
 **mkey 650**: CPUID_STEP.
-Expressed as `&(raw-value: 4): tagged-uint8`.
+Expressed as `&(raw-int: 15): int`.
 
 **mkey 3328**: CHIP_ID.
 Expressed as `&(raw-value: 4): tagged-bytes64`.
@@ -340,7 +339,7 @@ The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x020:0x030])`.
 
 **mkey 5**: VMPL.
 4 bytes.
-The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x030:0x034])`.
+The codepoint `&(raw-int: 15)` SHALL be set to `leuint32(R[0x030:0x034])`.
 
 **SIGNATURE_ALGO skipped**: `R[0x034:0x38]` only needed for signature verification.
 
@@ -379,16 +378,17 @@ The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x160:0x180])` only if no
 The codepoint `&(svn: 1)` SHALL be set to `552(reported_tcb)` where `reported_tcb` is `REPORTED_TCB` (`R[0x180:0x188]`) translated to `uint` from its little-endian representation.
 
 **mkey 648**: CPUID_FAM_ID.
-The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x188:0x189])` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
+The codepoint `&(raw-int: 15)` SHALL be set to `R[0x188:0x189]` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
 **mkey 649**: CPUID_MOD_ID.
-The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x189:0x18A])` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
+The codepoint `&(raw-int: 15)` SHALL be set to `R[0x189:0x18A]` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
 **mkey 650**: CPUID_STEP.
-The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x18A:0x18B])` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
+The codepoint `&(raw-int: 15)` SHALL be set to `R[0x18A:0x18B]` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
 **mkey 3328**: CHIP_ID.
-The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x1A0:0x1E0])` only if MASK_CHIP_KEY (`R[0x048] & 2`) is 0.
+The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x1A0:end])` only if MASK_CHIP_KEY (`R[0x048] & 2`) is 0 and CPUID_FAM_ID is 0x19.
+The `end` value SHALL be between 0x1A8 and 0x1E0, since the SEV GET_ID may return different length identities for different family CPUs.
 
 **mkey 3329**: COMMITTED_TCB.
 The codepoint `&(svn: 1)` SHALL be set to `552(committed_tcb)` where `committed_tcb` is `REPORTED_TCB` (`R[0x1E0:0x1E8]`) translated to `uint` from its little-endian representation.
