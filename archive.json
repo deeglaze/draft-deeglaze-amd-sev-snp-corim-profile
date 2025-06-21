@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-10T17:45:27.365403+00:00",
+  "timestamp": "2025-06-21T17:14:13.783592+00:00",
   "repo": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
   "labels": [
     {
@@ -81,6 +81,51 @@
       "updatedAt": "2024-12-18T15:54:02Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 6,
+      "id": "I_kwDONbyav862rabk",
+      "title": "TCB Reference Values",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/issues/6",
+      "state": "OPEN",
+      "author": "jraman567",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I wonder if it makes sense for the Reference Values to include ALL the TCB versions that are typically available in an Attestation Report - such as CURRENT_TCB (mKey 6), REPORTED_TCB (mKey 647), COMMITTED_TCB (mKey 3329) and LAUNCH_TCB (mKey 3968).\n\nI'm of the view that it's sufficient to just include the REPORTED_TCB in the Reference Values.\n\nFor a short intro:\n- REPORTED_TCB is the TCB that is reported to the VM owner. This is the TCB version that is used to fetch VCEK.\n- CURRENT_TCB is the version of the latest TCB. It's purpose appears to be to inform the admin of the bare-metal/host to figure out what's the latest available TCB\n- COMMITTED_TCB is the anti-rollback version. The SP won't allow the admin to downgrade the TCB below this one\n- LAUNCH_TCB is the TCB with which the VM launched.\n\nI wonder what the verifier should do with each of these TCBs. Here's how I see the verifier handling the TCBs:\n- The verifier should confirm that the REPORTED_TCB in the attestation report should be equal to or greater than the REPORTED_TCB in the reference value\n- The policy engine could enforce that the LAUNCH_TCB in the report isn't lower than than the COMMITTED_TCB in the report. This is to ensure the VM was launched with all the required components\n\nSo, I'm unsure about the value of having CURRENT_TCB, COMMITTED_TCB and LAUNCH_TCB in the reference value. We should this another look. Thanks!",
+      "createdAt": "2025-05-15T04:12:41Z",
+      "updatedAt": "2025-05-22T20:15:01Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "The translation into concise evidence is meant to be complete for the report. You don't have to use every entry for reference values.",
+          "createdAt": "2025-05-15T14:41:50Z",
+          "updatedAt": "2025-05-15T14:41:50Z"
+        },
+        {
+          "author": "jraman567",
+          "authorAssociation": "NONE",
+          "body": "OK, that sounds good.\n\nAnother thing I wanted to check is the codepoint use to represent TCB. Using `&(svn: 1)` for TCB doesn't appear useful, looks like `&(raw-value: 4)` would be a better fit. It's because TCB is not a single version, but is made up of multiple versions. So we can't compare one TCB as a whole with another, we need to extract the individual components and compare them individually.",
+          "createdAt": "2025-05-15T23:50:12Z",
+          "updatedAt": "2025-05-15T23:50:12Z"
+        },
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Yes and no. Yes it's not supposed to be meant to be compared linear, but cryptographically it's the best you can hope for until AMD uses DICE for their boot integrity due to the linear hash chain they use for exposing versioned secret information to the SNP firmware.\nIf you want to use raw-value to discourage that use of svn, then perhaps you want to instead break all the bytes of TCB_VERSION into separate SVN values.",
+          "createdAt": "2025-05-16T20:15:08Z",
+          "updatedAt": "2025-05-16T20:15:08Z"
+        },
+        {
+          "author": "jraman567",
+          "authorAssociation": "NONE",
+          "body": "I'm OK with breaking all the bytes of TCB_VERSION into separate SVN values. Thanks for the suggestion!",
+          "createdAt": "2025-05-22T20:15:00Z",
+          "updatedAt": "2025-05-22T20:15:00Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -117,24 +162,26 @@
       "id": "PR_kwDONbyav86F27s3",
       "title": "Add some richer types to prior raw-values",
       "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/pull/4",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "deeglaze",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "There was some pushback in the working group about these types. The VMPL is still a raw value because there's no linear privilege level measurement type.",
       "createdAt": "2024-12-20T01:05:16Z",
-      "updatedAt": "2024-12-20T23:15:54Z",
+      "updatedAt": "2025-01-10T17:46:18Z",
       "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
       "baseRefName": "main",
       "baseRefOid": "a253817e2ae50f3641cb64656ced1382e0792db8",
       "headRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
       "headRefName": "types",
       "headRefOid": "f9783756ad1e32e0a30174ec81bf88e0c4f3278f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-01-10T17:46:15Z",
+      "mergedAt": "2025-01-10T17:46:15Z",
+      "mergedBy": "deeglaze",
+      "mergeCommit": {
+        "oid": "df8bf4bd99522dd3c6128c62215269f5e6d36a66"
+      },
       "comments": [
         {
           "author": "deeglaze",
@@ -301,6 +348,40 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDONbyav86Ytmhf",
+      "title": "Use bit position for every mkey. Expand TCB SPLs",
+      "url": "https://github.com/deeglaze/draft-deeglaze-amd-sev-snp-corim-profile/pull/7",
+      "state": "OPEN",
+      "author": "deeglaze",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Each byte of the *_TCB field is itself an SVN, so modeling the whole value as a single svn ruins the partial order of the components. It doesn't make sense to use a lexicographic order for these boot elements.\r\n\r\nDespite the hash-chaining method used on Milan, Genoa, and Turin that linearizes the SVN space, reference values and policy should stick to the logical separation into a partially ordered space.",
+      "createdAt": "2025-06-02T22:25:50Z",
+      "updatedAt": "2025-06-21T16:38:40Z",
+      "baseRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "baseRefName": "main",
+      "baseRefOid": "150696cca31ff94b40b0b71d60c5691cad633171",
+      "headRepository": "deeglaze/draft-deeglaze-amd-sev-snp-corim-profile",
+      "headRefName": "split_tcb",
+      "headRefOid": "4872abfb955c25eb9d1ec1474086d78cae7558e9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "deeglaze",
+          "authorAssociation": "OWNER",
+          "body": "Notice, @jraman567",
+          "createdAt": "2025-06-02T22:26:32Z",
+          "updatedAt": "2025-06-02T22:26:32Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
