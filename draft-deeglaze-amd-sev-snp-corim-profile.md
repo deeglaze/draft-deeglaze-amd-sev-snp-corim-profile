@@ -196,8 +196,7 @@ Flag-like values are delegated to the `raw-value` and `raw-value-mask` measureme
 #### AMD SEV-SNP measurements
 
 The measurements in an ATTESTATION_REPORT are each assigned an `mkey` value and the field value is translated to an appropriate `measurement-values-map` entry.
-The convention for `mkey` value assignment is to sequential ordering when there are no reserved bits.
-The `mkey` following a reserved bit is the bit position in the report of the start of the value.
+The convention for `mkey` value assignment is to use the bit position of the start of the value in the attestation report.
 The `R[lo:hi]` notation will reference the attestation report byte slice from offset `lo` inclusive to `hi` exclusive.
 The `leuintN` type is another name for a byte string, but with the interpretation that it represents an unsigned integer with `N` bit width.
 
@@ -321,32 +320,53 @@ The `&(flags: 3)` codepoint SHALL be set to a `flags-map` with the following con
 **mkey 0**: VERSION.
 The codepoint `&(version: 0)` SHALL be set to `{ / version: / 0: vstr, / version-scheme: / 1: / decimal / 4}` where `vstr` is constructed as `dec(leuint32(R[0x000:0x004]))`.
 
-**mkey 1**: GUEST_SVN.
+**mkey 32**: GUEST_SVN.
 4 bytes.
 The codepoint `&(svn: 1)` SHALL be set to `leuint32(R[0x004:0x008])`.
 
-**mkey 2**: POLICY.
+**mkey 64**: POLICY.
 8 bytes.
 The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x008:0x010])` with optional `&(raw-value-mask: 5): tagged-bytes` to restrict the reference value to the masked bits.
 
-**mkey 3**: FAMILY_ID.
+**mkey 128**: FAMILY_ID.
 16 bytes.
 The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x010:0x020])`.
 
-**mkey 4**: IMAGE_ID.
+**mkey 256**: IMAGE_ID.
 16 bytes.
 The codepoint `&(raw-value: 4)` SHALL be set to `560:(R[0x020:0x030])`.
 
-**mkey 5**: VMPL.
+**mkey 384**: VMPL.
 4 bytes.
 The codepoint `&(raw-int: 15)` SHALL be set to `leuint32(R[0x030:0x034])`.
 
 **SIGNATURE_ALGO skipped**: `R[0x034:0x38]` only needed for signature verification.
 
-**mkey 6**: CURRENT_TCB.
-The codepoint `&(svn: 1)` SHALL be set to `552(current_tcb)` where `current_tcb` is `R[0x038:0x40]` translated to `uint` from its little-endian representation.
+**mkey 448**: CURRENT_TCB SPL1.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x038])`.
 
-**mkey 7**: PLATFORM_INFO.
+**mkey 456**: CURRENT_TCB SPL2.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x039])`.
+
+**mkey 464**: CURRENT_TCB SPL3.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x03a])`.
+
+**mkey 472**: CURRENT_TCB SPL4.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x03b])`.
+
+**mkey 480**: CURRENT_TCB SPL5.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x03c])`.
+
+**mkey 488**: CURRENT_TCB SPL6.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x03d])`.
+
+**mkey 496**: CURRENT_TCB SPL7.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x03e])`.
+
+**mkey 504**: CURRENT_TCB SPL8.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x03f])`.
+
+**mkey 512**: PLATFORM_INFO.
 The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x040:0x048])`.
 
 **AUTHOR_KEY_EN skipped**: AUTHOR_KEY_DIGEST will be present in evidence if and only if this bit is 1.
@@ -356,44 +376,86 @@ The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x040:0x048])`.
 **mkey 640**: REPORT_DATA.
 The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x050:0x090])`.
 
-**mkey 641**: MEASUREMENT.
+**mkey 1152**: MEASUREMENT.
 The codepoint `&(digests: 2)` SHALL be set to `[[7, R[0x090:0x0C0]]]`.
 
-**mkey 642: HOST_DATA.
+**mkey 1536: HOST_DATA.
 The codepoint `&(digests: 2)` SHALL be set to `[[7, R[0x0C0:0x0E0]]]`.
 
-**mkey 643**: ID_KEY_DIGEST.
+**mkey 1792**: ID_KEY_DIGEST.
 The codepoint `&(digests: 2): [[7, R[0x0E0:0x110]]]` SHALL be set.
 
-**mkey 644**: AUTHOR_KEY_DIGEST.
+**mkey 2176**: AUTHOR_KEY_DIGEST.
 The codepoint `&(digests: 2)` SHALL be set to `[[7, R[0x110:0x140]]]` only if AUTHOR_KEY_EN (`R[0x048] & 1`) is 1.
 
-**mkey 645**: REPORT_ID.
+**mkey 2560**: REPORT_ID.
 The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x140:0x160])`
 
-**mkey 646**: REPORT_ID_MA.
+**mkey 2816**: REPORT_ID_MA.
 The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x160:0x180])` only if non-zero.
 
-**mkey 647**: REPORTED_TCB
-The codepoint `&(svn: 1)` SHALL be set to `552(reported_tcb)` where `reported_tcb` is `REPORTED_TCB` (`R[0x180:0x188]`) translated to `uint` from its little-endian representation.
+**mkey 3072**: REPORTED_TCB SPL1
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x180])`.
 
-**mkey 648**: CPUID_FAM_ID.
+**mkey 3080**: REPORTED_TCB SPL2
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x181])`.
+
+**mkey 3088**: REPORTED_TCB SPL3
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x182])`.
+
+**mkey 3096**: REPORTED_TCB SPL4
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x183])`.
+
+**mkey 3104**: REPORTED_TCB SPL5
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x184])`.
+
+**mkey 3112**: REPORTED_TCB SPL6
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x185])`.
+
+**mkey 3120**: REPORTED_TCB SPL7
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x186])`.
+
+**mkey 3128**: REPORTED_TCB SPL8
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x187])`.
+
+**mkey 3136**: CPUID_FAM_ID.
 The codepoint `&(raw-int: 15)` SHALL be set to `R[0x188:0x189]` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
-**mkey 649**: CPUID_MOD_ID.
+**mkey 3144**: CPUID_MOD_ID.
 The codepoint `&(raw-int: 15)` SHALL be set to `R[0x189:0x18A]` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
-**mkey 650**: CPUID_STEP.
+**mkey 3152**: CPUID_STEP.
 The codepoint `&(raw-int: 15)` SHALL be set to `R[0x18A:0x18B]` only if VERSION (little endian `R[0x000:0x004]`) is at least 3.
 
 **mkey 3328**: CHIP_ID.
 The codepoint `&(raw-value: 4)` SHALL be set to `560(R[0x1A0:end])` only if MASK_CHIP_KEY (`R[0x048] & 2`) is 0 and CPUID_FAM_ID is 0x19.
 The `end` value SHALL be between 0x1A8 and 0x1E0, since the SEV GET_ID may return different length identities for different family CPUs.
 
-**mkey 3329**: COMMITTED_TCB.
-The codepoint `&(svn: 1)` SHALL be set to `552(committed_tcb)` where `committed_tcb` is `REPORTED_TCB` (`R[0x1E0:0x1E8]`) translated to `uint` from its little-endian representation.
+**mkey 3840**: COMMITTED_TCB SPL1.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E0])`.
 
-**mkey 3330**: CurrentVersion.
+**mkey 3848**: COMMITTED_TCB SPL2.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E1])`.
+
+**mkey 3856**: COMMITTED_TCB SPL3.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E2])`.
+
+**mkey 3864**: COMMITTED_TCB SPL4.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E3])`.
+
+**mkey 3872**: COMMITTED_TCB SPL5.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E4])`.
+
+**mkey 3880**: COMMITTED_TCB SPL6.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E5])`.
+
+**mkey 3888**: COMMITTED_TCB SPL7.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E6])`.
+
+**mkey 3896**: COMMITTED_TCB SPL8.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1E7])`.
+
+**mkey 3904**: CurrentVersion.
 The `&(version: 0)` codepoint SHALL be set to
 
 ~~~ cbor-diag
@@ -415,8 +477,29 @@ The `&(version: 0)` codepoint SHALL be set to
 ~~~
 The version string `vstr` is constructed as `dec(R[0x1EE]) '.' dec(R[0x1ED]) '.' dec(R[0x1EC])`.
 
-**mkey 3968**: LAUNCH_TCB.
-The codepoint `&(svn: 1)` SHALL be set to `552(launch_tcb)` where `launch_tcb` is `LAUNCH_TCB` (`R[0x1F0:0x1F8]`) translated to `uint` from its little-endian representation.
+**mkey 3968**: LAUNCH_TCB SPL1.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F0])`.
+
+**mkey 3972**: LAUNCH_TCB SPL2.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F1])`.
+
+**mkey 3980**: LAUNCH_TCB SPL3.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F2])`.
+
+**mkey 3988**: LAUNCH_TCB SPL4.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F3])`.
+
+**mkey 3996**: LAUNCH_TCB SPL5.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F4])`.
+
+**mkey 4004**: LAUNCH_TCB SPL6.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F5])`.
+
+**mkey 4012**: LAUNCH_TCB SPL7.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F6])`.
+
+**mkey 4020**: LAUNCH_TCB SPL8.
+The codepoint `&(svn: 1)` SHALL be set to `552(R[0x1F7])`.
 
 #### `cmtype`
 
