@@ -4,8 +4,8 @@
 
 Remote ATtestation ProcedureS                                   D. Glaze
 Internet-Draft                                                Google LLC
-Intended status: Standards Track                         10 January 2025
-Expires: 14 July 2025
+Intended status: Standards Track                            21 June 2025
+Expires: 23 December 2025
 
 
             CoRIM profile for AMD SEV-SNP ATTESTATION_REPORT
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 July 2025.
+   This Internet-Draft will expire on 23 December 2025.
 
 Copyright Notice
 
@@ -160,12 +160,12 @@ Table of Contents
 
    The profile attribute in the CoRIM MAY be present to specify a
    further restriction on this profile.  The base requirements of this
-   profile MAY be specified by tag:amd.com,2024:snp-corim-profile
+   profile MAY be specified by tag:amd.com,2025:snp-corim-profile
    Figure 1.
 
    / corim-map / {
      / corim.profile / 3: [
-       32("tag:amd.com,2024/snp-corim-profile")
+       32("tag:amd.com,2025:snp-corim-profile")
      ]
      / ... /
    }
@@ -262,9 +262,7 @@ Table of Contents
 
    *mkey 4*: IMAGE_ID.  Expressed as &(raw-value: 4): tagged-bytes16.
 
-   *mkey 5*: VMPL.  Expressed as &(raw-value: 4): tagged-leuint32.
-   _Would prefer a privilege level measurement type (https://github.com/
-   ietf-rats-wg/draft-ietf-rats-corim/pull/354)_
+   *mkey 5*: VMPL.  Expressed as &(raw-int: 15): int.
 
    *SIGNATURE_ALGO skipped*: R[0x034:0x38] only needed for signature
    verification.
@@ -301,13 +299,11 @@ Table of Contents
 
    *mkey 647*: REPORTED_TCB Expressed as &(svn: 1): svn64-type.
 
-   *mkey 648*: CPUID_FAM_ID.  Expressed as &(raw-value: 4): tagged-
-   uint8.
+   *mkey 648*: CPUID_FAM_ID.  Expressed as &(raw-int: 15): int.
 
-   *mkey 649*: CPUID_MOD_ID.  Expressed as &(raw-value: 4): tagged-
-   uint8.
+   *mkey 649*: CPUID_MOD_ID.  Expressed as &(raw-int: 15): int.
 
-   *mkey 650*: CPUID_STEP.  Expressed as &(raw-value: 4): tagged-uint8.
+   *mkey 650*: CPUID_STEP.  Expressed as &(raw-int: 15): int.
 
    *mkey 3328*: CHIP_ID.  Expressed as &(raw-value: 4): tagged-bytes64.
 
@@ -396,8 +392,8 @@ Table of Contents
    *mkey 4*: IMAGE_ID. 16 bytes.  The codepoint &(raw-value: 4) SHALL be
    set to 560:(R[0x020:0x030]).
 
-   *mkey 5*: VMPL. 4 bytes.  The codepoint &(raw-value: 4) SHALL be set
-   to 560:(R[0x030:0x034]).
+   *mkey 5*: VMPL. 4 bytes.  The codepoint &(raw-int: 15) SHALL be set
+   to leuint32(R[0x030:0x034]).
 
    *SIGNATURE_ALGO skipped*: R[0x034:0x38] only needed for signature
    verification.
@@ -441,20 +437,23 @@ Table of Contents
    552(reported_tcb) where reported_tcb is REPORTED_TCB (R[0x180:0x188])
    translated to uint from its little-endian representation.
 
-   *mkey 648*: CPUID_FAM_ID.  The codepoint &(raw-value: 4) SHALL be set
-   to 560(R[0x188:0x189]) only if VERSION (little endian R[0x000:0x004])
-   is at least 3.
+   *mkey 648*: CPUID_FAM_ID.  The codepoint &(raw-int: 15) SHALL be set
+   to R[0x188:0x189] only if VERSION (little endian R[0x000:0x004]) is
+   at least 3.
 
-   *mkey 649*: CPUID_MOD_ID.  The codepoint &(raw-value: 4) SHALL be set
-   to 560(R[0x189:0x18A]) only if VERSION (little endian R[0x000:0x004])
-   is at least 3.
+   *mkey 649*: CPUID_MOD_ID.  The codepoint &(raw-int: 15) SHALL be set
+   to R[0x189:0x18A] only if VERSION (little endian R[0x000:0x004]) is
+   at least 3.
 
-   *mkey 650*: CPUID_STEP.  The codepoint &(raw-value: 4) SHALL be set
-   to 560(R[0x18A:0x18B]) only if VERSION (little endian R[0x000:0x004])
-   is at least 3.
+   *mkey 650*: CPUID_STEP.  The codepoint &(raw-int: 15) SHALL be set to
+   R[0x18A:0x18B] only if VERSION (little endian R[0x000:0x004]) is at
+   least 3.
 
    *mkey 3328*: CHIP_ID.  The codepoint &(raw-value: 4) SHALL be set to
-   560(R[0x1A0:0x1E0]) only if MASK_CHIP_KEY (R[0x048] & 2) is 0.
+   560(R[0x1A0:end]) only if MASK_CHIP_KEY (R[0x048] & 2) is 0 and
+   CPUID_FAM_ID is 0x19.  The end value SHALL be between 0x1A8 and
+   0x1E0, since the SEV GET_ID may return different length identities
+   for different family CPUs.
 
    *mkey 3329*: COMMITTED_TCB.  The codepoint &(svn: 1) SHALL be set to
    552(committed_tcb) where committed_tcb is REPORTED_TCB
@@ -647,9 +646,9 @@ Table of Contents
    [I-D.ietf-rats-corim]
               Birkholz, H., Fossati, T., Deshpande, Y., Smith, N., and
               W. Pan, "Concise Reference Integrity Manifest", Work in
-              Progress, Internet-Draft, draft-ietf-rats-corim-06, 18
-              October 2024, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-rats-corim-06>.
+              Progress, Internet-Draft, draft-ietf-rats-corim-07, 3
+              March 2025, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-rats-corim-07>.
 
    [IANA.cbor-tags]
               IANA, "Concise Binary Object Representation (CBOR) Tags",
