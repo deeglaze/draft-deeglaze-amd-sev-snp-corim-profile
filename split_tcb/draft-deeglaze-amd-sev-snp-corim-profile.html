@@ -1026,11 +1026,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CoRIM-SEV</td>
-<td class="right">January 2025</td>
+<td class="right">June 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Glaze</td>
-<td class="center">Expires 12 July 2025</td>
+<td class="center">Expires 23 December 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1043,12 +1043,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-deeglaze-amd-sev-snp-corim-profile-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-08" class="published">8 January 2025</time>
+<time datetime="2025-06-21" class="published">21 June 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-07-12">12 July 2025</time></dd>
+<dd class="expires"><time datetime="2025-12-23">23 December 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1092,7 +1092,7 @@ This document specifies the information elements for representing SEV-SNP Refere
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 December 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1225,8 +1225,7 @@ Some measurement types of the baseline CDDL are not used in this profile.
 The AMD SEV-SNP attestation report byte format is specified by AMD.
 The profile defines a transformation from the AMD byte format into a CoMID representation for use in appraisal.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">This profile is meant for expressing reference values and endorsements of specific environments. It is not meant to encode complex policy decisions about the acceptability of measurements. The accepted claim set construction (ACS) this profile enables does lay a foundation for policy engines that enable further evaluation over complete ACS constructions.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This profile extends the <code>flags-map</code> to represent the guest policy and host platform info that are unique to AMD SEV-SNP.
-The profile extends the <code>$crypto-key-type-choice</code> to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-4">The profile extends the <code>$crypto-key-type-choice</code> to represent the SHA-384 digest of a key in AMD format from Appendix: Digital Signatures of <span>[<a href="#SEV-SNP.API" class="cite xref">SEV-SNP.API</a>]</span>.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1268,14 +1267,14 @@ This draft documents the normative representation of attestation report Evidence
         </h3>
 <p id="section-3.1-1">AMD SEV-SNP launch endorsements are carried in one or more CoMIDs inside a CoRIM.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">The profile attribute in the CoRIM MAY be present to specify a further restriction on this profile.
-The base requirements of this profile MAY be specified by <code>tag:amd.com,2024:snp-corim-profile</code> <a href="#_figure-profile" class="auto internal xref">Figure 1</a>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+The base requirements of this profile MAY be specified by <code>tag:amd.com,2025:snp-corim-profile</code> <a href="#_figure-profile" class="auto internal xref">Figure 1</a>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <span id="name-sev-snp-attestation-profile"></span><div id="_figure-profile">
 <figure id="figure-1">
           <div class="lang-cbor-diag sourcecode" id="section-3.1-3.1">
 <pre>
 / corim-map / {
   / corim.profile / 3: [
-    32("tag:amd.com,2024/snp-corim-profile")
+    32("tag:amd.com,2025:snp-corim-profile")
   ]
   / ... /
 }
@@ -1346,14 +1345,13 @@ Flag-like values are delegated to the <code>raw-value</code> and <code>raw-value
 <a href="#section-3.1.2.1" class="section-number selfRef">3.1.2.1. </a><a href="#name-amd-sev-snp-measurements" class="section-name selfRef">AMD SEV-SNP measurements</a>
             </h5>
 <p id="section-3.1.2.1-1">The measurements in an ATTESTATION_REPORT are each assigned an <code>mkey</code> value and the field value is translated to an appropriate <code>measurement-values-map</code> entry.
-The convention for <code>mkey</code> value assignment is to sequential ordering when there are no reserved bits.
-The <code>mkey</code> following a reserved bit is the bit position in the report of the start of the value.
+The convention for <code>mkey</code> value assignment is to use the bit position of the start of the value in the attestation report.
 The <code>R[lo:hi]</code> notation will reference the attestation report byte slice from offset <code>lo</code> inclusive to <code>hi</code> exclusive.
 The <code>leuintN</code> type is another name for a byte string, but with the interpretation that it represents an unsigned integer with <code>N</code> bit width.<a href="#section-3.1.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1.2.1-2"><strong>mkey 0</strong>: VERSION.
-Expressed as <code>&amp;(raw-value: 4): tagged-leuint32</code>.<a href="#section-3.1.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.2.1-2"><strong>mkey 0</strong>: VERSION. This is the ATTESTATION_REPORT ABI version, not to be confused with CurrentVersion or CommittedVersion that describe the SEV-SNP firmware version.
+Expressed as <code>&amp;(version: 0): int-version-map</code>.<a href="#section-3.1.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-3"><strong>mkey 1</strong>: GUEST_SVN.
-Expressed as <code>&amp;(raw-value: 4): tagged-bytes4</code>.<a href="#section-3.1.2.1-3" class="pilcrow">¶</a></p>
+Expressed as <code>&amp;(svn: 1): svn32-type</code>.<a href="#section-3.1.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-4"><strong>mkey 2</strong>: POLICY.
 Expressed as <code>&amp;(raw-value: 4): tagged-bytes8</code> with optional <code>&amp;(raw-value-mask: 5): tagged-bytes8</code> to restrict the reference value to the masked bits.<a href="#section-3.1.2.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-5"><strong>mkey 3</strong>: FAMILY_ID.
@@ -1361,10 +1359,10 @@ Expressed as <code>&amp;(raw-value: 4): tagged-bytes16</code>.<a href="#section-
 <p id="section-3.1.2.1-6"><strong>mkey 4</strong>: IMAGE_ID.
 Expressed as <code>&amp;(raw-value: 4): tagged-bytes16</code>.<a href="#section-3.1.2.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-7"><strong>mkey 5</strong>: VMPL.
-Expressed as <code>&amp;(raw-value: 4): tagged-leuint32</code>.<a href="#section-3.1.2.1-7" class="pilcrow">¶</a></p>
+Expressed as <code>&amp;(raw-int: 15): int</code>.<a href="#section-3.1.2.1-7" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-8"><strong>SIGNATURE_ALGO skipped</strong>: <code>R[0x034:0x38]</code> only needed for signature verification.<a href="#section-3.1.2.1-8" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-9"><strong>mkey 6</strong>: CURRENT_TCB.
-Expressed as <code>&amp;(svn: 1): svn-type .and svn64-type</code><a href="#section-3.1.2.1-9" class="pilcrow">¶</a></p>
+Expressed as <code>&amp;(svn: 1): svn64-type</code><a href="#section-3.1.2.1-9" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-10"><strong>mkey 7</strong>: PLATFORM_INFO.
 Expressed as <code>&amp;(raw-value: 4): tagged-bytes8</code> with optional <code>&amp;(raw-value-mask: 5): tagged-bytes8</code> to restrict the reference value to the masked bits.<a href="#section-3.1.2.1-10" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-11"><strong>AUTHOR_KEY_EN skipped</strong>: AUTHOR_KEY_DIGEST will be present in evidence if and only if this bit is 1.
@@ -1387,11 +1385,11 @@ Expressed as <code>&amp;(raw-value: 4): tagged-bytes32</code><a href="#section-3
 <p id="section-3.1.2.1-19"><strong>mkey 647</strong>: REPORTED_TCB
 Expressed as <code>&amp;(svn: 1): svn64-type</code>.<a href="#section-3.1.2.1-19" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-20"><strong>mkey 648</strong>: CPUID_FAM_ID.
-Expressed as <code>&amp;(raw-value: 4): tagged-uint8</code>.<a href="#section-3.1.2.1-20" class="pilcrow">¶</a></p>
+Expressed as <code>&amp;(raw-int: 15): int</code>.<a href="#section-3.1.2.1-20" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-21"><strong>mkey 649</strong>: CPUID_MOD_ID.
-Expressed as <code>&amp;(raw-value: 4): tagged-uint8</code>.<a href="#section-3.1.2.1-21" class="pilcrow">¶</a></p>
+Expressed as <code>&amp;(raw-int: 15): int</code>.<a href="#section-3.1.2.1-21" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-22"><strong>mkey 650</strong>: CPUID_STEP.
-Expressed as <code>&amp;(raw-value: 4): tagged-uint8</code>.<a href="#section-3.1.2.1-22" class="pilcrow">¶</a></p>
+Expressed as <code>&amp;(raw-int: 15): int</code>.<a href="#section-3.1.2.1-22" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-23"><strong>mkey 3328</strong>: CHIP_ID.
 Expressed as <code>&amp;(raw-value: 4): tagged-bytes64</code>.<a href="#section-3.1.2.1-23" class="pilcrow">¶</a></p>
 <p id="section-3.1.2.1-24"><strong>mkey 3329</strong>: COMMITTED_TCB:
@@ -1454,7 +1452,10 @@ Expressed as <code>&amp;(svn: 1): svn64-type</code>.<a href="#section-3.1.2.1-27
 <p id="section-3.1.3.2-1">The translation makes use of the following metafunctions:<a href="#section-3.1.3.2-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-3.1.3.2-2.1">
-                <p id="section-3.1.3.2-2.1.1">The function <code>dec(b)</code> represents a byte in its decimal string rendering.<a href="#section-3.1.3.2-2.1.1" class="pilcrow">¶</a></p>
+                <p id="section-3.1.3.2-2.1.1">The function <code>dec(b)</code> represents a number in its decimal string rendering.<a href="#section-3.1.3.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+              <li class="normal" id="section-3.1.3.2-2.2">
+                <p id="section-3.1.3.2-2.2.1">The functions <code>leuintN(bstr)</code> translates a byte string representing <code>N</code> bits in little-endian into a CBOR integer.<a href="#section-3.1.3.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
             </ul>
 <p id="section-3.1.3.2-3">Juxtaposition of expressions with string literals is interpreted with string concatenation.<a href="#section-3.1.3.2-3" class="pilcrow">¶</a></p>
@@ -1476,80 +1477,137 @@ Expressed as <code>&amp;(svn: 1): svn64-type</code>.<a href="#section-3.1.2.1-27
 </li>
             </ul>
 <p id="section-3.1.3.2-8"><strong>mkey 0</strong>: VERSION.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x000:0x004])</code>.<a href="#section-3.1.3.2-8" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-9"><strong>mkey 1</strong>: GUEST_SVN.
+The codepoint <code>&amp;(version: 0)</code> SHALL be set to <code>{ / version: / 0: vstr, / version-scheme: / 1: / decimal / 4}</code> where <code>vstr</code> is constructed as <code>dec(leuint32(R[0x000:0x004]))</code>.<a href="#section-3.1.3.2-8" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-9"><strong>mkey 32</strong>: GUEST_SVN.
 4 bytes.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x004:0x008])</code>.<a href="#section-3.1.3.2-9" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-10"><strong>mkey 2</strong>: POLICY.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>leuint32(R[0x004:0x008])</code>.<a href="#section-3.1.3.2-9" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-10"><strong>mkey 64</strong>: POLICY.
 8 bytes.
 The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560:(R[0x008:0x010])</code> with optional <code>&amp;(raw-value-mask: 5): tagged-bytes</code> to restrict the reference value to the masked bits.<a href="#section-3.1.3.2-10" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-11"><strong>mkey 3</strong>: FAMILY_ID.
+<p id="section-3.1.3.2-11"><strong>mkey 128</strong>: FAMILY_ID.
 16 bytes.
 The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560:(R[0x010:0x020])</code>.<a href="#section-3.1.3.2-11" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-12"><strong>mkey 4</strong>: IMAGE_ID.
+<p id="section-3.1.3.2-12"><strong>mkey 256</strong>: IMAGE_ID.
 16 bytes.
 The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560:(R[0x020:0x030])</code>.<a href="#section-3.1.3.2-12" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-13"><strong>mkey 5</strong>: VMPL.
+<p id="section-3.1.3.2-13"><strong>mkey 384</strong>: VMPL.
 4 bytes.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560:(R[0x030:0x034])</code>.<a href="#section-3.1.3.2-13" class="pilcrow">¶</a></p>
+The codepoint <code>&amp;(raw-int: 15)</code> SHALL be set to <code>leuint32(R[0x030:0x034])</code>.<a href="#section-3.1.3.2-13" class="pilcrow">¶</a></p>
 <p id="section-3.1.3.2-14"><strong>SIGNATURE_ALGO skipped</strong>: <code>R[0x034:0x38]</code> only needed for signature verification.<a href="#section-3.1.3.2-14" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-15"><strong>mkey 6</strong>: CURRENT_TCB.
-The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(current_tcb)</code> where <code>current_tcb</code> is <code>R[0x038:0x40]</code> translated to <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-15" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-16"><strong>mkey 7</strong>: PLATFORM_INFO.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x040:0x048])</code>.<a href="#section-3.1.3.2-16" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-17"><strong>AUTHOR_KEY_EN skipped</strong>: AUTHOR_KEY_DIGEST will be present in evidence if and only if this bit is 1.
+<p id="section-3.1.3.2-15"><strong>mkey 448</strong>: CURRENT_TCB SPL1.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x038])</code>.<a href="#section-3.1.3.2-15" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-16"><strong>mkey 456</strong>: CURRENT_TCB SPL2.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x039])</code>.<a href="#section-3.1.3.2-16" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-17"><strong>mkey 464</strong>: CURRENT_TCB SPL3.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x03a])</code>.<a href="#section-3.1.3.2-17" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-18"><strong>mkey 472</strong>: CURRENT_TCB SPL4.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x03b])</code>.<a href="#section-3.1.3.2-18" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-19"><strong>mkey 480</strong>: CURRENT_TCB SPL5.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x03c])</code>.<a href="#section-3.1.3.2-19" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-20"><strong>mkey 488</strong>: CURRENT_TCB SPL6.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x03d])</code>.<a href="#section-3.1.3.2-20" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-21"><strong>mkey 496</strong>: CURRENT_TCB SPL7.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x03e])</code>.<a href="#section-3.1.3.2-21" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-22"><strong>mkey 504</strong>: CURRENT_TCB SPL8.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x03f])</code>.<a href="#section-3.1.3.2-22" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-23"><strong>mkey 512</strong>: PLATFORM_INFO.
+The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x040:0x048])</code>.<a href="#section-3.1.3.2-23" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-24"><strong>AUTHOR_KEY_EN skipped</strong>: AUTHOR_KEY_DIGEST will be present in evidence if and only if this bit is 1.
 <strong>MASK_CHIP_KEY skipped</strong>: CHIP_ID will be present in evidence if and only if this bit is 0.
-<strong>SIGNING_KEY skipped</strong>: The environment's class is determined by the attestation key kind.<a href="#section-3.1.3.2-17" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-18"><strong>mkey 640</strong>: REPORT_DATA.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x050:0x090])</code>.<a href="#section-3.1.3.2-18" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-19"><strong>mkey 641</strong>: MEASUREMENT.
-The codepoint <code>&amp;(digests: 2)</code> SHALL be set to <code>[[7, R[0x090:0x0C0]]]</code>.<a href="#section-3.1.3.2-19" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-20">**mkey 642: HOST_DATA.
-The codepoint <code>&amp;(digests: 2)</code> SHALL be set to <code>[[7, R[0x0C0:0x0E0]]]</code>.<a href="#section-3.1.3.2-20" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-21"><strong>mkey 643</strong>: ID_KEY_DIGEST.
-The codepoint <code>&amp;(digests: 2): [[7, R[0x0E0:0x110]]]</code> SHALL be set.<a href="#section-3.1.3.2-21" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-22"><strong>mkey 644</strong>: AUTHOR_KEY_DIGEST.
-The codepoint <code>&amp;(digests: 2)</code> SHALL be set to <code>[[7, R[0x110:0x140]]]</code> only if AUTHOR_KEY_EN (<code>R[0x048] &amp; 1</code>) is 1.<a href="#section-3.1.3.2-22" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-23"><strong>mkey 645</strong>: REPORT_ID.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x140:0x160])</code><a href="#section-3.1.3.2-23" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-24"><strong>mkey 646</strong>: REPORT_ID_MA.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x160:0x180])</code> only if non-zero.<a href="#section-3.1.3.2-24" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-25"><strong>mkey 647</strong>: REPORTED_TCB
-The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(reported_tcb)</code> where <code>reported_tcb</code> is <code>REPORTED_TCB</code> (<code>R[0x180:0x188]</code>) translated to <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-25" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-26"><strong>mkey 648</strong>: CPUID_FAM_ID.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x188:0x189])</code> only if VERSION (little endian <code>R[0x000:0x004]</code>) is at least 3.<a href="#section-3.1.3.2-26" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-27"><strong>mkey 649</strong>: CPUID_MOD_ID.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x189:0x18A])</code> only if VERSION (little endian <code>R[0x000:0x004]</code>) is at least 3.<a href="#section-3.1.3.2-27" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-28"><strong>mkey 650</strong>: CPUID_STEP.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x18A:0x18B])</code> only if VERSION (little endian <code>R[0x000:0x004]</code>) is at least 3.<a href="#section-3.1.3.2-28" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-29"><strong>mkey 3328</strong>: CHIP_ID.
-The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x1A0:0x1E0])</code> only if MASK_CHIP_KEY (<code>R[0x048] &amp; 2</code>) is 0.<a href="#section-3.1.3.2-29" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-30"><strong>mkey 3329</strong>: COMMITTED_TCB.
-The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(committed_tcb)</code> where <code>committed_tcb</code> is <code>REPORTED_TCB</code> (<code>R[0x1E0:0x1E8]</code>) translated to <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-30" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-31"><strong>mkey 3330</strong>: CurrentVersion.
-The <code>&amp;(version: 0)</code> codepoint SHALL be set to<a href="#section-3.1.3.2-31" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-32">
+<strong>SIGNING_KEY skipped</strong>: The environment's class is determined by the attestation key kind.<a href="#section-3.1.3.2-24" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-25"><strong>mkey 640</strong>: REPORT_DATA.
+The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x050:0x090])</code>.<a href="#section-3.1.3.2-25" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-26"><strong>mkey 1152</strong>: MEASUREMENT.
+The codepoint <code>&amp;(digests: 2)</code> SHALL be set to <code>[[7, R[0x090:0x0C0]]]</code>.<a href="#section-3.1.3.2-26" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-27">**mkey 1536: HOST_DATA.
+The codepoint <code>&amp;(digests: 2)</code> SHALL be set to <code>[[7, R[0x0C0:0x0E0]]]</code>.<a href="#section-3.1.3.2-27" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-28"><strong>mkey 1792</strong>: ID_KEY_DIGEST.
+The codepoint <code>&amp;(digests: 2): [[7, R[0x0E0:0x110]]]</code> SHALL be set.<a href="#section-3.1.3.2-28" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-29"><strong>mkey 2176</strong>: AUTHOR_KEY_DIGEST.
+The codepoint <code>&amp;(digests: 2)</code> SHALL be set to <code>[[7, R[0x110:0x140]]]</code> only if AUTHOR_KEY_EN (<code>R[0x048] &amp; 1</code>) is 1.<a href="#section-3.1.3.2-29" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-30"><strong>mkey 2560</strong>: REPORT_ID.
+The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x140:0x160])</code><a href="#section-3.1.3.2-30" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-31"><strong>mkey 2816</strong>: REPORT_ID_MA.
+The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x160:0x180])</code> only if non-zero.<a href="#section-3.1.3.2-31" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-32"><strong>mkey 3072</strong>: REPORTED_TCB SPL1
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x180])</code>.<a href="#section-3.1.3.2-32" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-33"><strong>mkey 3080</strong>: REPORTED_TCB SPL2
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x181])</code>.<a href="#section-3.1.3.2-33" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-34"><strong>mkey 3088</strong>: REPORTED_TCB SPL3
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x182])</code>.<a href="#section-3.1.3.2-34" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-35"><strong>mkey 3096</strong>: REPORTED_TCB SPL4
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x183])</code>.<a href="#section-3.1.3.2-35" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-36"><strong>mkey 3104</strong>: REPORTED_TCB SPL5
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x184])</code>.<a href="#section-3.1.3.2-36" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-37"><strong>mkey 3112</strong>: REPORTED_TCB SPL6
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x185])</code>.<a href="#section-3.1.3.2-37" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-38"><strong>mkey 3120</strong>: REPORTED_TCB SPL7
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x186])</code>.<a href="#section-3.1.3.2-38" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-39"><strong>mkey 3128</strong>: REPORTED_TCB SPL8
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x187])</code>.<a href="#section-3.1.3.2-39" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-40"><strong>mkey 3136</strong>: CPUID_FAM_ID.
+The codepoint <code>&amp;(raw-int: 15)</code> SHALL be set to <code>R[0x188:0x189]</code> only if VERSION (little endian <code>R[0x000:0x004]</code>) is at least 3.<a href="#section-3.1.3.2-40" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-41"><strong>mkey 3144</strong>: CPUID_MOD_ID.
+The codepoint <code>&amp;(raw-int: 15)</code> SHALL be set to <code>R[0x189:0x18A]</code> only if VERSION (little endian <code>R[0x000:0x004]</code>) is at least 3.<a href="#section-3.1.3.2-41" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-42"><strong>mkey 3152</strong>: CPUID_STEP.
+The codepoint <code>&amp;(raw-int: 15)</code> SHALL be set to <code>R[0x18A:0x18B]</code> only if VERSION (little endian <code>R[0x000:0x004]</code>) is at least 3.<a href="#section-3.1.3.2-42" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-43"><strong>mkey 3328</strong>: CHIP_ID.
+The codepoint <code>&amp;(raw-value: 4)</code> SHALL be set to <code>560(R[0x1A0:end])</code> only if MASK_CHIP_KEY (<code>R[0x048] &amp; 2</code>) is 0 and CPUID_FAM_ID is 0x19.
+The <code>end</code> value SHALL be between 0x1A8 and 0x1E0, since the SEV GET_ID may return different length identities for different family CPUs.<a href="#section-3.1.3.2-43" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-44"><strong>mkey 3840</strong>: COMMITTED_TCB SPL1.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E0])</code>.<a href="#section-3.1.3.2-44" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-45"><strong>mkey 3848</strong>: COMMITTED_TCB SPL2.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E1])</code>.<a href="#section-3.1.3.2-45" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-46"><strong>mkey 3856</strong>: COMMITTED_TCB SPL3.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E2])</code>.<a href="#section-3.1.3.2-46" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-47"><strong>mkey 3864</strong>: COMMITTED_TCB SPL4.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E3])</code>.<a href="#section-3.1.3.2-47" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-48"><strong>mkey 3872</strong>: COMMITTED_TCB SPL5.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E4])</code>.<a href="#section-3.1.3.2-48" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-49"><strong>mkey 3880</strong>: COMMITTED_TCB SPL6.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E5])</code>.<a href="#section-3.1.3.2-49" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-50"><strong>mkey 3888</strong>: COMMITTED_TCB SPL7.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E6])</code>.<a href="#section-3.1.3.2-50" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-51"><strong>mkey 3896</strong>: COMMITTED_TCB SPL8.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1E7])</code>.<a href="#section-3.1.3.2-51" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-52"><strong>mkey 3904</strong>: CurrentVersion.
+The <code>&amp;(version: 0)</code> codepoint SHALL be set to<a href="#section-3.1.3.2-52" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-53">
 <pre>
 / version-map / {
   / version: 0 / vstr
   / version-scheme: / 1: 16384
 }
-</pre><a href="#section-3.1.3.2-32" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.3.2-53" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1.3.2-33">The version string <code>vstr</code> is constructed as <code>dec(R[0x1EA]) '.' dec(R[0x1E9]) '.' dec(R[0x1E8])</code>.<a href="#section-3.1.3.2-33" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-34"><strong>mkey 3936</strong>: CommittedVersion.
-The <code>&amp;(version: 0)</code> codepoint SHALL be set to<a href="#section-3.1.3.2-34" class="pilcrow">¶</a></p>
-<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-35">
+<p id="section-3.1.3.2-54">The version string <code>vstr</code> is constructed as <code>dec(R[0x1EA]) '.' dec(R[0x1E9]) '.' dec(R[0x1E8])</code>.<a href="#section-3.1.3.2-54" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-55"><strong>mkey 3936</strong>: CommittedVersion.
+The <code>&amp;(version: 0)</code> codepoint SHALL be set to<a href="#section-3.1.3.2-55" class="pilcrow">¶</a></p>
+<div class="lang-cbor-diag sourcecode" id="section-3.1.3.2-56">
 <pre>
 / version-map / {
   / version: 0 / vstr
   / version-scheme: / 1: 16384
 }
-</pre><a href="#section-3.1.3.2-35" class="pilcrow">¶</a>
+</pre><a href="#section-3.1.3.2-56" class="pilcrow">¶</a>
 </div>
-<p id="section-3.1.3.2-36">The version string <code>vstr</code> is constructed as <code>dec(R[0x1EE]) '.' dec(R[0x1ED]) '.' dec(R[0x1EC])</code>.<a href="#section-3.1.3.2-36" class="pilcrow">¶</a></p>
-<p id="section-3.1.3.2-37"><strong>mkey 3968</strong>: LAUNCH_TCB.
-The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(launch_tcb)</code> where <code>launch_tcb</code> is <code>LAUNCH_TCB</code> (<code>R[0x1F0:0x1F8]</code>) translated to <code>uint</code> from its little-endian representation.<a href="#section-3.1.3.2-37" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-57">The version string <code>vstr</code> is constructed as <code>dec(R[0x1EE]) '.' dec(R[0x1ED]) '.' dec(R[0x1EC])</code>.<a href="#section-3.1.3.2-57" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-58"><strong>mkey 3968</strong>: LAUNCH_TCB SPL1.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F0])</code>.<a href="#section-3.1.3.2-58" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-59"><strong>mkey 3972</strong>: LAUNCH_TCB SPL2.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F1])</code>.<a href="#section-3.1.3.2-59" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-60"><strong>mkey 3980</strong>: LAUNCH_TCB SPL3.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F2])</code>.<a href="#section-3.1.3.2-60" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-61"><strong>mkey 3988</strong>: LAUNCH_TCB SPL4.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F3])</code>.<a href="#section-3.1.3.2-61" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-62"><strong>mkey 3996</strong>: LAUNCH_TCB SPL5.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F4])</code>.<a href="#section-3.1.3.2-62" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-63"><strong>mkey 4004</strong>: LAUNCH_TCB SPL6.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F5])</code>.<a href="#section-3.1.3.2-63" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-64"><strong>mkey 4012</strong>: LAUNCH_TCB SPL7.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F6])</code>.<a href="#section-3.1.3.2-64" class="pilcrow">¶</a></p>
+<p id="section-3.1.3.2-65"><strong>mkey 4020</strong>: LAUNCH_TCB SPL8.
+The codepoint <code>&amp;(svn: 1)</code> SHALL be set to <code>552(R[0x1F7])</code>.<a href="#section-3.1.3.2-65" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cmtype">
@@ -1775,7 +1833,7 @@ Requesting 10572 and 10573 respectively.<a href="#section-4.3-1" class="pilcrow"
 <dl class="references">
 <dt id="I-D.ietf-rats-corim">[I-D.ietf-rats-corim]</dt>
         <dd>
-<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-06</span>, <time datetime="2024-10-18" class="refDate">18 October 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-06">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-06</a>&gt;</span>. </dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Fossati, T.</span>, <span class="refAuthor">Deshpande, Y.</span>, <span class="refAuthor">Smith, N.</span>, and <span class="refAuthor">W. Pan</span>, <span class="refTitle">"Concise Reference Integrity Manifest"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-rats-corim-07</span>, <time datetime="2025-03-03" class="refDate">3 March 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-07">https://datatracker.ietf.org/doc/html/draft-ietf-rats-corim-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="IANA.cbor-tags">[IANA.cbor-tags]</dt>
         <dd>
@@ -1853,6 +1911,12 @@ digest = [
   val: bytes
 ]
 
+int-version-map = {
+  &amp;(version: 0): version-int-text,
+  &amp;(version-scheme: 1): &amp;(multipartnumeric: 1)
+}
+version-int-text = tstr .regexp "[0-9]+"
+
 non-empty&lt;M&gt; = (M) .and ({ + any =&gt; any })
 
 semver-version-map = {
@@ -1861,30 +1925,9 @@ semver-version-map = {
 }
 version-core-text = tstr .regexp "[0-9]+\\.[0-9]+\\.[0-9]+"
 
-$$flags-map-extension //= &amp;(
-  sevsnpvm-policy-smt-allowed: -1,
-  sevsnpvm-policy-migration-agent-allowed: -2,
-  sevsnpvm-policy-debug-allowed: -3,
-  sevsnpvm-policy-single-socket-only: -4,
-  sevsnpvm-policy-cxl-allowed: -5,
-  sevsnpvm-policy-mem-aes-256-xts-required: -6,
-  sevsnpvm-policy-rapl-must-be-disabled: -7,
-  sevsnpvm-policy-ciphertext-hiding-must-be-enabled: -8,
-  sevsnpvm-policy-reserved: -47..-9,
-)
-
 $version-scheme /= &amp;(sevsnpvm-familyimageid-hex: -1)
 
 $raw-value-type-choice /= uint
-
-$$flags-map-extension //= &amp;(
-  sevsnphost-smt-enabled: -49,
-  sevsnphost-tsme-enabled: -50,
-  sevsnphost-ecc-mem-reported-enabled:-51,
-  sevsnphost-rapl-disabled: -52,
-  sevsnphost-ciphertext-hiding-enabled: -53
-  sevsnphost-reserved: -112..-49
-)
 
 tagged-uint8 = #6.64(bytes1)
 tagged-leuint32 = #6.70(bytes4)
@@ -1909,6 +1952,10 @@ min-svn = svn-type
 tagged-svn = #6.552(svn)
 tagged-min-svn = #6.553(min-svn)
 svn-type-choice = tagged-svn / tagged-min-svn
+
+svn32-type = tagged-svn32 / tagged-min-svn32
+tagged-svn32 = #6.552(uint32)
+tagged-min-svn32 = #6.553(uint32)
 
 svn64-type = tagged-svn64 / tagged-min-svn64
 tagged-svn64 = #6.552(uint64)
