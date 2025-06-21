@@ -51,8 +51,9 @@ jobs:
         token: ${{ github.token }}
 
     - name: "Archive Built Drafts"
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
+        name: archive_draft
         path: |
           draft-*.html
           draft-*.txt
